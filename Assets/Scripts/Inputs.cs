@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-public class PlayerInputs : MonoBehaviour
+public class Inputs : MonoBehaviour
 {
     [Header("Character Input Values")]
     public Vector2 move;
@@ -20,47 +20,28 @@ public class PlayerInputs : MonoBehaviour
     
 	public void OnMove(InputValue value)
 	{
-		MoveInput(value.Get<Vector2>());
+        move = value.Get<Vector2>();
 	}
 
 	public void OnLook(InputValue value)
 	{
 		if(cursorInputForLook)
 		{
-			LookInput(value.Get<Vector2>());
+			look = value.Get<Vector2>();
 		}
 	}
 
 	public void OnJump(InputValue value)
 	{
-		JumpInput(value.isPressed);
+        jump = value.isPressed;
 		playerController.JUMP_MJ();
 	}
 
 	public void OnSprint(InputValue value)
 	{
-		SprintInput(value.isPressed);
+        sprint = value.isPressed;
 	}
     
-    public void MoveInput(Vector2 newMoveDirection)
-    {
-        move = newMoveDirection;
-    } 
-
-    public void LookInput(Vector2 newLookDirection)
-    {
-        look = newLookDirection;
-    }
-
-    public void JumpInput(bool newJumpState)
-    {
-        jump = newJumpState;
-    }
-
-    public void SprintInput(bool newSprintState)
-    {
-        sprint = newSprintState;
-    }
 
     private void OnApplicationFocus(bool hasFocus)
     {
