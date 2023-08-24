@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
     public bool isWalled = false;
     public bool isWallSliding = false;
     public float wallJumpCounter;
-    public float wallJumpTime = 0.4f;
+    private float wallJumpTime = 0.35f;
     private Vector3 wallJumpVector;
     
     private PlayerInput _playerInput;
@@ -108,14 +108,14 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         SetGravity();
-        if (wallJumpCounter <= 0)
+        if (wallJumpCounter > 0)
         {
-            Move();
+            _controller.Move(wallJumpVector.normalized * (Time.deltaTime * 15.0f) +
+                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
         }
         else
         {
-            _controller.Move(wallJumpVector * (_speed * Time.deltaTime * 30.0f) +
-                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            Move();
         }
         
         RaycastHit hit;
@@ -235,7 +235,7 @@ public class PlayerController : MonoBehaviour
                 Debug.DrawRay(hit.point, hit.normal, Color.red, 1.25f);
                 wallJumpCounter = wallJumpTime;
                 wallJumpVector = hit.normal;
-                _verticalVelocity = Mathf.Sqrt(JumpHeight * -1f * Gravity);
+                _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
             }
         }
     }

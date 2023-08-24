@@ -46,7 +46,9 @@ public class Inputs : MonoBehaviour
     public void OnDash(InputValue value)
 	{
         
-        if(value.isPressed){
+        if(value.isPressed)
+        {
+	        playerController.wallJumpCounter = 0f;
             playerController.Dash();
         }
 	}
