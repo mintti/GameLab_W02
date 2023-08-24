@@ -46,7 +46,7 @@ namespace MJi
         {
             if (moveDirection != Vector3.zero)
             {
-                MoveThePlayer3();
+                MoveThePlayer2();
                 TurnThePlayer();
             }
 
