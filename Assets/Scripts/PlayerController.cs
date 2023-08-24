@@ -124,7 +124,6 @@ public class PlayerController : MonoBehaviour
         _controller  = GetComponent<CharacterController>();
         _input       = GetComponent<Inputs>();
         _playerInput = GetComponent<PlayerInput>();
-        rb = GetComponent<Rigidbody>();
         
 
         DASH_FORWARD_ROLL_TIME = new WaitForSeconds(dashForwardRollTime);
