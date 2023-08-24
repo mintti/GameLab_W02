@@ -50,6 +50,14 @@
                     "interactions": "",
                     "initialStateCheck": true
                 },
+                {
+                    "name": "Backflip",
+                    "type": "Button",
+                    "id": "4d7f46a8-3cfb-43e4-a2b5-12d9c3fbde73",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [

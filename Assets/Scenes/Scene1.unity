@@ -866,10 +866,10 @@ MonoBehaviour:
   isDashing: 0
   isDashTetany: 0
   isDashCool: 0
-  dashPower: 0
-  dashForwardRollTime: 0
-  dashTetanyTime: 0
-  dashCoolTime: 0
+  dashPower: 60
+  dashForwardRollTime: 0.2
+  dashTetanyTime: 0.1
+  dashCoolTime: 0.1
   isBackflip: 0
   isBackflipDown: 0
 --- !u!114 &1257167238
