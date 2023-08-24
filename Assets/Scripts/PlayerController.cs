@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -53,6 +54,30 @@ public class PlayerController : MonoBehaviour
     
     private const float _threshold = 0.01f;
 
+    /// <summary>
+    /// 사다리 콜라이더와 접촉 시 true
+    /// </summary>
+    private bool _touchLadder;
+    
+    /// <summary>
+    /// 사다리 상태
+    /// </summary>
+    private bool _onladder;
+
+    public bool OnLadder
+    {
+        get => _onladder;
+        set
+        {
+            _onladder = value;
+           //_lastTouchObject.GetComponent<Ladder>().Attach = _onladder;
+        }
+    }
+
+    public Transform DefaultTarget { get; private set; }
+
+    public GameObject _lastTouchObject;
+    
     private bool IsCurrentDeviceMouse
     {
         get
@@ -78,6 +103,7 @@ public class PlayerController : MonoBehaviour
         _input = GetComponent<PlayerInputs>();
         _playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody>();
+        
     }
 
     private void Update()
@@ -125,8 +151,9 @@ public class PlayerController : MonoBehaviour
         float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
         // accelerate or decelerate to target speed
-        if (currentHorizontalSpeed < targetSpeed - speedOffset ||
-            currentHorizontalSpeed > targetSpeed + speedOffset)
+        if (!OnLadder && 
+            (currentHorizontalSpeed < targetSpeed - speedOffset ||
+             currentHorizontalSpeed > targetSpeed + speedOffset))
         {
             _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
                 Time.deltaTime * SpeedChangeRate);
@@ -154,10 +181,13 @@ public class PlayerController : MonoBehaviour
 
 
         Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-
+        
         // move the player
-        _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                         new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+        if (!CheckLadder())
+        {
+            _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
+                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+        }
     }
 
     private bool IsWalled()
@@ -186,7 +216,12 @@ public class PlayerController : MonoBehaviour
 
     public void JUMP_MJ()
     {
-        if (IsWalled() && !_controller.isGrounded)
+        if(OnLadder)
+        {
+            OnLadder = false;
+            _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+        }
+        else if (IsWalled() && !_controller.isGrounded)
         {
             #region WallJump
             
@@ -214,5 +249,51 @@ public class PlayerController : MonoBehaviour
         if (lfAngle < -360f) lfAngle += 360f;
         if (lfAngle > 360f) lfAngle -= 360f;
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
+    }
+
+    private bool CheckLadder()
+    {
+        if (_touchLadder)
+        {
+            // 사다리에 붙고
+            if (_input.move == Vector2.up)
+            {
+                // [TODO] 사다리를 바라봐야한다면, 바라보는 대상 카메라 -> 사다리 변경 필요
+                OnLadder = true;
+            }
+            
+            // 붙었으면 이동
+            if (OnLadder)
+            {
+                _verticalVelocity = 0;
+                if (_input.move != default)
+                {
+                    Vector3 value = _input.move * Time.deltaTime * _speed;
+                    //transform.Translate(value);
+                    _controller.Move(value);
+                }
+            }
+        }
+
+        return OnLadder;
+    }
+    
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Ladder")
+        {
+            _touchLadder = true;
+            _lastTouchObject = other.gameObject;
+        }
+    }
+    
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Ladder")
+        {
+            _touchLadder = false;
+            OnLadder = false;
+        }
     }
 }
