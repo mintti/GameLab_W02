@@ -58,6 +58,30 @@ public class PlayerController : MonoBehaviour
     
     private const float _threshold = 0.01f;
 
+    /// <summary>
+    /// 사다리 콜라이더와 접촉 시 true
+    /// </summary>
+    private bool _touchLadder;
+    
+    /// <summary>
+    /// 사다리 상태
+    /// </summary>
+    private bool _onladder;
+
+    public bool OnLadder
+    {
+        get => _onladder;
+        set
+        {
+            _onladder = value;
+           //_lastTouchObject.GetComponent<Ladder>().Attach = _onladder;
+        }
+    }
+
+    public Transform DefaultTarget { get; private set; }
+
+    public GameObject _lastTouchObject;
+    
 #region Dash
     [Header("Dash")]
     [SerializeField] bool  isDashing;
@@ -124,6 +148,8 @@ public class PlayerController : MonoBehaviour
         _controller  = GetComponent<CharacterController>();
         _input       = GetComponent<Inputs>();
         _playerInput = GetComponent<PlayerInput>();
+        rb = GetComponent<Rigidbody>();
+        
 
         DASH_FORWARD_ROLL_TIME = new WaitForSeconds(dashForwardRollTime);
         DASH_TETANY_TIME       = new WaitForSeconds(dashTetanyTime);
@@ -276,7 +302,12 @@ public class PlayerController : MonoBehaviour
 
     public void HandlingJump()
     {
-        if (_controller.isGrounded)
+    	if(OnLadder)
+        {
+            OnLadder = false;
+            _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+        }
+        else if (_controller.isGrounded)
         {
             #region Jump
             
