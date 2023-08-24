@@ -23,7 +23,7 @@ public class Inputs : MonoBehaviour
 	{
         move = value.Get<Vector2>();
 	}
-
+    
 	public void OnLook(InputValue value)
 	{
 		if(cursorInputForLook)
@@ -34,8 +34,8 @@ public class Inputs : MonoBehaviour
 
 	public void OnJump(InputValue value)
 	{
-        jump = value.isPressed;
-		playerController.JUMP_MJ();
+		jump = value.isPressed;
+        playerController.HandlingJump();
 	}
 
 	public void OnSprint(InputValue value)

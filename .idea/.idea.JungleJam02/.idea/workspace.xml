@@ -5,8 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7f4366c4-dd79-4469-9c62-e02f5c54abbc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/haein/InputSystem/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/haein/InputSystem/PlayerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/haein/Scene1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/haein/Scene1.unity" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.JungleJam02/.idea/indexLayout.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.JungleJam02/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.JungleJam02/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.JungleJam02/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scene1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Scene1.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controls.inputactions" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controls.inputactions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Inputs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Inputs.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/PlayerController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -56,7 +62,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;haein__0823&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -129,6 +135,7 @@
       <workItem from="1692793517923" duration="531000" />
       <workItem from="1692794071718" duration="6263000" />
       <workItem from="1692842438558" duration="3094000" />
+      <workItem from="1692863859362" duration="15596000" />
     </task>
     <servers />
   </component>
