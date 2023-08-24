@@ -216,7 +216,8 @@ public class ThirdPersonController : MonoBehaviour
 
     private void JumpAndGravity()
     {
-        if (Grounded)
+        // if (Grounded) // GroundCheck() 함수에서 판별, 현재는 미동작하여 생략함
+        if (_controller.isGrounded)  // CharacterController 컴포넌트의 내장 함수
         {
             // reset the fall timeout timer
             _fallTimeoutDelta = FallTimeout;
