@@ -9,6 +9,7 @@ public class Inputs : MonoBehaviour
     public Vector2 look;
     public bool jump;
     public bool sprint;
+    public bool dash;
 
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -40,6 +41,14 @@ public class Inputs : MonoBehaviour
 	public void OnSprint(InputValue value)
 	{
         sprint = value.isPressed;
+	}
+
+    public void OnDash(InputValue value)
+	{
+        
+        if(value.isPressed){
+            playerController.Dash();
+        }
 	}
     
 

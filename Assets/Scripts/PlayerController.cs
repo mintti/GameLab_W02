@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -45,9 +46,26 @@ public class PlayerController : MonoBehaviour
     private CharacterController _controller;
     private Inputs _input;
     private GameObject _mainCamera;
-    private Rigidbody _rb;
     
     private const float _threshold = 0.01f;
+
+#region Dash
+    [Header("Dash")]
+    [SerializeField] bool  isDashing;
+    [SerializeField] bool  isDashTetany;
+    [SerializeField] bool  isDashCool;   
+    
+    [SerializeField] float dashPower;
+    [SerializeField] float dashForwardRollTime; // 대시 앞구르기 모션 시간.
+    [SerializeField] float dashTetanyTime;      // 대시 후, 경직시간 
+    [SerializeField] float dashCoolTime;
+
+    private WaitForSeconds DASH_FORWARD_ROLL_TIME;
+    private WaitForSeconds DASH_TETANY_TIME;
+#endregion
+
+
+
 
     private bool IsCurrentDeviceMouse
     {
@@ -73,7 +91,10 @@ public class PlayerController : MonoBehaviour
         _controller  = GetComponent<CharacterController>();
         _input       = GetComponent<Inputs>();
         _playerInput = GetComponent<PlayerInput>();
-        _rb          = GetComponent<Rigidbody>();
+
+
+        DASH_FORWARD_ROLL_TIME = new WaitForSeconds(dashForwardRollTime);
+        DASH_TETANY_TIME       = new WaitForSeconds(dashTetanyTime);
     }
 
     private void Update()
@@ -199,6 +220,55 @@ public class PlayerController : MonoBehaviour
             
             #endregion
         }
+    }
+
+    public void Dash()
+    {
+        bool isAvailableDash = (!isDashing && !isDashTetany && !isDashCool );
+
+        if(isAvailableDash)
+        {
+            isDashing = true;        // TODO: playerState = dash 
+            StartCoroutine(DashCo());
+        }
+    }
+
+    IEnumerator DashCo()
+    {
+        Vector3 dashDirection = (transform.forward).normalized; // TODO 계산 필요. 경사면 등
+
+        // 최소한의 대시거리 + 현재이동거리에 비례한 추가거리
+        
+        
+        float minimumDash = dashPower * Time.deltaTime;
+        float addDash     = _speed    * Time.deltaTime;
+
+        Vector3 verticalDash = new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
+        
+        _controller.Move( dashDirection * (minimumDash + addDash) + verticalDash);
+        
+
+        yield return DASH_FORWARD_ROLL_TIME; // 앞구르기 모션 시간
+        isDashing = false;
+        
+        isDashTetany = true;
+        yield return DASH_TETANY_TIME; // 대시 후 경직 시간
+        isDashTetany = false;
+        // TODO: playerState = move
+
+        isDashCool = true;
+        StartCoroutine(DashCoolTimeCO());
+    }
+
+    IEnumerator DashCoolTimeCO()
+    {
+        float timer = 0;
+        while(timer < dashCoolTime)
+        {
+            timer += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        isDashCool = false;
     }
 
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
