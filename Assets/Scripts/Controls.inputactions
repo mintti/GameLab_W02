@@ -49,6 +49,7 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
                 }
             ],
             "bindings": [
@@ -192,6 +193,17 @@
                     "processors": "",
                     "groups": "Keyboard and Mouse",
                     "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "85688498-c577-4c56-a6bb-d12dc999b321",
+                    "path": "<Keyboard>/leftCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "Backflip",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

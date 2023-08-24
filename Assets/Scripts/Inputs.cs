@@ -10,6 +10,7 @@ public class Inputs : MonoBehaviour
     public bool jump;
     public bool sprint;
     public bool dash;
+    public bool backflip;
 
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -52,6 +53,15 @@ public class Inputs : MonoBehaviour
             playerController.Dash();
         }
 	}
+    
+    public void OnBackflip(InputValue value)
+    {
+	    if(value.isPressed)
+	    {
+		    playerController.wallJumpCounter = 0f;
+		    playerController.Backflip();
+	    }
+    }
     
 
     private void OnApplicationFocus(bool hasFocus)

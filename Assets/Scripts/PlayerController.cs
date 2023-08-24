@@ -20,7 +20,8 @@ public class PlayerController : MonoBehaviour
     public float SpeedChangeRate = 10.0f;
    
     public float JumpHeight = 1.2f;
-    public float Gravity = -15.0f;
+    public float Gravity = -80.0f;
+    public float MaxGravity = -80.0f;
 
     [Header("Cinemachine")]
     public GameObject CinemachineCameraTarget;
@@ -57,7 +58,7 @@ public class PlayerController : MonoBehaviour
     private GameObject _mainCamera;
     
     private const float _threshold = 0.01f;
-
+    
     /// <summary>
     /// 사다리 콜라이더와 접촉 시 true
     /// </summary>
@@ -82,7 +83,8 @@ public class PlayerController : MonoBehaviour
 
     public GameObject _lastTouchObject;
     
-#region Dash
+    #region Dash
+
     [Header("Dash")]
     [SerializeField] bool  isDashing;
     [SerializeField] bool  isDashTetany;
@@ -95,10 +97,19 @@ public class PlayerController : MonoBehaviour
 
     private WaitForSeconds DASH_FORWARD_ROLL_TIME;
     private WaitForSeconds DASH_TETANY_TIME;
-#endregion
+    #endregion
+    
+    #region Backflip
+    [Header("Backflip")]
+    [SerializeField] bool isBackflip;
+    [SerializeField] bool isBackflipDown;
 
-
-
+    private float backflipTime = .5f;
+    private Quaternion initialRotation;
+    private Quaternion targetRotation;
+    private float elapsedTime = 0f;
+    
+    #endregion
 
     /// <summary>
     /// 사다리 콜라이더와 접촉 시 true
@@ -186,6 +197,10 @@ public class PlayerController : MonoBehaviour
             isWallSliding = false;
         }
         if (wallJumpCounter > 0) wallJumpCounter -= Time.deltaTime;
+        if (isWallSliding)
+        {
+            _verticalVelocity = -2f;
+        }
     }
     private void LateUpdate()
     {
@@ -247,7 +262,7 @@ public class PlayerController : MonoBehaviour
             float rotation  = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
 
             // rotate to face input direction relative to camera position
-            transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+            if (!isBackflip) transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
 
 
@@ -295,6 +310,9 @@ public class PlayerController : MonoBehaviour
                 wallJumpCounter = wallJumpTime;
                 wallJumpVector = hit.normal;
                 _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+                
+                Vector3 newRotation = transform.eulerAngles + new Vector3(0f, 180f, 0f);
+                transform.eulerAngles = newRotation;
             }
         }
     }
@@ -316,6 +334,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    #region Dash
     public void Dash()
     {
         bool isAvailableDash = (!isDashing && !isDashTetany && !isDashCool );
@@ -365,6 +384,31 @@ public class PlayerController : MonoBehaviour
         isDashCool = false;
     }
 
+    #endregion
+    
+    #region Backflip
+    
+    public void Backflip()
+    {
+        bool isAvailableBackflip = (!_controller.isGrounded && !isWalled && !isWallSliding);
+
+        if(isAvailableBackflip)
+        {
+            isBackflip = true;        // TODO: playerState = backflip
+            _verticalVelocity = Mathf.Sqrt(JumpHeight * Gravity * .2f);
+            StartCoroutine(BackflipCO());
+        }
+    }
+    
+    IEnumerator BackflipCO()
+    {
+        yield return new WaitForSeconds(backflipTime);
+        isBackflip = false;
+        isBackflipDown = true;
+    }
+    
+    #endregion
+    
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
     {
         if (lfAngle < -360f) lfAngle += 360f;
