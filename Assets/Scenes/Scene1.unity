@@ -254,7 +254,7 @@ GameObject:
   - component: {fileID: 500386470}
   - component: {fileID: 500386469}
   - component: {fileID: 500386468}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (2)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -351,7 +351,7 @@ GameObject:
   - component: {fileID: 669953768}
   - component: {fileID: 669953767}
   - component: {fileID: 669953766}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plane
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -449,7 +449,7 @@ GameObject:
   - component: {fileID: 719867626}
   - component: {fileID: 719867625}
   - component: {fileID: 719867624}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -781,18 +781,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d64f4e6681b183e49ba30282e8765224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputManager: {fileID: 1257167238}
   MoveSpeed: 7
   SprintSpeed: 10
   RotationSmoothTime: 0.12
   SpeedChangeRate: 10
   JumpHeight: 3.5
-  Gravity: -150
+  Gravity: -80
   CinemachineCameraTarget: {fileID: 1062724266}
   TopClamp: 70
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
+  isWalled: 0
+  isWallSliding: 0
+  wallJumpCounter: 0
+  wallJumpTime: 0.4
   isDashing: 0
+  isDashTetany: 0
   isDashCool: 0
   dashPower: 60
   dashForwardRollTime: 0.2
@@ -1029,9 +1035,9 @@ GameObject:
   - component: {fileID: 1611490116}
   - component: {fileID: 1611490115}
   - component: {fileID: 1611490114}
-  m_Layer: 8
-  m_Name: Cube (1)
-  m_TagString: Ground
+  m_Layer: 7
+  m_Name: Wall
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1385,7 +1391,7 @@ GameObject:
   - component: {fileID: 1954487456}
   - component: {fileID: 1954487455}
   - component: {fileID: 1954487454}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (3)
   m_TagString: Ground
   m_Icon: {fileID: 0}

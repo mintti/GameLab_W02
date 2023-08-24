@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,6 +8,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
+    public Inputs inputManager;
     [Header("Player")]
     public float MoveSpeed = 7.0f;
     public float SprintSpeed = 10.0f;
@@ -41,6 +43,13 @@ public class PlayerController : MonoBehaviour
     private float _rotationVelocity;
     private float _verticalVelocity;
     private float _terminalVelocity = 53.0f;
+    
+    //player wall jump
+    public bool isWalled = false;
+    public bool isWallSliding = false;
+    public float wallJumpCounter;
+    public float wallJumpTime = 0.4f;
+    private Vector3 wallJumpVector;
     
     private PlayerInput _playerInput;
     private CharacterController _controller;
@@ -92,7 +101,6 @@ public class PlayerController : MonoBehaviour
         _input       = GetComponent<Inputs>();
         _playerInput = GetComponent<PlayerInput>();
 
-
         DASH_FORWARD_ROLL_TIME = new WaitForSeconds(dashForwardRollTime);
         DASH_TETANY_TIME       = new WaitForSeconds(dashTetanyTime);
     }
@@ -100,9 +108,36 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         SetGravity();
-        Move();
+        if (wallJumpCounter <= 0)
+        {
+            Move();
+        }
+        else
+        {
+            _controller.Move(wallJumpVector * (_speed * Time.deltaTime * 30.0f) +
+                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+        }
+        
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 1f, LayerMask.GetMask("WallLayer")))
+        {
+            isWalled = true;
+        }
+        else
+        {
+            isWalled = false;
+        }
+        
+        if (isWalled && !_controller.isGrounded && _verticalVelocity < 0.0f)
+        {
+            isWallSliding = true;
+        }
+        else
+        {
+            isWallSliding = false;
+        }
+        if (wallJumpCounter > 0) wallJumpCounter -= Time.deltaTime;
     }
-
     private void LateUpdate()
     {
         CameraRotation();
@@ -172,13 +207,6 @@ public class PlayerController : MonoBehaviour
         _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                          new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
     }
-
-    private bool IsWalled()
-    {
-        float collisionRadius = 0.5f;
-        Collider[] colliders = Physics.OverlapSphere(transform.position, collisionRadius, LayerMask.NameToLayer("WallLayer"));
-        return colliders.Length > 0;
-    }
     
     private void SetGravity()
     {
@@ -195,24 +223,26 @@ public class PlayerController : MonoBehaviour
         {
             _verticalVelocity += Gravity * Time.deltaTime;
         }
+        
     }
 
-    public void JUMP_MJ()
+    private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (IsWalled() && !_controller.isGrounded)
+        if (inputManager.jump && isWallSliding)
         {
-            #region WallJump
-            
-            /*
-            isWallJumping = true;
-            Vector2 playerToWall = transform.position - wallPosition; // wallPosition은 벽의 위치
-            wallJumpDirection = playerToWall.normalized;
-            */
-            //_verticalVelocity = Mathf.Sqrt(JumpHeight * -1f * Gravity);
-                  
-            #endregion
+            if (!_controller.isGrounded && hit.normal.y < 0.1f) 
+            {
+                Debug.DrawRay(hit.point, hit.normal, Color.red, 1.25f);
+                wallJumpCounter = wallJumpTime;
+                wallJumpVector = hit.normal;
+                _verticalVelocity = Mathf.Sqrt(JumpHeight * -1f * Gravity);
+            }
         }
-        else if (_controller.isGrounded)
+    }
+
+    public void HandlingJump()
+    {
+        if (_controller.isGrounded)
         {
             #region Jump
             
