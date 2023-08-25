@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 
 [RequireComponent(typeof(CharacterController))]
@@ -60,16 +61,13 @@ public class PlayerController : MonoBehaviour
     public Animator _animator;
     
     private const float _threshold = 0.01f;
+
+    #region 사다리
+    [Tooltip("사다리 콜라이더와 접촉 시 true")]
+    [SerializeField] private bool _touchLadder;
     
-    /// <summary>
-    /// 사다리 콜라이더와 접촉 시 true
-    /// </summary>
-    private bool _touchLadder;
-    
-    /// <summary>
-    /// 사다리 상태
-    /// </summary>
-    private bool _onladder;
+    [Tooltip("사다리 매달린 상태 여부")]
+    [SerializeField] private bool _onladder;
 
     public bool OnLadder
     {
@@ -77,13 +75,25 @@ public class PlayerController : MonoBehaviour
         set
         {
             _onladder = value;
-           //_lastTouchObject.GetComponent<Ladder>().Attach = _onladder;
+            //_lastTouchObject.GetComponent<Ladder>().Attach = _onladder;
         }
     }
 
     public Transform DefaultTarget { get; private set; }
 
     public GameObject _lastTouchObject;
+    #endregion
+
+    #region Sliding
+    [Header("Sliding")]
+    [SerializeField] bool isSliding = false;            // 슬라이딩 여부
+    [SerializeField] float slideMinAngle = 10;          // 슬라이딩 동작하는 최소 각도
+    [SerializeField] float slideMaxAngle = 50;          // 슬라이딩 지원하는 최대 각도
+    [SerializeField] float slidingSpeed ;               // 슬라이딩 기본 속도
+    [SerializeField] private Vector3 _slideDirection;   // 슬라이딩 방향
+    private float _slidingMultipleByAngle;              // 슬라이드 속도에 곱할 각도
+    
+    #endregion
     
     #region Dash
     [Header("Dash")]
@@ -153,6 +163,8 @@ public class PlayerController : MonoBehaviour
 
         DASH_FORWARD_ROLL_TIME = new WaitForSeconds(dashForwardRollTime);
         DASH_TETANY_TIME       = new WaitForSeconds(dashTetanyTime);
+
+        isSliding = false;
     }
 
     private void Update()
@@ -296,8 +308,10 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
 
-
         Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+
+
+        MoveSliding(); 
         
         // move the player
         if (!CheckLadder())
@@ -305,6 +319,36 @@ public class PlayerController : MonoBehaviour
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
         }
+    }
+
+    private bool MoveSliding()
+    {
+        SetSlopeSlideVelocity();
+        isSliding = !(_slideDirection == Vector3.zero);
+        
+        if (isSliding)
+        {
+            var veloc = _slideDirection * slidingSpeed * Time.deltaTime * _slidingMultipleByAngle;
+            _controller.Move(veloc);
+        }
+        
+        return isSliding;
+    }
+
+    private void SetSlopeSlideVelocity()
+    {
+        if(Physics.Raycast(transform.position , Vector3.down, out RaycastHit slopeHit, 2))
+        {
+            float angle = Vector3.Angle(slopeHit.normal, Vector3.up);
+            if (angle >= slideMinAngle)
+            {
+                _slidingMultipleByAngle = angle <= slideMaxAngle ? (float)Math.Pow((angle / 60), 2f) : 2f ;
+                _slideDirection = Vector3.ProjectOnPlane( Vector3.down, slopeHit.normal).normalized;
+                return;
+            }
+        }
+
+        _slideDirection = Vector3.zero;
     }
     
     private void SetGravity()
@@ -487,6 +531,11 @@ public class PlayerController : MonoBehaviour
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
 
+    /// <summary>
+    /// 사다리 액션 체크 및 수행
+    /// 사다리 액션 수행 시, 기본 Move 를 수행하지 않음
+    /// </summary>
+    /// <returns>사다리 액션 여부 반환</returns>
     private bool CheckLadder()
     {
         if (_touchLadder)
@@ -501,7 +550,7 @@ public class PlayerController : MonoBehaviour
             // 붙었으면 이동
             if (OnLadder)
             {
-                _verticalVelocity = 0;
+                _verticalVelocity = 0; // 사다리에서 내려가거나 점프할 때, 수직 가속이 높아지는 것을 막음
                 if (_input.move != default)
                 {
                     Vector3 value = _input.move * Time.deltaTime * _speed;
