@@ -10,9 +10,10 @@ public class PlayerController : MonoBehaviour
 {
     public Inputs inputManager;
     [Header("Player")]
-    public float MoveSpeed = 7.0f;
-    public float SprintSpeed = 10.0f;
-    
+    public float SlowWalkSpeed = 1.0f;
+    public float MoveSpeed     = 7.0f;
+    public float SprintSpeed   = 10.0f;
+
     [Range(0.0f, 0.3f)]
     public float RotationSmoothTime = 0.12f;
 
@@ -217,7 +218,12 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         // set target speed based on move speed, sprint speed and if sprint is pressed
-        float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+        float targetSpeed = MoveSpeed;
+
+        if( _input.slowWalk ){ targetSpeed = SlowWalkSpeed; }
+        if( _input.sprint   ){ targetSpeed = SprintSpeed;   } // 같이 누르면 sprint speed
+
+
         if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
         // a reference to the players current horizontal velocity

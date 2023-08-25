@@ -237,11 +237,33 @@
                 },
                 {
                     "name": "",
+                    "id": "8e1c1597-5484-4f26-90d3-5458cf6dd40e",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Backflip",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ab3387de-1653-4608-bad4-a6805f3e71ef",
                     "path": "<Keyboard>/leftCtrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
+                    "action": "SlowWalk",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bc6f2679-669c-472e-8261-86a292b92f14",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "SlowWalk",
                     "isComposite": false,
                     "isPartOfComposite": false
