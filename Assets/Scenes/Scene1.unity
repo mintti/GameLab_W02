@@ -435,7 +435,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1427740083}
   m_Father: {fileID: 1257167234}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -844,7 +845,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1257167234}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1257167230
 GameObject:
@@ -879,7 +880,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 573654771}
-  - {fileID: 1427740083}
   - {fileID: 1062724267}
   m_Father: {fileID: 0}
   m_RootOrder: 4
@@ -915,6 +915,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputManager: {fileID: 1257167238}
+  SlowWalkSpeed: 5
   MoveSpeed: 7
   SprintSpeed: 10
   RotationSmoothTime: 0.12
@@ -932,7 +933,6 @@ MonoBehaviour:
   wallJumpCounter: 0
   _animator: {fileID: 573654772}
   _lastTouchObject: {fileID: 0}
-  pcIsGrounded: 0
   isDashing: 0
   isDashTetany: 0
   isDashCool: 0
@@ -959,6 +959,7 @@ MonoBehaviour:
   look: {x: 0, y: 0}
   jump: 0
   sprint: 0
+  slowWalk: 0
   dash: 0
   backflip: 0
   analogMovement: 0
@@ -1021,13 +1022,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1427740082}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.123, z: 0.5}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.123000145, z: 0.5}
   m_LocalScale: {x: 0.6, y: 0.3, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1257167234}
-  m_RootOrder: 1
+  m_Father: {fileID: 573654771}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1427740084
 BoxCollider:

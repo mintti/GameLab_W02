@@ -9,6 +9,7 @@ public class Inputs : MonoBehaviour
     public Vector2 look;
     public bool jump;
     public bool sprint;
+    public bool slowWalk;
     public bool dash;
     public bool backflip;
 
@@ -41,7 +42,12 @@ public class Inputs : MonoBehaviour
 
 	public void OnSprint(InputValue value)
 	{
-        sprint = value.isPressed;
+        sprint = value.isPressed;        
+	}
+
+    public void OnSlowWalk(InputValue value)
+	{
+        slowWalk = value.isPressed;
 	}
 
     public void OnDash(InputValue value)
