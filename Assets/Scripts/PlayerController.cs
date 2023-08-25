@@ -265,6 +265,7 @@ public class PlayerController : MonoBehaviour
         if (_controller.isGrounded) isAttackGrounded = true;
         
         ComboRecentlyChangedTimer -= Time.deltaTime;
+        CheckEmit();
     }
     private void LateUpdate()
     {
@@ -636,7 +637,6 @@ public class PlayerController : MonoBehaviour
     {
         foreach (TrailRenderer T in Tyremarks)
         {
-            Debug.Log("StartEmmiter");
             T.emitting = true;
         }
     }
