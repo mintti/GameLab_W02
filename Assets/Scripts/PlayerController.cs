@@ -84,11 +84,12 @@ public class PlayerController : MonoBehaviour
     public GameObject _lastTouchObject;
     
     #region Dash
-
     [Header("Dash")]
     [SerializeField] bool  isDashing;
     [SerializeField] bool  isDashTetany;
-    [SerializeField] bool  isDashCool;   
+    [SerializeField] bool  isDashCool;
+
+    [SerializeField] int   dashCounter = 1;
     
     [SerializeField] float dashPower;
     [SerializeField] float dashForwardRollTime; // 대시 앞구르기 모션 시간.
@@ -144,7 +145,8 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         SetGravity();
-        if (wallJumpCounter > 0)
+
+        if (wallJumpCounter > 0)  // isWallJump-ing
         {
             _controller.Move(wallJumpVector.normalized * (Time.deltaTime * 15.0f) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
@@ -261,6 +263,11 @@ public class PlayerController : MonoBehaviour
             {
                 _verticalVelocity = -2f;
             }
+
+            if(dashCounter == 0){
+                dashCounter = 1;  // 대쉬는 공중에서 한번만 가능. 땅에 닿은 후에 충전됨. 최대충전횟수 1회.
+            }
+
         }
         // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
         if (_verticalVelocity < _terminalVelocity)
@@ -307,22 +314,23 @@ public class PlayerController : MonoBehaviour
     #region Dash
     public void Dash()
     {
-        bool isAvailableDash = (!isDashing && !isDashTetany && !isDashCool );
+        bool isAvailableDash = !isDashing && !isDashTetany && !isDashCool && (dashCounter > 0);
 
         if(isAvailableDash)
         {
-            isDashing = true;        // TODO: playerState = dash 
+            wallJumpCounter = 0f;  // wall jump cancel
+
             StartCoroutine(DashCo());
         }
     }
 
     IEnumerator DashCo()
     {
+        dashCounter = 0;
+        isDashing = true;
         Vector3 dashDirection = (transform.forward).normalized; // TODO 계산 필요. 경사면 등
 
         // 최소한의 대시거리 + 현재이동거리에 비례한 추가거리
-        
-        
         float minimumDash = dashPower * Time.deltaTime;
         float addDash     = _speed    * Time.deltaTime;
 
