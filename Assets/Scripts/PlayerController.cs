@@ -107,8 +107,22 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool isBackflipDown;
 
     private float backflipTime = .5f;
+    private float canSuperJumpTimer = 0f;
     
     #endregion
+    
+    #region Attack
+
+    [Header("Attack")] 
+    [SerializeField] private bool isAttack;
+    public int comboCount;
+    [SerializeField] private float lastClickedTime = 0f;
+    [SerializeField] private float maxComboDelay = 1f;
+    public float nextFireTime = 0f;
+    [SerializeField] private float coolDownTime = 2.0f;
+    
+    #endregion
+    
 
     /// <summary>
     /// 사다리 콜라이더와 접촉 시 true
@@ -167,7 +181,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         SetGravity();
-
+        if (canSuperJumpTimer > 0) canSuperJumpTimer -= Time.deltaTime;
         if (wallJumpCounter > 0)  // isWallJump-ing
         {
             _controller.Move(wallJumpVector.normalized * (Time.deltaTime * 15.0f) +
@@ -178,6 +192,7 @@ public class PlayerController : MonoBehaviour
             _controller.Move(Vector3.down * (Time.deltaTime * 50.0f));
             if (_controller.isGrounded)
             {
+                canSuperJumpTimer = .5f;
                 _verticalVelocity = -2.0f;
                 _speed = MoveSpeed;
                 isBackflipDown = false;
@@ -211,7 +226,30 @@ public class PlayerController : MonoBehaviour
         {
             _verticalVelocity = -2f;
         }
-        
+        /*
+        if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
+            _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
+        {
+            _animator.SetBool("Attack1", false);
+        }
+        if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
+            _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
+        {
+            _animator.SetBool("Attack2", false);
+        }
+        if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
+            _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack3"))
+        {
+            _animator.SetBool("Attack3", false);
+            comboCount = 0;
+        }
+        */
+        if (Time.time - lastClickedTime > maxComboDelay)
+        {
+            isAttack = false;
+            comboCount = 0;
+            _animator.SetTrigger("GoToIdle");
+        }
     }
     private void LateUpdate()
     {
@@ -348,8 +386,9 @@ public class PlayerController : MonoBehaviour
         else if (_controller.isGrounded)
         {
             #region Jump
-            
-            _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+
+            float multiplyValue = (canSuperJumpTimer > 0) ? 2f : 1f;
+            _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity * multiplyValue);
             
             #endregion
         }
@@ -433,6 +472,42 @@ public class PlayerController : MonoBehaviour
     }
     
     #endregion
+    
+    #region Attack
+    
+    public void Attack()
+    {
+        bool canAttack =
+            (!isWalled && !isWallSliding && !isBackflip && !isBackflipDown);
+
+        if(canAttack)
+        {
+            wallJumpCounter = 0f;
+            lastClickedTime = Time.time;
+            nextFireTime = lastClickedTime + 0.5f;
+            comboCount++; 
+            if (comboCount == 1)
+            {
+                _animator.SetTrigger("AttackTrigger1");
+            }
+            comboCount = Mathf.Clamp(comboCount, 0, 3);
+
+            if (comboCount >= 2 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f &&
+                _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
+            {
+                _animator.SetTrigger("AttackTrigger2");
+            }
+            
+            if (comboCount >= 3 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f &&
+                _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
+            {
+                _animator.SetTrigger("AttackTrigger3");
+            }
+        }
+    }
+    
+    #endregion
+    
     
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
     {

@@ -12,7 +12,8 @@ public class Inputs : MonoBehaviour
     public bool slowWalk;
     public bool dash;
     public bool backflip;
-
+    public bool attack;
+    
     [Header("Movement Settings")]
     public bool analogMovement;
 
@@ -65,6 +66,15 @@ public class Inputs : MonoBehaviour
 	    {
 		    playerController.wallJumpCounter = 0f;
 		    playerController.Backflip();
+	    }
+    }
+    
+    public void OnAttack(InputValue value)
+    {
+	    attack = value.isPressed;
+	    if(attack && Time.time > playerController.nextFireTime && playerController.comboCount < 3)
+	    {
+		    playerController.Attack();
 	    }
     }
     
