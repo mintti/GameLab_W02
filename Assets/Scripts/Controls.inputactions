@@ -67,15 +67,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Attack",
-                    "type": "Button",
-                    "id": "cd0fe9f3-f439-482c-a596-79c88f2dd913",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -246,6 +237,17 @@
                 },
                 {
                     "name": "",
+                    "id": "8e1c1597-5484-4f26-90d3-5458cf6dd40e",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Backflip",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ab3387de-1653-4608-bad4-a6805f3e71ef",
                     "path": "<Keyboard>/leftCtrl",
                     "interactions": "",
@@ -257,12 +259,12 @@
                 },
                 {
                     "name": "",
-                    "id": "68c25437-77dc-4195-ae84-960ac870a6e3",
-                    "path": "<Mouse>/leftButton",
+                    "id": "bc6f2679-669c-472e-8261-86a292b92f14",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "Attack",
+                    "groups": "Gamepad",
+                    "action": "SlowWalk",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

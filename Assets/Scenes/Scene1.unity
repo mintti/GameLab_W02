@@ -915,6 +915,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputManager: {fileID: 1257167238}
+  SlowWalkSpeed: 5
   MoveSpeed: 7
   SprintSpeed: 10
   RotationSmoothTime: 0.12
@@ -964,6 +965,7 @@ MonoBehaviour:
   look: {x: 0, y: 0}
   jump: 0
   sprint: 0
+  slowWalk: 0
   dash: 0
   backflip: 0
   attack: 0
