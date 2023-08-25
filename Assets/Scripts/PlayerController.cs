@@ -56,6 +56,7 @@ public class PlayerController : MonoBehaviour
     private CharacterController _controller;
     private Inputs _input;
     private GameObject _mainCamera;
+    public Animator _animator;
     
     private const float _threshold = 0.01f;
     
@@ -106,9 +107,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool isBackflipDown;
 
     private float backflipTime = .5f;
-    private Quaternion initialRotation;
-    private Quaternion targetRotation;
-    private float elapsedTime = 0f;
     
     #endregion
 
@@ -150,6 +148,16 @@ public class PlayerController : MonoBehaviour
         {
             _controller.Move(wallJumpVector.normalized * (Time.deltaTime * 15.0f) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+        } 
+        else if (isBackflipDown)
+        {
+            _controller.Move(Vector3.down * (Time.deltaTime * 50.0f));
+            if (_controller.isGrounded)
+            {
+                _verticalVelocity = -2.0f;
+                _speed = MoveSpeed;
+                isBackflipDown = false;
+            }
         }
         else
         {
@@ -179,6 +187,7 @@ public class PlayerController : MonoBehaviour
         {
             _verticalVelocity = -2f;
         }
+        
     }
     private void LateUpdate()
     {
@@ -239,8 +248,8 @@ public class PlayerController : MonoBehaviour
             _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
             float rotation  = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
 
-            // rotate to face input direction relative to camera position
-            if (!isBackflip) transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+            // 카메라 방향으로 플레이어 회전
+            transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
 
 
@@ -276,7 +285,7 @@ public class PlayerController : MonoBehaviour
         }
         
     }
-
+    
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (inputManager.jump && isWallSliding)
@@ -368,10 +377,12 @@ public class PlayerController : MonoBehaviour
     
     public void Backflip()
     {
-        bool isAvailableBackflip = (!_controller.isGrounded && !isWalled && !isWallSliding);
+        bool isAvailableBackflip =
+            (!_controller.isGrounded && !isWalled && !isWallSliding && !isBackflip && !isBackflipDown);
 
         if(isAvailableBackflip)
         {
+            wallJumpCounter = 0f;
             isBackflip = true;        // TODO: playerState = backflip
             _verticalVelocity = Mathf.Sqrt(JumpHeight * Gravity * .2f);
             StartCoroutine(BackflipCO());
@@ -380,6 +391,7 @@ public class PlayerController : MonoBehaviour
     
     IEnumerator BackflipCO()
     {
+        _animator.SetTrigger("Backflip");
         yield return new WaitForSeconds(backflipTime);
         isBackflip = false;
         isBackflipDown = true;

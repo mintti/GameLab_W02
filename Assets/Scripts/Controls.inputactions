@@ -57,7 +57,7 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -207,7 +207,7 @@
                 {
                     "name": "",
                     "id": "85688498-c577-4c56-a6bb-d12dc999b321",
-                    "path": "<Keyboard>/leftCtrl",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
