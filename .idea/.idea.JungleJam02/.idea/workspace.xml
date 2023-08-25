@@ -6,12 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="7f4366c4-dd79-4469-9c62-e02f5c54abbc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.JungleJam02/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.JungleJam02/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Player.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animations/Player.controller" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Scene1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Scene1.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controls.inputactions" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controls.inputactions" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Inputs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Inputs.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/PlayerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,6 +133,7 @@
       <workItem from="1692842438558" duration="3094000" />
       <workItem from="1692863859362" duration="22590000" />
       <workItem from="1692928988234" duration="7348000" />
+      <workItem from="1692944876209" duration="15370000" />
     </task>
     <servers />
   </component>

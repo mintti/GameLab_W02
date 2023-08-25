@@ -915,7 +915,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputManager: {fileID: 1257167238}
-  SlowWalkSpeed: 5
+  SlowWalkSpeed: 1
   MoveSpeed: 7
   SprintSpeed: 10
   RotationSmoothTime: 0.12
@@ -955,9 +955,8 @@ MonoBehaviour:
   isAttack: 0
   comboCount: 0
   lastClickedTime: 0
-  maxComboDelay: 0.9
+  maxComboDelay: 0.8
   nextFireTime: 0
-  coolDownTime: 2
 --- !u!114 &1257167238
 MonoBehaviour:
   m_ObjectHideFlags: 0

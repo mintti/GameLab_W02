@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour
     private Inputs _input;
     private GameObject _mainCamera;
     public Animator _animator;
+    public TrailRenderer[] Tyremarks;
     
     private const float _threshold = 0.01f;
 
@@ -128,9 +129,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isAttack;
     public int comboCount;
     [SerializeField] private float lastClickedTime = 0f;
-    [SerializeField] private float maxComboDelay = 1f;
+    [SerializeField] private float maxComboDelay = 1.0f;
     public float nextFireTime = 0f;
-    [SerializeField] private float coolDownTime = 2.0f;
+    private float ComboRecentlyChangedTimer = 0f;
+    public bool isAttackGrounded = true; //점프 어택 이후 내려찍기 기술 못쓰게 하기 위한 변수
     
     #endregion
     
@@ -210,6 +212,19 @@ public class PlayerController : MonoBehaviour
                 _speed = MoveSpeed;
                 isBackflipDown = false;
             }
+        } else if (isAttack)
+        {
+            if (ComboRecentlyChangedTimer > 0 && ComboRecentlyChangedTimer < .2f)
+            {
+                _controller.Move(Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward.normalized * (Time.deltaTime * 10.0f) +
+                                 Vector3.down *  Time.deltaTime);
+                _verticalVelocity = -5.0f;
+            }
+            else
+            {
+                _controller.Move(Vector3.down * (2.0f * Time.deltaTime));
+                _verticalVelocity = -10.0f;
+            }
         }
         else
         {
@@ -239,30 +254,17 @@ public class PlayerController : MonoBehaviour
         {
             _verticalVelocity = -2f;
         }
-        /*
-        if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
-            _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
-        {
-            _animator.SetBool("Attack1", false);
-        }
-        if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
-            _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
-        {
-            _animator.SetBool("Attack2", false);
-        }
-        if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
-            _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack3"))
-        {
-            _animator.SetBool("Attack3", false);
-            comboCount = 0;
-        }
-        */
-        if (Time.time - lastClickedTime > maxComboDelay)
+
+        if (Time.time - lastClickedTime > maxComboDelay && isAttack)
         {
             isAttack = false;
             comboCount = 0;
             _animator.SetTrigger("GoToIdle");
         }
+
+        if (_controller.isGrounded) isAttackGrounded = true;
+        
+        ComboRecentlyChangedTimer -= Time.deltaTime;
     }
     private void LateUpdate()
     {
@@ -497,7 +499,7 @@ public class PlayerController : MonoBehaviour
     public void Backflip()
     {
         bool isAvailableBackflip =
-            (!_controller.isGrounded && !isWalled && !isWallSliding && !isBackflip && !isBackflipDown);
+            (!_controller.isGrounded && !isWalled && !isWallSliding && !isBackflip && !isBackflipDown && !isAttack && isAttackGrounded);
 
         if(isAvailableBackflip)
         {
@@ -512,6 +514,7 @@ public class PlayerController : MonoBehaviour
     {
         _animator.SetTrigger("Backflip");
         yield return new WaitForSeconds(backflipTime);
+        _animator.SetTrigger("GoToIdle");
         isBackflip = false;
         isBackflipDown = true;
     }
@@ -527,25 +530,28 @@ public class PlayerController : MonoBehaviour
 
         if(canAttack)
         {
+            isAttackGrounded = false;
+            isAttack = true;
             wallJumpCounter = 0f;
             lastClickedTime = Time.time;
             nextFireTime = lastClickedTime + 0.5f;
-            comboCount++; 
+            comboCount++;
+            ComboRecentlyChangedTimer = .2f;
             if (comboCount == 1)
             {
+                //ComboRecentlyChangedTimer = .3f;
                 _animator.SetTrigger("AttackTrigger1");
             }
-            comboCount = Mathf.Clamp(comboCount, 0, 3);
-
-            if (comboCount >= 2 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f &&
+            else if (comboCount == 2 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
                 _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
             {
+                //ComboRecentlyChangedTimer = .4f;
                 _animator.SetTrigger("AttackTrigger2");
             }
-            
-            if (comboCount >= 3 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f &&
+            else if (comboCount == 3 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
                 _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
             {
+                //ComboRecentlyChangedTimer = .53f;
                 _animator.SetTrigger("AttackTrigger3");
             }
         }
@@ -611,4 +617,37 @@ public class PlayerController : MonoBehaviour
             OnLadder = false;
         }
     }
+
+    #region SkidMark
+
+    private void CheckEmit()
+    {
+        if ((isDashing && _controller.isGrounded) || _speed == SprintSpeed)
+        {
+            startEmmiter();
+        }
+        else
+        {
+            stopEmmiter();
+        }
+    }
+    
+    private void startEmmiter()
+    {
+        foreach (TrailRenderer T in Tyremarks)
+        {
+            Debug.Log("StartEmmiter");
+            T.emitting = true;
+        }
+    }
+    
+    private void stopEmmiter()
+    {
+        foreach (TrailRenderer T in Tyremarks)
+        {
+            T.emitting = false;
+        }
+    }
+
+    #endregion
 }
