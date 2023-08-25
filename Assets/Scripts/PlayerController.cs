@@ -58,16 +58,13 @@ public class PlayerController : MonoBehaviour
     private GameObject _mainCamera;
     
     private const float _threshold = 0.01f;
+
+    #region 사다리
+    [Tooltip("사다리 콜라이더와 접촉 시 true")]
+    [SerializeField] private bool _touchLadder;
     
-    /// <summary>
-    /// 사다리 콜라이더와 접촉 시 true
-    /// </summary>
-    private bool _touchLadder;
-    
-    /// <summary>
-    /// 사다리 상태
-    /// </summary>
-    private bool _onladder;
+    [Tooltip("사다리 매달린 상태 여부")]
+    [SerializeField] private bool _onladder;
 
     public bool OnLadder
     {
@@ -75,13 +72,15 @@ public class PlayerController : MonoBehaviour
         set
         {
             _onladder = value;
-           //_lastTouchObject.GetComponent<Ladder>().Attach = _onladder;
+            //_lastTouchObject.GetComponent<Ladder>().Attach = _onladder;
         }
     }
+    
 
     public Transform DefaultTarget { get; private set; }
 
     public GameObject _lastTouchObject;
+    #endregion
     
     #region Dash
 
@@ -416,6 +415,11 @@ public class PlayerController : MonoBehaviour
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
 
+    /// <summary>
+    /// 사다리 액션 체크 및 수행
+    /// 사다리 액션 수행 시, 기본 Move 를 수행하지 않음
+    /// </summary>
+    /// <returns>사다리 액션 여부 반환</returns>
     private bool CheckLadder()
     {
         if (_touchLadder)
@@ -430,7 +434,7 @@ public class PlayerController : MonoBehaviour
             // 붙었으면 이동
             if (OnLadder)
             {
-                _verticalVelocity = 0;
+                _verticalVelocity = 0; // 사다리에서 내려가거나 점프할 때, 수직 가속이 높아지는 것을 막음
                 if (_input.move != default)
                 {
                     Vector3 value = _input.move * Time.deltaTime * _speed;
