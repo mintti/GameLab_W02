@@ -863,13 +863,15 @@ MonoBehaviour:
   isWallSliding: 0
   wallJumpCounter: 0
   _lastTouchObject: {fileID: 0}
+  pcIsGrounded: 0
   isDashing: 0
   isDashTetany: 0
   isDashCool: 0
+  dashCounter: 0
   dashPower: 60
   dashForwardRollTime: 0.2
   dashTetanyTime: 0.1
-  dashCoolTime: 0.1
+  dashCoolTime: 0.2
   isBackflip: 0
   isBackflipDown: 0
 --- !u!114 &1257167238
@@ -1120,7 +1122,7 @@ Transform:
   m_GameObject: {fileID: 1611490112}
   m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 5.11}
-  m_LocalScale: {x: 10, y: 10, z: 1}
+  m_LocalScale: {x: 10, y: 32.39, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2014038720}
