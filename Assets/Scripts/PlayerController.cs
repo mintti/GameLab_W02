@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 
 [RequireComponent(typeof(CharacterController))]
@@ -77,11 +78,21 @@ public class PlayerController : MonoBehaviour
             //_lastTouchObject.GetComponent<Ladder>().Attach = _onladder;
         }
     }
-    
 
     public Transform DefaultTarget { get; private set; }
 
     public GameObject _lastTouchObject;
+    #endregion
+
+    #region Sliding
+    [Header("Sliding")]
+    [SerializeField] bool isSliding = false;            // 슬라이딩 여부
+    [SerializeField] float slideMinAngle = 10;          // 슬라이딩 동작하는 최소 각도
+    [SerializeField] float slideMaxAngle = 50;          // 슬라이딩 지원하는 최대 각도
+    [SerializeField] float slidingSpeed ;               // 슬라이딩 기본 속도
+    [SerializeField] private Vector3 _slideDirection;   // 슬라이딩 방향
+    private float _slidingMultipleByAngle;              // 슬라이드 속도에 곱할 각도
+    
     #endregion
     
     #region Dash
@@ -176,6 +187,8 @@ public class PlayerController : MonoBehaviour
 
         DASH_FORWARD_ROLL_TIME = new WaitForSeconds(dashForwardRollTime);
         DASH_TETANY_TIME       = new WaitForSeconds(dashTetanyTime);
+
+        isSliding = false;
     }
 
     private void Update()
@@ -319,8 +332,10 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
 
-
         Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+
+
+        MoveSliding(); 
         
         // move the player
         if (!CheckLadder())
@@ -328,6 +343,36 @@ public class PlayerController : MonoBehaviour
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
         }
+    }
+
+    private bool MoveSliding()
+    {
+        SetSlopeSlideVelocity();
+        isSliding = !(_slideDirection == Vector3.zero);
+        
+        if (isSliding)
+        {
+            var veloc = _slideDirection * slidingSpeed * Time.deltaTime * _slidingMultipleByAngle;
+            _controller.Move(veloc);
+        }
+        
+        return isSliding;
+    }
+
+    private void SetSlopeSlideVelocity()
+    {
+        if(Physics.Raycast(transform.position , Vector3.down, out RaycastHit slopeHit, 2))
+        {
+            float angle = Vector3.Angle(slopeHit.normal, Vector3.up);
+            if (angle >= slideMinAngle)
+            {
+                _slidingMultipleByAngle = angle <= slideMaxAngle ? (float)Math.Pow((angle / 60), 2f) : 2f ;
+                _slideDirection = Vector3.ProjectOnPlane( Vector3.down, slopeHit.normal).normalized;
+                return;
+            }
+        }
+
+        _slideDirection = Vector3.zero;
     }
     
     private void SetGravity()
