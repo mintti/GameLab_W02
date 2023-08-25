@@ -9,6 +9,7 @@ TagManager:
   - Ladder
   - Enemy
   - AttackParticle
+  - Box
   layers:
   - Default
   - TransparentFX
