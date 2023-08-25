@@ -931,6 +931,8 @@ MonoBehaviour:
   isWalled: 0
   isWallSliding: 0
   wallJumpCounter: 0
+  _touchLadder: 0
+  _onladder: 0
   _animator: {fileID: 573654772}
   _touchLadder: 0
   _onladder: 0
