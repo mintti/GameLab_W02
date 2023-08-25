@@ -829,7 +829,7 @@ CharacterController:
   serializedVersion: 2
   m_Height: 1
   m_Radius: 0.5
-  m_SlopeLimit: 46
+  m_SlopeLimit: 90
   m_StepOffset: 0.25
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0
@@ -862,7 +862,14 @@ MonoBehaviour:
   isWalled: 0
   isWallSliding: 0
   wallJumpCounter: 0
+  _touchLadder: 0
+  _onladder: 0
   _lastTouchObject: {fileID: 0}
+  isSliding: 0
+  slideMinAngle: 10
+  slideMaxAngle: 50
+  slidingSpeed: 10
+  _slideDirection: {x: 0, y: 0, z: 0}
   isDashing: 0
   isDashTetany: 0
   isDashCool: 0
