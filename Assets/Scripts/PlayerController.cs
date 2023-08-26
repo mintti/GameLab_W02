@@ -9,6 +9,9 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
+
+    public StateMachine stateMachine {get; private set;}
+
     public Inputs inputManager;
     [Header("Player")]
     public float SlowWalkSpeed = 1.0f;
@@ -41,10 +44,10 @@ public class PlayerController : MonoBehaviour
     private float _cinemachineTargetPitch;
 
     // player
-    private float _speed;
-    private float _targetRotation = 0.0f;
-    private float _rotationVelocity;
-    private float _verticalVelocity;
+    public float _speed;
+    public float _targetRotation = 0.0f;
+    public float _rotationVelocity;
+    public float _verticalVelocity;
     private float _terminalVelocity = 53.0f;
     
     //player wall jump
@@ -55,7 +58,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 wallJumpVector;
     
     private PlayerInput _playerInput;
-    private CharacterController _controller;
+    public  CharacterController _controller;
     private Inputs _input;
     private GameObject _mainCamera;
     public Animator _animator;
@@ -100,19 +103,12 @@ public class PlayerController : MonoBehaviour
     
     #region Dash
     [Header("Dash")]
-    [SerializeField] bool  isDashing;
-    [SerializeField] bool  isDashTetany;
-    [SerializeField] bool  isDashCool;
+    [SerializeField] public bool  isDashing;     // 이걸 사용할 필요가 없어져야함
+    [SerializeField] public bool  isDashTetany;
+    [SerializeField] public bool  isDashCool;
 
-    [SerializeField] int   dashCounter = 1;
+    [SerializeField] public int   dashCounter = 1;
     
-    [SerializeField] float dashPower;
-    [SerializeField] float dashForwardRollTime; // 대시 앞구르기 모션 시간.
-    [SerializeField] float dashTetanyTime;      // 대시 후, 경직시간 
-    [SerializeField] float dashCoolTime;
-
-    private WaitForSeconds DASH_FORWARD_ROLL_TIME;
-    private WaitForSeconds DASH_TETANY_TIME;
     #endregion
     
     #region Backflip
@@ -179,25 +175,41 @@ public class PlayerController : MonoBehaviour
         {
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
+
+        
     }
 
-    private void Start()
+    void Start()
     {
+
+
         _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         _controller  = GetComponent<CharacterController>();
         _input       = GetComponent<Inputs>();
         _playerInput = GetComponent<PlayerInput>();
         
 
-        DASH_FORWARD_ROLL_TIME = new WaitForSeconds(dashForwardRollTime);
-        DASH_TETANY_TIME       = new WaitForSeconds(dashTetanyTime);
+        // DASH_FORWARD_ROLL_TIME = new WaitForSeconds(dashForwardRollTime);
+        // DASH_TETANY_TIME       = new WaitForSeconds(dashTetanyTime);
 
         isSliding = false;
+
+        InitStateMachine();
     }
 
-    private void Update()
+    void FixedUpdate()
     {
+        stateMachine.FixedUpdateState();
+    }
+
+    void Update()
+    {
+        stateMachine.UpdateState();
+
         SetGravity();
+        GroundCheck();
+
+
         if (canSuperJumpTimer > 0) canSuperJumpTimer -= Time.deltaTime;
         if (wallJumpCounter > 0)  // isWallJump-ing
         {
@@ -230,7 +242,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Move();
+            //Move();
         }
         
         RaycastHit hit;
@@ -269,6 +281,7 @@ public class PlayerController : MonoBehaviour
         ComboRecentlyChangedTimer -= Time.deltaTime;
         CheckEmit();
     }
+
     private void LateUpdate()
     {
         CameraRotation();
@@ -380,6 +393,18 @@ public class PlayerController : MonoBehaviour
         _slideDirection = Vector3.zero;
     }
     
+    private void GroundCheck()
+
+    {
+        if (_controller.isGrounded)
+        {
+            if( dashCounter == 0 ){
+                dashCounter =  1;
+                // 대쉬는 공중에서 한번만 가능. 땅에 닿은 후에 충전됨. 최대충전횟수 1회.
+            }
+        }        
+    }
+
     private void SetGravity()
     {
         if (_controller.isGrounded)
@@ -390,9 +415,9 @@ public class PlayerController : MonoBehaviour
                 _verticalVelocity = -2f;
             }
 
-            if(dashCounter == 0){
-                dashCounter = 1;  // 대쉬는 공중에서 한번만 가능. 땅에 닿은 후에 충전됨. 최대충전횟수 1회.
-            }
+            // if(dashCounter == 0){
+            //     dashCounter = 1;  // 대쉬는 공중에서 한번만 가능. 땅에 닿은 후에 충전됨. 최대충전횟수 1회.
+            // }
 
         }
         // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
@@ -444,65 +469,65 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    #region Dash
-    public void Dash()
-    {
-        bool isAvailableDash = !isDashing && !isDashTetany && !isDashCool && (dashCounter > 0) && !isAttack &&
-                               isAttackGrounded;
+    // #region Dash
+    // public void Dash()
+    // {
+    //     bool isAvailableDash = !isDashing && !isDashTetany && !isDashCool && (dashCounter > 0) && !isAttack &&
+    //                            isAttackGrounded;
 
-        if(isAvailableDash)
-        {
-            wallJumpCounter = 0f;  // wall jump cancel
+    //     if(isAvailableDash)
+    //     {
+    //         wallJumpCounter = 0f;  // wall jump cancel
             
-            //create particle
-            GameObject particle = Instantiate(dashParticle, transform.position, _mainCamera.transform.rotation);
-            particle.transform.parent = _mainCamera.transform;
-            ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
-            particlesys.Play();
+    //         //create particle
+    //         GameObject particle = Instantiate(dashParticle, transform.position, _mainCamera.transform.rotation);
+    //         particle.transform.parent = _mainCamera.transform;
+    //         ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
+    //         particlesys.Play();
             
-            StartCoroutine(DashCo());
-        }
-    }
+    //         StartCoroutine(DashCo());
+    //     }
+    // }
 
-    IEnumerator DashCo()
-    {
-        dashCounter = 0;
-        isDashing = true;
-        Vector3 dashDirection = (transform.forward).normalized; // TODO 계산 필요. 경사면 등
+    // IEnumerator DashCo()
+    // {
+    //     dashCounter = 0;
+    //     isDashing = true;
+    //     Vector3 dashDirection = (transform.forward).normalized; // TODO 계산 필요. 경사면 등
 
-        // 최소한의 대시거리 + 현재이동거리에 비례한 추가거리
-        float minimumDash = dashPower * Time.deltaTime;
-        float addDash     = _speed    * Time.deltaTime;
+    //     // 최소한의 대시거리 + 현재이동거리에 비례한 추가거리
+    //     float minimumDash = dashPower * Time.deltaTime;
+    //     float addDash     = _speed    * Time.deltaTime;
 
-        Vector3 verticalDash = new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
+    //     Vector3 verticalDash = new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
+    // }
+    //     _controller.Move( dashDirection * (minimumDash + addDash) + verticalDash);
         
-        _controller.Move( dashDirection * (minimumDash + addDash) + verticalDash);
+
+    //     yield return DASH_FORWARD_ROLL_TIME; // 앞구르기 모션 시간
+    //     isDashing = false;
         
+    //     isDashTetany = true;
+    //     yield return DASH_TETANY_TIME; // 대시 후 경직 시간
+    //     isDashTetany = false;
+    //     // TODO: playerState = move
 
-        yield return DASH_FORWARD_ROLL_TIME; // 앞구르기 모션 시간
-        isDashing = false;
-        
-        isDashTetany = true;
-        yield return DASH_TETANY_TIME; // 대시 후 경직 시간
-        isDashTetany = false;
-        // TODO: playerState = move
+    //     isDashCool = true;
+    //     StartCoroutine(DashCoolTimeCO());
+    // }
 
-        isDashCool = true;
-        StartCoroutine(DashCoolTimeCO());
-    }
+    // IEnumerator DashCoolTimeCO()
+    // {
+    //     float timer = 0;
+    //     while(timer < dashCoolTime)
+    //     {
+    //         timer += Time.deltaTime;
+    //         yield return new WaitForEndOfFrame();
+    //     }
+    //     isDashCool = false;
+    // }
 
-    IEnumerator DashCoolTimeCO()
-    {
-        float timer = 0;
-        while(timer < dashCoolTime)
-        {
-            timer += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-        isDashCool = false;
-    }
-
-    #endregion
+    // #endregion
     
     #region Backflip
     
@@ -691,4 +716,218 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
+
+    public float getSpeed()
+    {
+        return _speed;
+    }
+
+    public float getVerticalVelocity()
+    {
+        return _verticalVelocity;
+    }
+
+
+    public Inputs GetInputs()
+    {
+        if( _input == null){
+            Debug.Log("_input is null");
+            return null;
+        }
+        return _input;
+    }
+
+    public GameObject GetMainCamera()
+    {
+        if( _mainCamera == null){
+            Debug.Log("_mainCamera is null");
+            return null;
+        }
+        return _mainCamera;
+    }
+
+
+    private void InitStateMachine()
+    {
+        Debug.Log("InitStateMachine");
+
+        stateMachine = new StateMachine(StateName.WALK, new WalkState(this));
+
+        stateMachine.AddState(StateName.DASH, new DashState(this));
+
+    
+    }
 }
+
+
+
+
+// public interface IState
+// {
+//     void Handle(PlayerController controller);
+// }
+
+// public class StateContext
+// {
+//     public IState PreviousState { get;}
+//     public IState CurrentState { get; set; }
+
+
+//     private readonly PlayerController _playerController;
+
+//     public StateContext(PlayerController playerController_)
+//     {
+//         _playerController = playerController_;
+//     }
+
+//     public void Transition() // 다음 상태가 이전 상태와 같을때
+//     {
+//         CurrentState.Handle(_playerController);
+//     }
+//     public void Transition(IState state)
+//     {
+//         CurrentState = state;
+//         CurrentState.Handle(_playerController);
+//     }
+
+// }
+
+
+// public class IdleState : MonoBehaviour, IState
+// {
+//     private PlayerController _playerController;
+
+//     public void Handle(PlayerController playerController_) {
+//         if(!playerController_)
+//         {
+//             _playerController = playerController_;
+//         }
+//      }
+//  }
+
+// public class WalkState : MonoBehaviour, IState
+// {
+//     private PlayerController _playerController;
+
+//     public void Handle(PlayerController playerController_) {
+//         if(!playerController_)
+//         {
+//             _playerController = playerController_;
+//         }
+//     }
+
+//     void Update()
+//     {
+//         // move
+//     }
+// }
+
+// public class JumpState : MonoBehaviour, IState
+// {
+//     private PlayerController _playerController;
+
+//     public void Handle(PlayerController playerController_) {
+//         if(!playerController_)
+//         {
+//             _playerController = playerController_;
+//         }
+//      }
+// }
+
+
+
+// public class DashState : MonoBehaviour, IState
+// {
+//     private PlayerController _playerController;
+
+//     public WaitForSeconds DASH_FORWARD_ROLL_TIME;
+//     public WaitForSeconds DASH_TETANY_TIME;
+
+
+//     // TODO: dashPOWER 입력하기 in script
+
+//     [SerializeField] public float dashPower;
+//     [SerializeField] public float dashForwardRollTime; // 대시 앞구르기 모션 시간.
+//     [SerializeField] public float dashTetanyTime;      // 대시 후, 경직시간 
+//     [SerializeField] public float dashCoolTime;
+
+//     public void Handle(PlayerController playerController_) 
+//     {
+//         if(!playerController_)
+//         {
+//             _playerController = playerController_;
+//         }
+
+//         bool isAvailableDash = !_playerController.isDashing && !_playerController.isDashTetany && !_playerController.isDashCool && (_playerController.dashCounter > 0);
+
+//         if(isAvailableDash)
+//         {
+//             _playerController.wallJumpCounter = 0f;  // wall jump cancel
+
+//             StartCoroutine(DashCo());
+//         }
+//      }
+
+//     void Start() {
+//         DASH_FORWARD_ROLL_TIME = new WaitForSeconds(dashForwardRollTime);
+//         DASH_TETANY_TIME       = new WaitForSeconds(dashTetanyTime);
+
+        
+//     }
+
+//      void Update()
+//      {
+
+//         if(_playerController == null) return;
+        
+
+//         if (_playerController._controller.isGrounded)
+//         {
+//             if( _playerController.dashCounter == 0 ){
+//                 _playerController.dashCounter =  1;
+//                 // 대쉬는 공중에서 한번만 가능. 땅에 닿은 후에 충전됨. 최대충전횟수 1회.
+//             }
+
+//         }
+//      }
+
+
+
+//     IEnumerator DashCo()
+//     {
+//         _playerController.dashCounter = 0;
+//         _playerController.isDashing = true;
+//         Vector3 dashDirection = (transform.forward).normalized; // TODO 계산 필요. 경사면 등
+
+//         // 최소한의 대시거리 + 현재이동거리에 비례한 추가거리
+//         float minimumDash = dashPower * Time.deltaTime;
+//         float addDash     = _playerController.getSpeed()    * Time.deltaTime;
+
+//         Vector3 verticalDash = new Vector3(0.0f, _playerController.getVerticalVelocity(), 0.0f) * Time.deltaTime;
+        
+//         _playerController._controller.Move( dashDirection * (minimumDash + addDash) + verticalDash);
+        
+
+//         yield return DASH_FORWARD_ROLL_TIME; // 앞구르기 모션 시간
+//         _playerController.isDashing = false;
+        
+//         _playerController.isDashTetany = true;
+//         yield return DASH_TETANY_TIME; // 대시 후 경직 시간
+//         _playerController.isDashTetany = false;
+//         // TODO: playerState = move
+
+//         _playerController.isDashCool = true;
+//         StartCoroutine(DashCoolTimeCO());
+//     }
+
+//     IEnumerator DashCoolTimeCO()
+//     {
+//         float timer = 0;
+//         while(timer < dashCoolTime)
+//         {
+//             timer += Time.deltaTime;
+//             yield return new WaitForEndOfFrame();
+//         }
+//         _playerController.isDashCool = false;
+//     }
+// }

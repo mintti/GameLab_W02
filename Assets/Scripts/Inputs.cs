@@ -22,6 +22,12 @@ public class Inputs : MonoBehaviour
     public bool cursorInputForLook = true;
     public PlayerController playerController;
     
+
+    void Start() 
+    {
+
+    }
+
 	public void OnMove(InputValue value)
 	{
         move = value.Get<Vector2>();
@@ -56,7 +62,16 @@ public class Inputs : MonoBehaviour
         dash = value.isPressed;
         if(dash)
         {
-            playerController.Dash();
+            //playerController.Dash();
+
+            bool isAvailableDash = !playerController.isDashing && !playerController.isDashTetany && !playerController.isDashCool && (playerController.dashCounter > 0); 
+            if(isAvailableDash){
+                playerController.stateMachine.ChangeState(StateName.DASH);
+            }else{
+
+                Debug.Log("playerController.isDashing(" +playerController.isDashing + ") playerController.isDashTetany("+playerController.isDashTetany+") " + " playerController.dashCounter("+ playerController.dashCounter+")");
+            }
+
         }
 	}
     
