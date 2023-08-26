@@ -6,11 +6,14 @@ TagManager:
   tags:
   - Ground
   - Wall
+  - Ladder
+  - Enemy
+  - AttackParticle
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - PostProcess
   - Water
   - UI
   - GroundLayer
