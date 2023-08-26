@@ -135,30 +135,7 @@ public class PlayerController : MonoBehaviour
     #endregion
     
 
-    /// <summary>
-    /// 사다리 콜라이더와 접촉 시 true
-    /// </summary>
-    private bool _touchLadder;
-    
-    /// <summary>
-    /// 사다리 상태
-    /// </summary>
-    private bool _onladder;
 
-    public bool OnLadder
-    {
-        get => _onladder;
-        set
-        {
-            _onladder = value;
-           //_lastTouchObject.GetComponent<Ladder>().Attach = _onladder;
-        }
-    }
-
-    public Transform DefaultTarget { get; private set; }
-
-    public GameObject _lastTouchObject;
-    
     private bool IsCurrentDeviceMouse
     {
         get
@@ -450,7 +427,13 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
+    private bool IsWalled()
+    {
+        float collisionRadius = 0.5f;
+        Collider[] colliders = Physics.OverlapSphere(transform.position, collisionRadius, LayerMask.NameToLayer("WallLayer"));
+        return colliders.Length > 0;
+    }
+    
     public void HandlingJump()
     {
     	if(OnLadder)
