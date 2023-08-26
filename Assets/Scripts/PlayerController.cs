@@ -60,6 +60,8 @@ public class PlayerController : MonoBehaviour
     private GameObject _mainCamera;
     public Animator _animator;
     public TrailRenderer[] Tyremarks;
+    [SerializeField] private GameObject dashParticle = default;
+    [SerializeField] private GameObject slashParticle = default;
     
     private const float _threshold = 0.01f;
 
@@ -445,12 +447,19 @@ public class PlayerController : MonoBehaviour
     #region Dash
     public void Dash()
     {
-        bool isAvailableDash = !isDashing && !isDashTetany && !isDashCool && (dashCounter > 0);
+        bool isAvailableDash = !isDashing && !isDashTetany && !isDashCool && (dashCounter > 0) && !isAttack &&
+                               isAttackGrounded;
 
         if(isAvailableDash)
         {
             wallJumpCounter = 0f;  // wall jump cancel
-
+            
+            //create particle
+            GameObject particle = Instantiate(dashParticle, transform.position, _mainCamera.transform.rotation);
+            particle.transform.parent = _mainCamera.transform;
+            ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
+            particlesys.Play();
+            
             StartCoroutine(DashCo());
         }
     }
@@ -523,6 +532,18 @@ public class PlayerController : MonoBehaviour
     #endregion
     
     #region Attack
+
+    public void CreateParticle(float yAng)
+    {
+        //create particle
+        GameObject particle = Instantiate(slashParticle, transform.position, transform.rotation);
+        particle.transform.parent = gameObject.transform;
+        ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
+        float rad = (Mathf.PI / 180) * yAng;
+        particlesys.startRotation3D = new Vector3(0.0f, rad, 0.0f);
+        particlesys.Play();
+    }
+    
     
     public void Attack()
     {
@@ -531,6 +552,22 @@ public class PlayerController : MonoBehaviour
 
         if(canAttack)
         {
+            //카메라가 보는 시점으로 곻격하게 하고 싶은데 안됨
+            /* 방법 1
+            Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+
+            Vector3 cameraForward = _mainCamera.transform.forward;
+            cameraForward.y = 0.0f; // Make sure the vector is horizontal
+            cameraForward.Normalize();
+
+            if (cameraForward != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 10.0f * Time.deltaTime);
+            }
+            */
+            
+            // 방법 2. transform.rotation = Quaternion.Inverse(Quaternion.Euler(_mainCamera.transform.rotation.x, _mainCamera.transform.rotation.y, _mainCamera.transform.rotation.z));
             isAttackGrounded = false;
             isAttack = true;
             wallJumpCounter = 0f;
@@ -538,21 +575,25 @@ public class PlayerController : MonoBehaviour
             nextFireTime = lastClickedTime + 0.5f;
             comboCount++;
             ComboRecentlyChangedTimer = .2f;
+            
             if (comboCount == 1)
             {
                 //ComboRecentlyChangedTimer = .3f;
+                CreateParticle(180.0f);
                 _animator.SetTrigger("AttackTrigger1");
             }
             else if (comboCount == 2 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
                 _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
             {
                 //ComboRecentlyChangedTimer = .4f;
+                CreateParticle(45.0f);
                 _animator.SetTrigger("AttackTrigger2");
             }
             else if (comboCount == 3 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
                 _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
             {
                 //ComboRecentlyChangedTimer = .53f;
+                CreateParticle(110.0f);
                 _animator.SetTrigger("AttackTrigger3");
             }
         }
@@ -623,7 +664,7 @@ public class PlayerController : MonoBehaviour
 
     private void CheckEmit()
     {
-        if ((isDashing && _controller.isGrounded) || _speed == SprintSpeed)
+        if ((isDashing) || _speed == SprintSpeed)
         {
             startEmmiter();
         }
