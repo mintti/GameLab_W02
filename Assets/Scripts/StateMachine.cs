@@ -88,6 +88,7 @@ public abstract class BaseState
 public enum StateName{
     WALK = 100,
     DASH,
+    JUMP,
     ATTACK
 }
 
@@ -208,10 +209,11 @@ public class DashState : BaseState
 
         Vector3 verticalDash = new Vector3(0.0f, controller.getVerticalVelocity(), 0.0f) * Time.deltaTime;
         
-        controller._controller.Move( dashDirection * (minimumDash + addDash) + verticalDash);
-        
-        // todo: timer 생성을 once로 끝내야함
-        // 아니면 
+        controller._controller.Move( dashDirection * (minimumDash + addDash) + verticalDash); // 이걸 playerController에서 call 하고 param을 바꾸는 방향
+
+        // move the player
+        // controller._controller.Move(targetDirection.normalized * (controller._speed * Time.deltaTime) +
+        //                     new Vector3(0.0f, controller._verticalVelocity, 0.0f) * Time.deltaTime);
 
         if(!isTimer){
             isTimer = true;
@@ -260,5 +262,63 @@ public class DashState : BaseState
     public override void OnExitState()
     {
         
+    }
+}
+
+
+
+public class JumpState : BaseState
+{
+    bool isTimer = false;
+    // TODO: dashPOWER 입력하기 in script
+
+    public float dashPower = 10;
+    public float dashRollTime = 0.2f; // 대시 앞구르기 모션 시간.
+    public float dashTetanyTime = 0.1f;      // 대시 후, 경직시간 
+    public float dashCoolTime = 0.1f;
+
+    float multiplyValue = 1f;
+    
+    public JumpState( PlayerController controller) : base(controller)
+    {
+        Debug.Log("JumpState 생성");
+    }
+
+
+    public override void OnEnterState()
+    {
+        controller.isJumping = true;
+    }
+
+    public override void OnUpdateState()
+    {
+    	if(controller.OnLadder)
+        {
+            controller.OnLadder = false;
+            multiplyValue = 1f;
+        }
+        else if (controller._controller.isGrounded)
+        {
+            multiplyValue = (controller.canSuperJumpTimer > 0) ? 2f : 1f;
+        }
+        
+        controller._verticalVelocity = Mathf.Sqrt(controller.JumpHeight * -2f * controller.Gravity * multiplyValue);
+
+        // 언제 state 전환? 
+        // 땅에 닿을때 끝
+        if(controller.isJumping && controller._controller.isGrounded)
+        {            
+            controller.stateMachine.ChangeState(StateName.WALK);
+        }
+    }
+
+
+
+    public override void OnFixedUpdateState()
+    {}
+
+    public override void OnExitState()
+    {
+        controller.isJumping = false;
     }
 }

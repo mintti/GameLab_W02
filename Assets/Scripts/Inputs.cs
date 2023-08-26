@@ -44,7 +44,10 @@ public class Inputs : MonoBehaviour
 	public void OnJump(InputValue value)
 	{
 		jump = value.isPressed;
-        playerController.HandlingJump();
+        //playerController.HandlingJump();
+        if(!playerController.isJumping && playerController._controller.isGrounded){
+            playerController.stateMachine.ChangeState(StateName.JUMP);
+        }
 	}
 
 	public void OnSprint(InputValue value)
@@ -63,13 +66,12 @@ public class Inputs : MonoBehaviour
         if(dash)
         {
             //playerController.Dash();
-
             bool isAvailableDash = !playerController.isDashing && !playerController.isDashTetany && !playerController.isDashCool && (playerController.dashCounter > 0); 
             if(isAvailableDash){
                 playerController.stateMachine.ChangeState(StateName.DASH);
             }else{
 
-                Debug.Log("playerController.isDashing(" +playerController.isDashing + ") playerController.isDashTetany("+playerController.isDashTetany+") " + " playerController.dashCounter("+ playerController.dashCounter+")");
+                //Debug.Log("playerController.isDashing(" +playerController.isDashing + ") playerController.isDashTetany("+playerController.isDashTetany+") " + " playerController.dashCounter("+ playerController.dashCounter+")");
             }
 
         }
