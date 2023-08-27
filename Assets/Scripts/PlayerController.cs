@@ -216,7 +216,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (warpTimer <= 0f)
         {
-            // Move();
+            //Move();
         }
         if (warpTimer > 0f) warpTimer -= Time.deltaTime;
         
@@ -504,11 +504,6 @@ public class PlayerController : MonoBehaviour
         isBackflipDown = true;
     }
     
-    public void HandlingJump()
-    {
-        yield return new WaitForSeconds(.2f);
-        isBackflipDown = true;
-    }
     
     public void Jump()
     {
@@ -520,33 +515,9 @@ public class PlayerController : MonoBehaviour
         }
         else if (_controller.isGrounded || (coyoteTimer > 0f && _controller.velocity.y < 0.0f))
         {
-            #region Jump
-
+        }
     }
     
-
-    public void HandlingCoyoteTime()
-    {
-        if (_controller.isGrounded)
-        {
-            coyoteTimer = 0.2f;
-        }
-        else
-        {
-            coyoteTimer -= Time.deltaTime;
-        }
-        
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.5f))
-        {
-            Debug.DrawRay(transform.position, Vector3.down * 0.5f, Color.green);
-            canJumpBuffer = true;
-        }
-        else
-        {
-            canJumpBuffer = false;
-        }
-    }
 
     public void HandlingCoyoteTime()
     {
@@ -735,7 +706,8 @@ public class PlayerController : MonoBehaviour
             stopEmmiter();
         }
     }
-    
+    #endregion
+
     private void startEmmiter()
     {
         foreach (TrailRenderer T in Tyremarks)
@@ -752,7 +724,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    #endregion
 
     public float getSpeed()
     {
@@ -815,3 +786,4 @@ public class PlayerController : MonoBehaviour
     
     #endregion
 }
+

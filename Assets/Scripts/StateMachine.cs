@@ -171,8 +171,15 @@ public class WalkState : BaseState
         Vector3 targetDirection = Quaternion.Euler(0.0f, controller._targetRotation, 0.0f) * Vector3.forward;
 
         // move the player
-        controller._controller.Move(targetDirection.normalized * (controller._speed * Time.deltaTime) +
-                            new Vector3(0.0f, controller._verticalVelocity, 0.0f) * Time.deltaTime);
+        // controller._controller.Move(targetDirection.normalized * (controller._speed * Time.deltaTime) +
+        //                     new Vector3(0.0f, controller._verticalVelocity, 0.0f) * Time.deltaTime);
+
+
+        if (controller.warpTimer <= 0f)
+        {
+            controller._controller.Move(targetDirection.normalized * (controller._speed * Time.deltaTime) +
+                    new Vector3(0.0f, controller._verticalVelocity, 0.0f) * Time.deltaTime);
+        }
 
 
         if (controller._touchLadder)
