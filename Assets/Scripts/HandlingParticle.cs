@@ -31,14 +31,5 @@ public class HandlingParticle : MonoBehaviour
             ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
             particlesys.Play();
         }
-        
-        if (other.transform.CompareTag("FlyingEnemy") && hitOnce == true)
-        { 
-            hitOnce = false;
-            other.GetComponent<HandlingHit>().HandleHit();
-            GameObject particle = Instantiate(hitParticle, other.transform.position, transform.rotation);
-            ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
-            particlesys.Play();
-        }
     }
 }

@@ -13,7 +13,6 @@ public class Inputs : MonoBehaviour
     public bool dash;
     public bool backflip;
     public bool attack;
-    public bool resetCamera;
     
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -85,12 +84,6 @@ public class Inputs : MonoBehaviour
 	    {
 		    playerController.AttackS();
 	    }
-    }
-    
-    public void OnResetCamera(InputValue value)
-    {
-	    resetCamera = value.isPressed;
-	    playerController.ResetCamera();
     }
     
 

@@ -29,7 +29,7 @@ public class HandlingHit: MonoBehaviour
             hitDelay = .4f;
             Vector3 pos = transform.position - GameObject.Find("Player").transform.position;
             rb.AddForce(pos.normalized * .5f, ForceMode.Impulse);
-            if (gameObject.CompareTag("Enemy"))rb.AddForce(Vector3.up * 4f, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * 4f, ForceMode.Impulse);
             
             foreach (GameObject child in childObjects)
             {
