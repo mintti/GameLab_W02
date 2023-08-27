@@ -480,9 +480,29 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine("TurnOnBackflipDown");
             }
         }
+        
+        if (hit.collider.CompareTag("Box"))
+        {
+            if (hit.transform.position.y < transform.position.y && isBackflipDown == true)
+            {
+                //create particle
+                GameObject particle = Instantiate(boxParticle, hit.transform.position, hit.transform.rotation);
+                ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
+                particlesys.Play();
+                
+                Destroy(hit.gameObject);
+                StartCoroutine("TurnOnBackflipDown");
+            }
+        }
     }
 
     IEnumerator TurnOnBackflipDown()
+    {
+        yield return new WaitForSeconds(.2f);
+        isBackflipDown = true;
+    }
+    
+    public void HandlingJump()
     {
         yield return new WaitForSeconds(.2f);
         isBackflipDown = true;
@@ -496,9 +516,35 @@ public class PlayerController : MonoBehaviour
         {
             stateMachine.ChangeState(StateName.JUMP);
         }
+        else if (_controller.isGrounded || (coyoteTimer > 0f && _controller.velocity.y < 0.0f))
+        {
+            #region Jump
 
     }
     
+
+    public void HandlingCoyoteTime()
+    {
+        if (_controller.isGrounded)
+        {
+            coyoteTimer = 0.2f;
+        }
+        else
+        {
+            coyoteTimer -= Time.deltaTime;
+        }
+        
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.5f))
+        {
+            Debug.DrawRay(transform.position, Vector3.down * 0.5f, Color.green);
+            canJumpBuffer = true;
+        }
+        else
+        {
+            canJumpBuffer = false;
+        }
+    }
 
     public void HandlingCoyoteTime()
     {
