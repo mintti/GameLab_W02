@@ -288,6 +288,17 @@
                 },
                 {
                     "name": "",
+                    "id": "68c25437-77dc-4195-ae84-960ac870a6e3",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "SlowWalk",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "98fe24fa-6741-449e-b562-015a8c6e0bb1",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",

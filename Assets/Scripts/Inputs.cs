@@ -23,6 +23,12 @@ public class Inputs : MonoBehaviour
     public bool cursorInputForLook = true;
     public PlayerController playerController;
     
+
+    void Start() 
+    {
+
+    }
+
 	public void OnMove(InputValue value)
 	{
         move = value.Get<Vector2>();
@@ -39,7 +45,10 @@ public class Inputs : MonoBehaviour
 	public void OnJump(InputValue value)
 	{
 		jump = value.isPressed;
-        playerController.HandlingJump();
+        if(jump)
+        {
+            playerController.Jump();
+        }
 	}
 
 	public void OnSprint(InputValue value)
@@ -65,7 +74,6 @@ public class Inputs : MonoBehaviour
     {
 	    if(value.isPressed)
 	    {
-		    playerController.wallJumpCounter = 0f;
 		    playerController.Backflip();
 	    }
     }
@@ -73,9 +81,9 @@ public class Inputs : MonoBehaviour
     public void OnAttack(InputValue value)
     {
 	    attack = value.isPressed;
-	    if(attack && Time.time > playerController.nextFireTime && playerController.comboCount < 3)
+	    if(attack)
 	    {
-		    playerController.Attack();
+		    playerController.AttackS();
 	    }
     }
     

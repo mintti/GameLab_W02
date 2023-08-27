@@ -16,15 +16,28 @@ public class Portal : MonoBehaviour
     private GameObject _player;
     public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            _player = other.gameObject;
-            StartCoroutine(nameof(WarpTimer));
+        // if (other.CompareTag("Player"))
+        // {
+        //     _player = other.gameObject;
+        //     StartCoroutine(nameof(WarpTimer));
+        // }
+    }
+
+    bool isTimer = false;
+    private void OnTriggerStay(Collider other) {
+        if(!isTimer){
+            
+            if (other.CompareTag("Player"))
+            {
+                _player = other.gameObject;
+                StartCoroutine(nameof(WarpTimer));
+            }
         }
     }
 
     public void OnTriggerExit(Collider other)
     {
+        isTimer = false;
         if (other.CompareTag("Player"))
         {
             StopCoroutine(nameof(WarpTimer));
@@ -34,6 +47,8 @@ public class Portal : MonoBehaviour
 
     IEnumerator WarpTimer()
     {
+        isTimer = true;
+
         int count = time;
         while(count > 0)
         {
@@ -41,7 +56,7 @@ public class Portal : MonoBehaviour
             yield return new WaitForSeconds(1f);
             count--;
         }
-
+        isTimer = false;
         Warp();
     }
 

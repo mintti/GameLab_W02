@@ -5,13 +5,16 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
+namespace asd
+{
+    
+
+
+
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
-
-    public StateMachine stateMachine {get; private set;}
-
     public Inputs inputManager;
     [Header("Player")]
     public float SlowWalkSpeed = 1.0f;
@@ -44,30 +47,23 @@ public class PlayerController : MonoBehaviour
     private float _cinemachineTargetPitch;
 
     // player
-    public float _speed;
-    public float _targetRotation = 0.0f;
-    public float _rotationVelocity;
-    public float _verticalVelocity;
+    private float _speed;
+    private float _targetRotation = 0.0f;
+    private float _rotationVelocity;
+    private float _verticalVelocity;
     private float _terminalVelocity = 53.0f;
     
-    // jump
-    public bool isJumping = false;
-
     //player wall jump
     public bool isWalled = false;
     public bool isWallSliding = false;
-    //public bool canWallJump   = false;
-    public float wallJumpTime = 0.35f;
-
     public float wallJumpCounter;
-
-    public bool isWallJumping = false;
-    public Vector3 wallJumpVector;
+    private float wallJumpTime = 0.35f;
+    private Vector3 wallJumpVector;
     
     private PlayerInput _playerInput;
     public CharacterController _controller;
     private Inputs _input;
-    public GameObject _mainCamera;
+    private GameObject _mainCamera;
     public Animator _animator;
     public TrailRenderer[] Tyremarks;
     [SerializeField] private GameObject dashParticle = default;
@@ -83,12 +79,20 @@ public class PlayerController : MonoBehaviour
     
     #region 사다리
     [Tooltip("사다리 콜라이더와 접촉 시 true")]
-    [SerializeField] public bool _touchLadder;
-
-    public bool isExitLadder;
+    [SerializeField] private bool _touchLadder;
     
     [Tooltip("사다리 매달린 상태 여부")]
-    [SerializeField] public bool OnLadder = false;
+    [SerializeField] private bool _onladder;
+
+    public bool OnLadder
+    {
+        get => _onladder;
+        set
+        {
+            _onladder = value;
+            //_lastTouchObject.GetComponent<Ladder>().Attach = _onladder;
+        }
+    }
 
     public Transform DefaultTarget { get; private set; }
 
@@ -108,37 +112,44 @@ public class PlayerController : MonoBehaviour
     
     #region Dash
     [Header("Dash")]
-    [SerializeField] public bool  isDashing;     // 이걸 사용할 필요가 없어져야함
-    [SerializeField] public bool  isDashTetany;
-    [SerializeField] public bool  isDashCool;
+    [SerializeField] bool  isDashing;
+    [SerializeField] bool  isDashTetany;
+    [SerializeField] bool  isDashCool;
 
-    [SerializeField] public int   dashCounter = 1;
+    [SerializeField] int   dashCounter = 1;
     
+    [SerializeField] float dashPower;
+    [SerializeField] float dashForwardRollTime; // 대시 앞구르기 모션 시간.
+    [SerializeField] float dashTetanyTime;      // 대시 후, 경직시간 
+    [SerializeField] float dashCoolTime;
+
+    private WaitForSeconds DASH_FORWARD_ROLL_TIME;
+    private WaitForSeconds DASH_TETANY_TIME;
     #endregion
     
     #region Backflip
     [Header("Backflip")]
-    [SerializeField] public bool isBackflip;
-    [SerializeField] public bool isBackflipDown;
+    [SerializeField] bool isBackflip;
+    [SerializeField] bool isBackflipDown;
 
-    public float canSuperJumpTimer = 0f;
+    private float backflipTime = .5f;
+    private float canSuperJumpTimer = 0f;
     
     #endregion
     
     #region Attack
 
     [Header("Attack")] 
-    [SerializeField] public bool isAttack;
+    [SerializeField] private bool isAttack;
     public int comboCount;
-    [SerializeField] public float lastClickedTime = 0f;
-    [SerializeField] public float maxComboDelay = 1.0f;
+    [SerializeField] private float lastClickedTime = 0f;
+    [SerializeField] private float maxComboDelay = 1.0f;
     public float nextFireTime = 0f;
-    public float ComboRecentlyChangedTimer = 0f;
+    private float ComboRecentlyChangedTimer = 0f;
     public bool isAttackGrounded = true; //점프 어택 이후 내려찍기 기술 못쓰게 하기 위한 변수
     
     #endregion
     
-
 
     private bool IsCurrentDeviceMouse
     {
@@ -156,11 +167,9 @@ public class PlayerController : MonoBehaviour
         {
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
-
-        
     }
 
-    void Start()
+    private void Start()
     {
         _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         _controller  = GetComponent<CharacterController>();
@@ -168,29 +177,22 @@ public class PlayerController : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         
 
-        // DASH_FORWARD_ROLL_TIME = new WaitForSeconds(dashForwardRollTime);
-        // DASH_TETANY_TIME       = new WaitForSeconds(dashTetanyTime);
+        DASH_FORWARD_ROLL_TIME = new WaitForSeconds(dashForwardRollTime);
+        DASH_TETANY_TIME       = new WaitForSeconds(dashTetanyTime);
 
         isSliding = false;
-
-        InitStateMachine();
     }
 
-    void FixedUpdate()
+    private void Update()
     {
-        stateMachine.FixedUpdateState();
-    }
-
-    void Update()
-    {
-        stateMachine.UpdateState();
-
         SetGravity();
-        GroundCheck();
-
-
         if (canSuperJumpTimer > 0) canSuperJumpTimer -= Time.deltaTime;
-        if (isBackflipDown)
+        if (wallJumpCounter > 0)  // isWallJump-ing
+        {
+            _controller.Move(wallJumpVector.normalized * (Time.deltaTime * 15.0f) +
+                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+        } 
+        else if (isBackflipDown)
         {
             _controller.Move(Vector3.down * (Time.deltaTime * 50.0f));
             if (_controller.isGrounded)
@@ -216,7 +218,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (warpTimer <= 0f)
         {
-            //Move();
+            Move();
         }
         if (warpTimer > 0f) warpTimer -= Time.deltaTime;
         
@@ -238,6 +240,7 @@ public class PlayerController : MonoBehaviour
         {
             isWallSliding = false;
         }
+        if (wallJumpCounter > 0) wallJumpCounter -= Time.deltaTime;
         if (isWallSliding)
         {
             _verticalVelocity = -2f;
@@ -250,13 +253,13 @@ public class PlayerController : MonoBehaviour
             _animator.SetTrigger("GoToIdle");
         }
 
+        if (_controller.isGrounded) isAttackGrounded = true;
         
         ComboRecentlyChangedTimer -= Time.deltaTime;
         if (dontMoveRotationTimer > 0f) dontMoveRotationTimer -= Time.deltaTime;
         CheckEmit();
         HandlingCoyoteTime();
     }
-
     private void LateUpdate()
     {
         CameraRotation();
@@ -280,50 +283,6 @@ public class PlayerController : MonoBehaviour
 
         // Cinemachine will follow this target
         CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
-    }
-
-    public void Move_mj()
-    {
-        // set target speed based on move speed, sprint speed and if sprint is pressed
-        float targetSpeed = MoveSpeed;
-
-        if (_input.move == Vector2.zero) targetSpeed = 0.0f;
-
-        // a reference to the players current horizontal velocity
-        float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
-
-        float speedOffset = 0.1f;
-        float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
-
-        // accelerate or decelerate to target speed
-        if ( currentHorizontalSpeed < targetSpeed - speedOffset ||
-             currentHorizontalSpeed > targetSpeed + speedOffset )
-        {
-            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
-
-            // round speed to 3 decimal places
-            _speed = Mathf.Round(_speed * 1000f) / 1000f;
-        }
-        else
-        {
-            _speed = targetSpeed;
-        }
-        // normalise input direction
-        Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-
-        if (_input.move != Vector2.zero)
-        {
-            _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
-            float rotation  = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
-
-            // 카메라 방향으로 플레이어 회전
-            transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
-        }
-        Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-
-        // move the player
-        _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                            new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
     }
 
     private void Move()
@@ -375,11 +334,11 @@ public class PlayerController : MonoBehaviour
         MoveSliding(); 
         
         // move the player
-        //if (!CheckLadder())
-        //{
+        if (!CheckLadder())
+        {
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-        //}
+        }
     }
 
     private bool MoveSliding()
@@ -412,19 +371,6 @@ public class PlayerController : MonoBehaviour
         _slideDirection = Vector3.zero;
     }
     
-    private void GroundCheck()
-    {
-        if (_controller.isGrounded)
-        {
-            if( dashCounter == 0 ){
-                dashCounter =  1;
-                // 대쉬는 공중에서 한번만 가능. 땅에 닿은 후에 충전됨. 최대충전횟수 1회.
-            }
-
-            isAttackGrounded = true;
-        }
-    }
-
     private void SetGravity()
     {
         if (_controller.isGrounded)
@@ -434,6 +380,11 @@ public class PlayerController : MonoBehaviour
             {
                 _verticalVelocity = -2f;
             }
+
+            if(dashCounter == 0){
+                dashCounter = 1;  // 대쉬는 공중에서 한번만 가능. 땅에 닿은 후에 충전됨. 최대충전횟수 1회.
+            }
+
         }
         // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
         if (_verticalVelocity < _terminalVelocity)
@@ -445,41 +396,17 @@ public class PlayerController : MonoBehaviour
     
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (inputManager.jump && isWallSliding) // 이 코드의 정체는??
-        { 
-            if(OnLadder)
-            {
-                OnLadder = false;
-                _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-            }
-            else if (!_controller.isGrounded && hit.normal.y < 0.1f)
+        if (inputManager.jump && isWallSliding)
+        {
+            if (!_controller.isGrounded && hit.normal.y < 0.1f) 
             {
                 Debug.DrawRay(hit.point, hit.normal, Color.red, 1.25f);
-  
-                stateMachine.ChangeState(StateName.WALLJUMP);
-  
                 wallJumpCounter = wallJumpTime;
-                //canWallJump = true;
                 wallJumpVector = hit.normal;
                 _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
                 
                 Vector3 newRotation = transform.eulerAngles + new Vector3(0f, 180f, 0f);
                 transform.eulerAngles = newRotation;
-
-            }
-        }
-        
-        if (hit.collider.CompareTag("Box"))
-        {
-            if (hit.transform.position.y < transform.position.y && isBackflipDown == true)
-            {
-                //create particle
-                GameObject particle = Instantiate(boxParticle, hit.transform.position, hit.transform.rotation);
-                ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
-                particlesys.Play();
-                
-                Destroy(hit.gameObject);
-                StartCoroutine("TurnOnBackflipDown");
             }
         }
         
@@ -504,20 +431,23 @@ public class PlayerController : MonoBehaviour
         isBackflipDown = true;
     }
     
-    
-    public void Jump()
+    public void HandlingJump()
     {
-        if (!isJumping && _controller.isGrounded || (coyoteTimer > 0f && _controller.velocity.y < 0.0f)){ // 땅바닥에서 점프
-            stateMachine.ChangeState(StateName.JUMP);
-        }else if(OnLadder) // 사다리에서 점프
+    	if(OnLadder)
         {
-            stateMachine.ChangeState(StateName.JUMP);
+            OnLadder = false;
+            _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
         }
         else if (_controller.isGrounded || (coyoteTimer > 0f && _controller.velocity.y < 0.0f))
         {
+            #region Jump
+
+            float multiplyValue = (canSuperJumpTimer > 0) ? 2f : 1f;
+            _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity * multiplyValue);
+            
+            #endregion
         }
     }
-    
 
     public void HandlingCoyoteTime()
     {
@@ -546,8 +476,10 @@ public class PlayerController : MonoBehaviour
     public void Dash()
     {
         bool isAvailableDash = !isDashing && !isDashTetany && !isDashCool && (dashCounter > 0) && !isAttack &&
-                               isAttackGrounded && !isBackflip && !isBackflipDown && !isWallJumping;
-        if(isAvailableDash){
+                               isAttackGrounded;
+
+        if(isAvailableDash)
+        {
             wallJumpCounter = 0f;  // wall jump cancel
             
             //create particle
@@ -555,13 +487,51 @@ public class PlayerController : MonoBehaviour
             particle.transform.parent = _mainCamera.transform;
             ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
             particlesys.Play();
-            stateMachine.ChangeState(StateName.DASH);
-        }else{
-            //Debug.Log("playerController.isDashing(" +playerController.isDashing + ") playerController.isDashTetany("+playerController.isDashTetany+") " + " playerController.dashCounter("+ playerController.dashCounter+")");
-        }   
+            
+            StartCoroutine(DashCo());
+        }
     }
-    #endregion
 
+    IEnumerator DashCo()
+    {
+        dashCounter = 0;
+        isDashing = true;
+        Vector3 dashDirection = (transform.forward).normalized; // TODO 계산 필요. 경사면 등
+
+        // 최소한의 대시거리 + 현재이동거리에 비례한 추가거리
+        float minimumDash = dashPower * Time.deltaTime;
+        float addDash     = _speed    * Time.deltaTime;
+
+        Vector3 verticalDash = new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
+        
+        _controller.Move( dashDirection * (minimumDash + addDash) + verticalDash);
+        
+
+        yield return DASH_FORWARD_ROLL_TIME; // 앞구르기 모션 시간
+        isDashing = false;
+        
+        isDashTetany = true;
+        yield return DASH_TETANY_TIME; // 대시 후 경직 시간
+        isDashTetany = false;
+        // TODO: playerState = move
+
+        isDashCool = true;
+        StartCoroutine(DashCoolTimeCO());
+    }
+
+    IEnumerator DashCoolTimeCO()
+    {
+        float timer = 0;
+        while(timer < dashCoolTime)
+        {
+            timer += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        isDashCool = false;
+    }
+
+    #endregion
+    
     #region Backflip
     
     public void Backflip()
@@ -572,16 +542,25 @@ public class PlayerController : MonoBehaviour
         if(isAvailableBackflip)
         {
             wallJumpCounter = 0f;
-            stateMachine.ChangeState(StateName.BACKFLIP);
-
+            isBackflip = true;        // TODO: playerState = backflip
+            _verticalVelocity = Mathf.Sqrt(JumpHeight * Gravity * .2f);
+            StartCoroutine(BackflipCO());
         }
     }
     
-
+    IEnumerator BackflipCO()
+    {
+        _animator.SetTrigger("Backflip");
+        yield return new WaitForSeconds(backflipTime);
+        _animator.SetTrigger("GoToIdle");
+        isBackflip = false;
+        isBackflipDown = true;
+    }
     
     #endregion
     
     #region Attack
+
     public void CreateParticle(float yAng)
     {
         //create particle
@@ -640,20 +619,6 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-    
-
-    public void AttackS()
-    {
-	    if( Time.time > nextFireTime && comboCount < 3)
-	    {
-            bool canAttack = !isWalled && !isWallSliding && !isBackflip && !isBackflipDown;
-
-            if(canAttack)
-            {
-                stateMachine.ChangeState(StateName.ATTACK);
-            }
-	    }
-    }
     #endregion
     
     
@@ -664,6 +629,38 @@ public class PlayerController : MonoBehaviour
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
 
+    /// <summary>
+    /// 사다리 액션 체크 및 수행
+    /// 사다리 액션 수행 시, 기본 Move 를 수행하지 않음
+    /// </summary>
+    /// <returns>사다리 액션 여부 반환</returns>
+    private bool CheckLadder()
+    {
+        if (_touchLadder)
+        {
+            // 사다리에 붙고
+            if (_input.move == Vector2.up)
+            {
+                // [TODO] 사다리를 바라봐야한다면, 바라보는 대상 카메라 -> 사다리 변경 필요
+                OnLadder = true;
+            }
+            
+            // 붙었으면 이동
+            if (OnLadder)
+            {
+                _verticalVelocity = 0; // 사다리에서 내려가거나 점프할 때, 수직 가속이 높아지는 것을 막음
+                if (_input.move != default)
+                {
+                    Vector3 value = _input.move * Time.deltaTime * _speed;
+                    //transform.Translate(value);
+                    _controller.Move(value);
+                }
+            }
+        }
+
+        return OnLadder;
+    }
+    
 
     private void OnTriggerEnter(Collider other)
     {
@@ -671,11 +668,6 @@ public class PlayerController : MonoBehaviour
         {
             _touchLadder = true;
             _lastTouchObject = other.gameObject;
-        }
-
-        if (other.tag == "ExitLadder")
-        {
-            isExitLadder = true;
         }
     }
     
@@ -685,11 +677,6 @@ public class PlayerController : MonoBehaviour
         {
             _touchLadder = false;
             OnLadder = false;
-        }
-        
-        if (other.tag == "ExitLadder")
-        {
-            isExitLadder = false;
         }
     }
 
@@ -706,8 +693,7 @@ public class PlayerController : MonoBehaviour
             stopEmmiter();
         }
     }
-    #endregion
-
+    
     private void startEmmiter()
     {
         foreach (TrailRenderer T in Tyremarks)
@@ -724,53 +710,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-    public float getSpeed()
-    {
-        return _speed;
-    }
-
-    public float getVerticalVelocity()
-    {
-        return _verticalVelocity;
-    }
-
-
-    public Inputs GetInputs()
-    {
-        if( _input == null){
-            Debug.Log("_input is null");
-            return null;
-        }
-        return _input;
-    }
-
-    public GameObject GetMainCamera()
-    {
-        if( _mainCamera == null){
-            Debug.Log("_mainCamera is null");
-            return null;
-        }
-        return _mainCamera;
-    }
-
-
-    private void InitStateMachine()
-    {
-        Debug.Log("InitStateMachine");
-
-        stateMachine = new StateMachine();
-
-        stateMachine.AddState(StateName.WALK,     new WalkState(this,inputManager));
-        stateMachine.AddState(StateName.DASH,     new DashState(this,inputManager));
-        stateMachine.AddState(StateName.JUMP,     new JumpState(this,inputManager));
-        stateMachine.AddState(StateName.WALLJUMP, new WallJumpState(this,inputManager));
-        stateMachine.AddState(StateName.BACKFLIP, new BackflipState(this,inputManager));
-        stateMachine.AddState(StateName.ATTACK,   new AttackState(this,inputManager));
-        stateMachine.AddState(StateName.LADDER,   new LadderState(this,inputManager));
-
-    }
-
+    #endregion
     
     
     #region ResetCamera
@@ -787,3 +727,4 @@ public class PlayerController : MonoBehaviour
     #endregion
 }
 
+}
