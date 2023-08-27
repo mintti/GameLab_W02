@@ -80,17 +80,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public bool _touchLadder;
     
     [Tooltip("사다리 매달린 상태 여부")]
-    [SerializeField] private bool _onladder;
-
-    public bool OnLadder
-    {
-        get => _onladder;
-        set
-        {
-            _onladder = value;
-            //_lastTouchObject.GetComponent<Ladder>().Attach = _onladder;
-        }
-    }
+    [SerializeField] public bool OnLadder = false;
 
     public Transform DefaultTarget { get; private set; }
 
@@ -164,8 +154,6 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-
-
         _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         _controller  = GetComponent<CharacterController>();
         _input       = GetComponent<Inputs>();
@@ -473,25 +461,6 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-    // public void HandlingJump()
-    // {
-    // 	if(OnLadder)
-    //     {
-    //         OnLadder = false;
-    //         _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-    //     }
-    //     else if (_controller.isGrounded)
-    //     {
-    //         #region Jump
-
-    //         float multiplyValue = (canSuperJumpTimer > 0) ? 2f : 1f;
-    //         _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity * multiplyValue);
-            
-    //         #endregion
-    //     }
-    // }
-
-
     public void Jump()
     {
         if( !isWallJumping && wallJumpCounter > 0 ) // 벽점프
@@ -530,21 +499,10 @@ public class PlayerController : MonoBehaviour
             wallJumpCounter = 0f;
             stateMachine.ChangeState(StateName.BACKFLIP);
 
-            // wallJumpCounter = 0f; // canWallJump = false;
-            // isBackflip = true;        // TODO: playerState = backflip
-            // _verticalVelocity = Mathf.Sqrt(JumpHeight * Gravity * .2f);
-            // StartCoroutine(BackflipCO());
         }
     }
     
-    // IEnumerator BackflipCO()
-    // {
-    //     _animator.SetTrigger("Backflip");
-    //     yield return new WaitForSeconds(backflipTime);
-    //     _animator.SetTrigger("GoToIdle");
-    //     isBackflip = false;
-    //     isBackflipDown = true;
-    // }
+
     
     #endregion
     
@@ -561,60 +519,6 @@ public class PlayerController : MonoBehaviour
         particlesys.Play();
     }
     
-    
-    // public void Attack()
-    // {
-    //     bool canAttack =
-    //         (!isWalled && !isWallSliding && !isBackflip && !isBackflipDown);
-
-    //     if(canAttack)
-    //     {
-    //         //카메라가 보는 시점으로 곻격하게 하고 싶은데 안됨
-    //         /* 방법 1
-    //         Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-
-    //         Vector3 cameraForward = _mainCamera.transform.forward;
-    //         cameraForward.y = 0.0f; // Make sure the vector is horizontal
-    //         cameraForward.Normalize();
-
-    //         if (cameraForward != Vector3.zero)
-    //         {
-    //             Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
-    //             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 10.0f * Time.deltaTime);
-    //         }
-    //         */
-            
-    //         // 방법 2. transform.rotation = Quaternion.Inverse(Quaternion.Euler(_mainCamera.transform.rotation.x, _mainCamera.transform.rotation.y, _mainCamera.transform.rotation.z));
-    //         isAttackGrounded = false;
-    //         isAttack = true;
-    //         wallJumpCounter = 0f; //canWallJump = false;
-    //         lastClickedTime = Time.time;
-    //         nextFireTime = lastClickedTime + 0.5f;
-    //         comboCount++;
-    //         ComboRecentlyChangedTimer = .2f;
-            
-    //         if (comboCount == 1)
-    //         {
-    //             //ComboRecentlyChangedTimer = .3f;
-    //             CreateParticle(180.0f);
-    //             _animator.SetTrigger("AttackTrigger1");
-    //         }
-    //         else if (comboCount == 2 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
-    //             _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
-    //         {
-    //             //ComboRecentlyChangedTimer = .4f;
-    //             CreateParticle(45.0f);
-    //             _animator.SetTrigger("AttackTrigger2");
-    //         }
-    //         else if (comboCount == 3 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
-    //             _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
-    //         {
-    //             //ComboRecentlyChangedTimer = .53f;
-    //             CreateParticle(110.0f);
-    //             _animator.SetTrigger("AttackTrigger3");
-    //         }
-    //     }
-    // }
     
 
     public void AttackS()
@@ -638,65 +542,6 @@ public class PlayerController : MonoBehaviour
         if (lfAngle >  360f) lfAngle -= 360f;
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
-
-    /// <summary>
-    /// 사다리 액션 체크 및 수행
-    /// 사다리 액션 수행 시, 기본 Move 를 수행하지 않음
-    /// </summary>
-    /// <returns>사다리 액션 여부 반환</returns>
-    // private bool CheckLadder()
-    // {
-    //     if (_touchLadder)
-    //     {
-    //         // 사다리에 붙고
-    //         if (_input.move == Vector2.up)  // 화살표Up 누르는 순간
-    //         {
-    //             // [TODO] 사다리를 바라봐야한다면, 바라보는 대상 카메라 -> 사다리 변경 필요
-    //             OnLadder = true; // state 상태 진입
-    //         }
-            
-    //         // 붙었으면 이동
-    //         if (OnLadder)
-    //         {
-    //             _verticalVelocity = 0; // 사다리에서 내려가거나 점프할 때, 수직 가속이 높아지는 것을 막음
-    //             if (_input.move != default)
-    //             {
-    //                 Vector3 value = _input.move * Time.deltaTime * _speed;
-    //                 //transform.Translate(value);
-    //                 _controller.Move(value);
-    //             }
-    //         }
-    //     }
-
-    //     return OnLadder;
-    // }
-    
-    // private bool CheckLadderS()
-    // {
-    //     if (_touchLadder)
-    //     {
-    //         // 사다리에 붙고
-    //         if (_input.move == Vector2.up)  // 화살표Up 누르는 순간
-    //         {
-    //             // [TODO] 사다리를 바라봐야한다면, 바라보는 대상 카메라 -> 사다리 변경 필요
-    //             OnLadder = true; // ladder state 상태 진입
-    //             stateMachine.ChangeState(StateName.LADDER); // walk state에서 전환
-    //         }
-            
-    //         // // 붙었으면 이동
-    //         // if (OnLadder)
-    //         // {
-    //         //     _verticalVelocity = 0; // 사다리에서 내려가거나 점프할 때, 수직 가속이 높아지는 것을 막음
-    //         //     if (_input.move != default)
-    //         //     {
-    //         //         Vector3 value = _input.move * Time.deltaTime * _speed;
-    //         //         _controller.Move(value);
-    //         //     }
-    //         // }
-    //     }
-
-    //     return OnLadder;
-    // }
 
 
     private void OnTriggerEnter(Collider other)
