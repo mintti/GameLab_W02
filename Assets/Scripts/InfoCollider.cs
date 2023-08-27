@@ -14,6 +14,11 @@ public class InfoCollider : MonoBehaviour
         {
             UIManager.Instance.ActiveInfoText(infoText);
         }
+
+        if (tag == "Finish")
+        {
+            GameObject.Find("FlagHead").GetComponent<Animator>().SetTrigger("FlagDown");
+        }
     }
 
     public void OnTriggerExit(Collider other)
