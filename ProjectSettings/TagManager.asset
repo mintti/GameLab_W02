@@ -11,6 +11,7 @@ TagManager:
   - AttackParticle
   - Box
   - FlyingEnemy
+  - Lava
   layers:
   - Default
   - TransparentFX
