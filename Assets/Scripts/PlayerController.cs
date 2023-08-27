@@ -490,7 +490,15 @@ public class PlayerController : MonoBehaviour
     
     public void Jump()
     {
+<<<<<<< Updated upstream
         if (!isJumping && _controller.isGrounded || (coyoteTimer > 0f && _controller.velocity.y < 0.0f)){ // 땅바닥에서 점프
+=======
+        if( !isWallJumping && wallJumpCounter > 0) // 벽점프
+        {
+            stateMachine.ChangeState(StateName.WALLJUMP);
+        }
+         else if (!isJumping && _controller.isGrounded || (coyoteTimer > 0f && _controller.velocity.y < 0.0f)){ // 땅바닥에서 점프
+>>>>>>> Stashed changes
             stateMachine.ChangeState(StateName.JUMP);
         }else if(OnLadder) // 사다리에서 점프
         {
