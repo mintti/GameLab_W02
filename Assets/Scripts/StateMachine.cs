@@ -3,7 +3,14 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-
+public enum StateName{
+    WALK = 100,
+    DASH,
+    JUMP,
+    WALLJUMP,
+    BACKFLIP,
+    ATTACK
+}
 
 public class StateMachine
 {
@@ -85,13 +92,8 @@ public abstract class BaseState
 
 }
 
-public enum StateName{
-    WALK = 100,
-    DASH,
-    JUMP,
-    ATTACK
-}
 
+// == Idle State
 public class WalkState : BaseState
 {
     public const float CONVERT_UNIT_VALUE = 0.01f;
@@ -184,10 +186,10 @@ public class DashState : BaseState
     bool isTimer = false;
     // TODO: dashPOWER 입력하기 in script
 
-    public float dashPower = 10;
+    public float dashPower = 20;
     public float dashRollTime = 0.2f; // 대시 앞구르기 모션 시간.
     public float dashTetanyTime = 0.1f;      // 대시 후, 경직시간 
-    public float dashCoolTime = 0.1f;
+    public float dashCoolTime = 0.2f;
 
     public DashState( PlayerController controller) : base(controller)
     {
@@ -218,7 +220,6 @@ public class DashState : BaseState
         if(!isTimer){
             isTimer = true;
 
-            controller.wallJumpCounter = 0f;  // wall jump cancel
             controller.dashCounter = 0;
             controller.isDashing = true;
 
@@ -266,24 +267,17 @@ public class DashState : BaseState
 }
 
 
-
+// 수직 상승 힘을 받을 때만, jumpState
+// 수직 상승 힘을 받는 순간이 끝나면 idleState
+// SuperJump는 JumpState 의 multiplyValue 값의 변경으로 구현
 public class JumpState : BaseState
 {
-    bool isTimer = false;
-    // TODO: dashPOWER 입력하기 in script
-
-    public float dashPower = 10;
-    public float dashRollTime = 0.2f; // 대시 앞구르기 모션 시간.
-    public float dashTetanyTime = 0.1f;      // 대시 후, 경직시간 
-    public float dashCoolTime = 0.1f;
-
     float multiplyValue = 1f;
     
     public JumpState( PlayerController controller) : base(controller)
     {
         Debug.Log("JumpState 생성");
     }
-
 
     public override void OnEnterState()
     {
@@ -304,11 +298,13 @@ public class JumpState : BaseState
         
         controller._verticalVelocity = Mathf.Sqrt(controller.JumpHeight * -2f * controller.Gravity * multiplyValue);
 
+
+
         // 언제 state 전환? 
         // 땅에 닿을때 끝
         if(controller.isJumping && controller._controller.isGrounded)
         {            
-            controller.stateMachine.ChangeState(StateName.WALK);
+            controller.stateMachine.ChangeState(StateName.WALK); // to IdleState
         }
     }
 
@@ -322,3 +318,81 @@ public class JumpState : BaseState
         controller.isJumping = false;
     }
 }
+
+
+public class WallJumpState : BaseState
+{
+    float wallJumpTime = 0.35f;
+
+    public WallJumpState( PlayerController controller) : base(controller)
+    {
+        Debug.Log("WallJumpState 생성");
+    }
+
+
+    public override void OnEnterState()
+    {
+        controller.isWallJumping = true;
+    }
+
+    public override void OnUpdateState()
+    {
+        if (controller.wallJumpCounter > 0)  // isWallJump-ing
+        {
+            controller._controller.Move(controller.wallJumpVector.normalized * (Time.deltaTime * 15.0f) +
+                             new Vector3(0.0f, controller._verticalVelocity, 0.0f) * Time.deltaTime);
+        } 
+
+        if (controller.wallJumpCounter > 0) controller.wallJumpCounter -= Time.deltaTime;
+
+
+        if(controller.wallJumpCounter <= 0){
+            controller.stateMachine.ChangeState(StateName.WALK);
+        }
+
+        // State 변경
+        // 월점프state -> (공중이면)점프state -> 
+
+    }
+
+
+    public override void OnFixedUpdateState()
+    {}
+
+    public override void OnExitState()
+    {
+        controller.isWallJumping = false;
+    }
+}
+
+public class BackflipState : BaseState
+{
+
+    public BackflipState( PlayerController controller) : base(controller)
+    {
+        Debug.Log("BackflipState 생성");
+    }
+
+
+    public override void OnEnterState()
+    {
+        controller.isWallJumping = true;
+    }
+
+    public override void OnUpdateState()
+    {
+
+
+
+    }
+
+
+    public override void OnFixedUpdateState()
+    {}
+
+    public override void OnExitState()
+    {
+        controller.isWallJumping = false;
+    }
+}
+

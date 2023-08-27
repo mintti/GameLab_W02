@@ -56,9 +56,13 @@ public class PlayerController : MonoBehaviour
     //player wall jump
     public bool isWalled = false;
     public bool isWallSliding = false;
+    //public bool canWallJump   = false;
+    public float wallJumpTime = 0.35f;
+
     public float wallJumpCounter;
-    private float wallJumpTime = 0.35f;
-    private Vector3 wallJumpVector;
+
+    public bool isWallJumping = false;
+    public Vector3 wallJumpVector;
     
     private PlayerInput _playerInput;
     public  CharacterController _controller;
@@ -191,10 +195,10 @@ public class PlayerController : MonoBehaviour
 
 
         if (canSuperJumpTimer > 0) canSuperJumpTimer -= Time.deltaTime;
-        if (wallJumpCounter > 0)  // isWallJump-ing
+        if(false)//if (wallJumpCounter > 0)  // isWallJump-ing
         {
-            _controller.Move(wallJumpVector.normalized * (Time.deltaTime * 15.0f) +
-                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            // _controller.Move(wallJumpVector.normalized * (Time.deltaTime * 15.0f) +
+            //                  new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
         } 
         else if (isBackflipDown)
         {
@@ -243,7 +247,6 @@ public class PlayerController : MonoBehaviour
         {
             isWallSliding = false;
         }
-        if (wallJumpCounter > 0) wallJumpCounter -= Time.deltaTime;
         if (isWallSliding)
         {
             _verticalVelocity = -2f;
@@ -285,6 +288,50 @@ public class PlayerController : MonoBehaviour
 
         // Cinemachine will follow this target
         CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
+    }
+
+    public void Move_mj()
+    {
+        // set target speed based on move speed, sprint speed and if sprint is pressed
+        float targetSpeed = MoveSpeed;
+
+        if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+
+        // a reference to the players current horizontal velocity
+        float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
+
+        float speedOffset = 0.1f;
+        float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+
+        // accelerate or decelerate to target speed
+        if ( currentHorizontalSpeed < targetSpeed - speedOffset ||
+             currentHorizontalSpeed > targetSpeed + speedOffset )
+        {
+            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
+
+            // round speed to 3 decimal places
+            _speed = Mathf.Round(_speed * 1000f) / 1000f;
+        }
+        else
+        {
+            _speed = targetSpeed;
+        }
+        // normalise input direction
+        Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+
+        if (_input.move != Vector2.zero)
+        {
+            _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
+            float rotation  = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
+
+            // 카메라 방향으로 플레이어 회전
+            transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+        }
+        Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+
+        // move the player
+        _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
+                            new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
     }
 
     private void Move()
@@ -404,31 +451,26 @@ public class PlayerController : MonoBehaviour
     
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (inputManager.jump && isWallSliding)
-        if(OnLadder)
-        {
-            OnLadder = false;
-            _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-        }
-        else if (IsWalled() && !_controller.isGrounded)
-        {
-            if (!_controller.isGrounded && hit.normal.y < 0.1f) 
+        if (inputManager.jump && isWallSliding) // 이 코드의 정체는??
+        { 
+            if(OnLadder)
+            {
+                OnLadder = false;
+                _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+            }
+            else if (!_controller.isGrounded && hit.normal.y < 0.1f)
             {
                 Debug.DrawRay(hit.point, hit.normal, Color.red, 1.25f);
                 wallJumpCounter = wallJumpTime;
+                //canWallJump = true;
                 wallJumpVector = hit.normal;
                 _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
                 
                 Vector3 newRotation = transform.eulerAngles + new Vector3(0f, 180f, 0f);
                 transform.eulerAngles = newRotation;
+
             }
         }
-    }
-    private bool IsWalled()
-    {
-        float collisionRadius = 0.5f;
-        Collider[] colliders = Physics.OverlapSphere(transform.position, collisionRadius, LayerMask.NameToLayer("WallLayer"));
-        return colliders.Length > 0;
     }
     
     public void HandlingJump()
@@ -458,7 +500,7 @@ public class PlayerController : MonoBehaviour
 
         if(isAvailableBackflip)
         {
-            wallJumpCounter = 0f;
+            wallJumpCounter = 0f; // canWallJump = false;
             isBackflip = true;        // TODO: playerState = backflip
             _verticalVelocity = Mathf.Sqrt(JumpHeight * Gravity * .2f);
             StartCoroutine(BackflipCO());
@@ -515,7 +557,7 @@ public class PlayerController : MonoBehaviour
             // 방법 2. transform.rotation = Quaternion.Inverse(Quaternion.Euler(_mainCamera.transform.rotation.x, _mainCamera.transform.rotation.y, _mainCamera.transform.rotation.z));
             isAttackGrounded = false;
             isAttack = true;
-            wallJumpCounter = 0f;
+            wallJumpCounter = 0f; //canWallJump = false;
             lastClickedTime = Time.time;
             nextFireTime = lastClickedTime + 0.5f;
             comboCount++;
@@ -673,8 +715,10 @@ public class PlayerController : MonoBehaviour
 
         stateMachine = new StateMachine(StateName.WALK, new WalkState(this));
 
-        stateMachine.AddState(StateName.DASH, new DashState(this));
-        stateMachine.AddState(StateName.JUMP, new JumpState(this));
+        stateMachine.AddState(StateName.DASH,     new DashState(this));
+        stateMachine.AddState(StateName.JUMP,     new JumpState(this));
+        stateMachine.AddState(StateName.WALLJUMP, new WallJumpState(this));
+        stateMachine.AddState(StateName.BACKFLIP, new BackflipState(this));
 
     
     }
