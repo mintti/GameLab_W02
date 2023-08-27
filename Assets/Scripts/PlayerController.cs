@@ -443,6 +443,29 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void HandlingCoyoteTime()
+    {
+        if (_controller.isGrounded)
+        {
+            coyoteTimer = 0.2f;
+        }
+        else
+        {
+            coyoteTimer -= Time.deltaTime;
+        }
+        
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.5f))
+        {
+            Debug.DrawRay(transform.position, Vector3.down * 0.5f, Color.green);
+            canJumpBuffer = true;
+        }
+        else
+        {
+            canJumpBuffer = false;
+        }
+    }
+
     #region Dash
     public void Dash()
     {
