@@ -10,6 +10,7 @@ TagManager:
   - Enemy
   - AttackParticle
   - Box
+  - FlyingEnemy
   layers:
   - Default
   - TransparentFX
