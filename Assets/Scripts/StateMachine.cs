@@ -9,7 +9,8 @@ public enum StateName{
     JUMP,
     WALLJUMP,
     BACKFLIP,
-    ATTACK
+    ATTACK,
+    LADDER
 }
 
 public class StateMachine
@@ -395,3 +396,93 @@ public class BackflipState : BaseState
     }
 }
 
+
+public class AttackState : BaseState
+{
+    public AttackState( PlayerController controller) : base(controller)
+    {
+        Debug.Log("AttackState 생성");
+    }
+
+    public override void OnEnterState()
+    {
+        // 방법 2. transform.rotation = Quaternion.Inverse(Quaternion.Euler(_mainCamera.transform.rotation.x, _mainCamera.transform.rotation.y, _mainCamera.transform.rotation.z));
+        controller.isAttackGrounded = false;
+        controller.isAttack = true;
+        controller.wallJumpCounter = 0f; //canWallJump = false;
+        controller.lastClickedTime = Time.time;
+        controller.nextFireTime = controller.lastClickedTime + 0.5f;
+        controller.comboCount++;
+        controller.ComboRecentlyChangedTimer = .2f;
+        
+        if (controller.comboCount == 1)
+        {
+            //ComboRecentlyChangedTimer = .3f;
+            controller.CreateParticle(180.0f);
+            controller._animator.SetTrigger("AttackTrigger1");
+
+            controller.stateMachine.ChangeState(StateName.WALK); // IDLE
+
+        }
+        else if (controller.comboCount == 2 && controller._animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
+            controller._animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
+        {
+            //ComboRecentlyChangedTimer = .4f;
+            controller.CreateParticle(45.0f);
+            controller._animator.SetTrigger("AttackTrigger2");
+
+            controller.stateMachine.ChangeState(StateName.WALK); // IDLE
+        }
+        else if (controller.comboCount == 3 && controller._animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
+            controller._animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
+        {
+            //ComboRecentlyChangedTimer = .53f;
+            controller.CreateParticle(110.0f);
+            controller._animator.SetTrigger("AttackTrigger3");
+
+            controller.stateMachine.ChangeState(StateName.WALK); // IDLE
+        }
+
+    }
+
+    public override void OnUpdateState()
+    {
+    }
+
+
+    public override void OnFixedUpdateState()
+    {}
+
+    public override void OnExitState()
+    {
+
+    }
+}
+
+
+public class LadderState : BaseState
+{
+
+    public LadderState( PlayerController controller) : base(controller)
+    {
+        Debug.Log("LadderState 생성");
+    }
+
+    public override void OnEnterState()
+    {
+
+    }
+
+    public override void OnUpdateState()
+    {
+    }
+
+
+    public override void OnFixedUpdateState()
+    {}
+
+    public override void OnExitState()
+    {
+
+    }
+}

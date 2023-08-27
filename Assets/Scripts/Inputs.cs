@@ -85,9 +85,9 @@ public class Inputs : MonoBehaviour
     public void OnAttack(InputValue value)
     {
 	    attack = value.isPressed;
-	    if(attack && Time.time > playerController.nextFireTime && playerController.comboCount < 3)
+	    if(attack)
 	    {
-		    playerController.Attack();
+		    playerController.AttackS();
 	    }
     }
     

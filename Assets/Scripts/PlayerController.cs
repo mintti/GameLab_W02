@@ -123,7 +123,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public bool isBackflip;
     [SerializeField] public bool isBackflipDown;
 
-    private float backflipTime = .5f;
     public float canSuperJumpTimer = 0f;
     
     #endregion
@@ -131,12 +130,12 @@ public class PlayerController : MonoBehaviour
     #region Attack
 
     [Header("Attack")] 
-    [SerializeField] private bool isAttack;
+    [SerializeField] public bool isAttack;
     public int comboCount;
-    [SerializeField] private float lastClickedTime = 0f;
-    [SerializeField] private float maxComboDelay = 1.0f;
+    [SerializeField] public float lastClickedTime = 0f;
+    [SerializeField] public float maxComboDelay = 1.0f;
     public float nextFireTime = 0f;
-    private float ComboRecentlyChangedTimer = 0f;
+    public float ComboRecentlyChangedTimer = 0f;
     public bool isAttackGrounded = true; //점프 어택 이후 내려찍기 기술 못쓰게 하기 위한 변수
     
     #endregion
@@ -226,7 +225,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            //Move();
+            // Move();
         }
         
         RaycastHit hit;
@@ -545,60 +544,73 @@ public class PlayerController : MonoBehaviour
     }
     
     
-    public void Attack()
-    {
-        bool canAttack =
-            (!isWalled && !isWallSliding && !isBackflip && !isBackflipDown);
+    // public void Attack()
+    // {
+    //     bool canAttack =
+    //         (!isWalled && !isWallSliding && !isBackflip && !isBackflipDown);
 
-        if(canAttack)
-        {
-            //카메라가 보는 시점으로 곻격하게 하고 싶은데 안됨
-            /* 방법 1
-            Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+    //     if(canAttack)
+    //     {
+    //         //카메라가 보는 시점으로 곻격하게 하고 싶은데 안됨
+    //         /* 방법 1
+    //         Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
 
-            Vector3 cameraForward = _mainCamera.transform.forward;
-            cameraForward.y = 0.0f; // Make sure the vector is horizontal
-            cameraForward.Normalize();
+    //         Vector3 cameraForward = _mainCamera.transform.forward;
+    //         cameraForward.y = 0.0f; // Make sure the vector is horizontal
+    //         cameraForward.Normalize();
 
-            if (cameraForward != Vector3.zero)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 10.0f * Time.deltaTime);
-            }
-            */
+    //         if (cameraForward != Vector3.zero)
+    //         {
+    //             Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
+    //             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 10.0f * Time.deltaTime);
+    //         }
+    //         */
             
-            // 방법 2. transform.rotation = Quaternion.Inverse(Quaternion.Euler(_mainCamera.transform.rotation.x, _mainCamera.transform.rotation.y, _mainCamera.transform.rotation.z));
-            isAttackGrounded = false;
-            isAttack = true;
-            wallJumpCounter = 0f; //canWallJump = false;
-            lastClickedTime = Time.time;
-            nextFireTime = lastClickedTime + 0.5f;
-            comboCount++;
-            ComboRecentlyChangedTimer = .2f;
+    //         // 방법 2. transform.rotation = Quaternion.Inverse(Quaternion.Euler(_mainCamera.transform.rotation.x, _mainCamera.transform.rotation.y, _mainCamera.transform.rotation.z));
+    //         isAttackGrounded = false;
+    //         isAttack = true;
+    //         wallJumpCounter = 0f; //canWallJump = false;
+    //         lastClickedTime = Time.time;
+    //         nextFireTime = lastClickedTime + 0.5f;
+    //         comboCount++;
+    //         ComboRecentlyChangedTimer = .2f;
             
-            if (comboCount == 1)
-            {
-                //ComboRecentlyChangedTimer = .3f;
-                CreateParticle(180.0f);
-                _animator.SetTrigger("AttackTrigger1");
-            }
-            else if (comboCount == 2 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
-                _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
-            {
-                //ComboRecentlyChangedTimer = .4f;
-                CreateParticle(45.0f);
-                _animator.SetTrigger("AttackTrigger2");
-            }
-            else if (comboCount == 3 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
-                _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
-            {
-                //ComboRecentlyChangedTimer = .53f;
-                CreateParticle(110.0f);
-                _animator.SetTrigger("AttackTrigger3");
-            }
-        }
-    }
+    //         if (comboCount == 1)
+    //         {
+    //             //ComboRecentlyChangedTimer = .3f;
+    //             CreateParticle(180.0f);
+    //             _animator.SetTrigger("AttackTrigger1");
+    //         }
+    //         else if (comboCount == 2 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
+    //             _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
+    //         {
+    //             //ComboRecentlyChangedTimer = .4f;
+    //             CreateParticle(45.0f);
+    //             _animator.SetTrigger("AttackTrigger2");
+    //         }
+    //         else if (comboCount == 3 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
+    //             _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
+    //         {
+    //             //ComboRecentlyChangedTimer = .53f;
+    //             CreateParticle(110.0f);
+    //             _animator.SetTrigger("AttackTrigger3");
+    //         }
+    //     }
+    // }
     
+
+    public void AttackS()
+    {
+	    if( Time.time > nextFireTime && comboCount < 3)
+	    {
+            bool canAttack = !isWalled && !isWallSliding && !isBackflip && !isBackflipDown;
+
+            if(canAttack)
+            {
+                stateMachine.ChangeState(StateName.ATTACK);
+            }
+	    }
+    }
     #endregion
     
     
@@ -732,7 +744,8 @@ public class PlayerController : MonoBehaviour
         stateMachine.AddState(StateName.JUMP,     new JumpState(this));
         stateMachine.AddState(StateName.WALLJUMP, new WallJumpState(this));
         stateMachine.AddState(StateName.BACKFLIP, new BackflipState(this));
+        stateMachine.AddState(StateName.ATTACK,   new AttackState(this));
+        stateMachine.AddState(StateName.LADDER,   new LadderState(this));
 
-    
     }
 }
