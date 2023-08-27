@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 624613405180946121}
   - component: {fileID: 624613405180946120}
   - component: {fileID: 624613405180946127}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Cube
-  m_TagString: Wall
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,7 +106,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 624613405452989283}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Block
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -142,9 +142,9 @@ GameObject:
   - component: {fileID: 624613406571214498}
   - component: {fileID: 624613406571214497}
   - component: {fileID: 624613406571214496}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Cube (1)
-  m_TagString: Wall
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
