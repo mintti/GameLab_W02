@@ -479,12 +479,22 @@ public class PlayerController : MonoBehaviour
 
     public void Dash()
     {
-        bool isAvailableDash = !isDashing && !isDashTetany && !isDashCool && (dashCounter > 0); 
-        if(isAvailableDash){
+
+        bool isAvailableDash = !isDashing && !isDashTetany && !isDashCool && (dashCounter > 0) && !isAttack &&
+                               isAttackGrounded;
+
+        if(isAvailableDash)
+        {
+            wallJumpCounter = 0f;  // wall jump cancel
             stateMachine.ChangeState(StateName.DASH);
-        }else{
-            //Debug.Log("playerController.isDashing(" +playerController.isDashing + ") playerController.isDashTetany("+playerController.isDashTetany+") " + " playerController.dashCounter("+ playerController.dashCounter+")");
-        }   
+
+            //create particle
+            GameObject particle = Instantiate(dashParticle, transform.position, _mainCamera.transform.rotation);
+            particle.transform.parent = _mainCamera.transform;
+            ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
+            particlesys.Play();
+            
+        }
     }
 
     #region Backflip
@@ -507,7 +517,6 @@ public class PlayerController : MonoBehaviour
     #endregion
     
     #region Attack
-
     public void CreateParticle(float yAng)
     {
         //create particle
