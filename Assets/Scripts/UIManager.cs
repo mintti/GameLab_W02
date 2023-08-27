@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,6 +12,11 @@ public class UIManager : MonoBehaviour
     [Header("Info Text")]
     public GameObject textBoxObj;
     public TextMeshProUGUI textBoxText;
+
+    [Header("Question Related")] 
+    public GameObject questionObj;
+    public Text questionText;
+    private Action _questionCallback; 
     
     private void Awake()
     {
@@ -28,6 +34,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         textBoxObj.SetActive(false);
+        questionObj.SetActive(false);
     }
 
     public void ActiveInfoText(string text)
@@ -46,5 +53,12 @@ public class UIManager : MonoBehaviour
         {
             // 다른 텍스트가 출력 중이다.
         }
+    }
+
+    public void ShowQuestion(string text = null)
+    {
+        bool active = !string.IsNullOrEmpty(text);
+        questionObj.SetActive(active);
+        questionText.text = text;
     }
 }
