@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
-
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerInput))]
@@ -72,9 +72,14 @@ public class PlayerController : MonoBehaviour
     public TrailRenderer[] Tyremarks;
     [SerializeField] private GameObject dashParticle = default;
     [SerializeField] private GameObject slashParticle = default;
+    [SerializeField] private GameObject boxParticle = default;
     
     private const float _threshold = 0.01f;
+    private float dontMoveRotationTimer = 0f;
 
+    public float coyoteTimer = 0f;
+    public bool canJumpBuffer = false;
+    
     #region 사다리
     [Tooltip("사다리 콜라이더와 접촉 시 true")]
     [SerializeField] public bool _touchLadder;
@@ -248,7 +253,9 @@ public class PlayerController : MonoBehaviour
 
         
         ComboRecentlyChangedTimer -= Time.deltaTime;
+        if (dontMoveRotationTimer > 0f) dontMoveRotationTimer -= Time.deltaTime;
         CheckEmit();
+        HandlingCoyoteTime();
     }
 
     private void LateUpdate()
@@ -360,7 +367,7 @@ public class PlayerController : MonoBehaviour
             float rotation  = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
 
             // 카메라 방향으로 플레이어 회전
-            transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+            if (dontMoveRotationTimer <= 0) transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
 
         Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
@@ -459,15 +466,34 @@ public class PlayerController : MonoBehaviour
 
             }
         }
+        
+        if (hit.collider.CompareTag("Box"))
+        {
+            if (hit.transform.position.y < transform.position.y && isBackflipDown == true)
+            {
+                //create particle
+                GameObject particle = Instantiate(boxParticle, hit.transform.position, hit.transform.rotation);
+                ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
+                particlesys.Play();
+                
+                Destroy(hit.gameObject);
+                StartCoroutine("TurnOnBackflipDown");
+            }
+        }
     }
-    
+
+    IEnumerator TurnOnBackflipDown()
+    {
+        yield return new WaitForSeconds(.2f);
+        isBackflipDown = true;
+    }
     public void Jump()
     {
         if( !isWallJumping && wallJumpCounter > 0 ) // 벽점프
         {
             stateMachine.ChangeState(StateName.WALLJUMP);
         }
-        else if(!isJumping && _controller.isGrounded){ // 땅바닥에서 점프
+        else if(!isJumping && _controller.isGrounded || (coyoteTimer > 0f && _controller.velocity.y < 0.0f)){ // 땅바닥에서 점프
             stateMachine.ChangeState(StateName.JUMP);
         }else if(OnLadder) // 사다리에서 점프
         {
@@ -477,6 +503,31 @@ public class PlayerController : MonoBehaviour
     }
     
 
+
+    public void HandlingCoyoteTime()
+    {
+        if (_controller.isGrounded)
+        {
+            coyoteTimer = 0.2f;
+        }
+        else
+        {
+            coyoteTimer -= Time.deltaTime;
+        }
+        
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.5f))
+        {
+            Debug.DrawRay(transform.position, Vector3.down * 0.5f, Color.green);
+            canJumpBuffer = true;
+        }
+        else
+        {
+            canJumpBuffer = false;
+        }
+    }
+
+    #region Dash
     public void Dash()
     {
 
@@ -496,6 +547,7 @@ public class PlayerController : MonoBehaviour
             
         }
     }
+    #endregion
 
     #region Backflip
     
@@ -541,6 +593,7 @@ public class PlayerController : MonoBehaviour
                 stateMachine.ChangeState(StateName.ATTACK);
             }
 	    }
+
     }
     #endregion
     
@@ -648,4 +701,18 @@ public class PlayerController : MonoBehaviour
         stateMachine.AddState(StateName.LADDER,   new LadderState(this,inputManager));
 
     }
+    
+    
+    #region ResetCamera
+    
+    public void ResetCamera()
+    {
+        Vector3 playerDirection = transform.forward;
+        float targetYaw = Mathf.Atan2(playerDirection.x, playerDirection.z) * Mathf.Rad2Deg;
+        _cinemachineTargetYaw = targetYaw;
+        _cinemachineTargetPitch = 0.0f;
+        dontMoveRotationTimer = .2f;
+    }
+    
+    #endregion
 }
