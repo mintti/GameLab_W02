@@ -19,12 +19,9 @@ public class StateMachine
     public BaseState CurrentState {get; private set;}
     private Dictionary<StateName, BaseState> states = new Dictionary<StateName, BaseState>();
 
-    public StateMachine(StateName stateName, BaseState state)
+    public StateMachine()
     {
         Debug.Log("InitStateMachine");
-
-        AddState(stateName, state);
-        CurrentState = GetState(stateName);
     }
 
     public void AddState(StateName stateName, BaseState state)
@@ -34,6 +31,10 @@ public class StateMachine
         if(!states.ContainsKey(stateName))
         {
             states.Add(stateName, state);
+        }
+
+        if(states.Count == 1){  // 처음 추가되는 스테이트가 CurrentState
+            CurrentState = GetState(stateName);
         }
     }
 
@@ -81,9 +82,12 @@ public abstract class BaseState
 {
     protected PlayerController controller{ get; private set; }
 
-    public BaseState (PlayerController controller)
+    protected Inputs inputManager{ get; private set; }
+
+    public BaseState (PlayerController controller, Inputs inputsManager)
     {
-        this.controller = controller;
+        this.controller   = controller;
+        this.inputManager = inputsManager;
     }
 
     public abstract void OnEnterState();
@@ -106,7 +110,7 @@ public class WalkState : BaseState
     float moveSpeed = 7f;
     float targetSpeed;
 
-    public WalkState( PlayerController controller) : base(controller)
+    public WalkState( PlayerController controller, Inputs inputManager) : base(controller,inputManager)
     {
         Debug.Log("WalkState 생성");
         
@@ -131,7 +135,8 @@ public class WalkState : BaseState
         float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
         // accelerate or decelerate to target speed
-        if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
+        if (currentHorizontalSpeed < targetSpeed - speedOffset || 
+            currentHorizontalSpeed > targetSpeed + speedOffset)
         {
             // creates curved result rather than a linear one giving a more organic speed change
             // note T in Lerp is clamped, so we don't need to clamp our speed
@@ -166,6 +171,19 @@ public class WalkState : BaseState
         controller._controller.Move(targetDirection.normalized * (controller._speed * Time.deltaTime) +
                             new Vector3(0.0f, controller._verticalVelocity, 0.0f) * Time.deltaTime);
 
+
+        if (controller._touchLadder)
+        {
+            // 사다리에 붙고
+            if (_input.move == Vector2.up)  // 화살표Up 누르는 순간
+            {
+                // [TODO] 사다리를 바라봐야한다면, 바라보는 대상 카메라 -> 사다리 변경 필요
+                controller.OnLadder = true; // state 상태 진입
+                controller.stateMachine.ChangeState(StateName.LADDER); // walk state에서 전환
+
+            }
+        }
+
     }
 
     public override void OnFixedUpdateState()
@@ -192,7 +210,7 @@ public class DashState : BaseState
     public float dashTetanyTime = 0.1f;      // 대시 후, 경직시간 
     public float dashCoolTime = 0.2f;
 
-    public DashState( PlayerController controller) : base(controller)
+    public DashState( PlayerController controller, Inputs inputManager) : base(controller,inputManager)
     {
         Debug.Log("DashState 생성");
     }
@@ -261,7 +279,7 @@ public class JumpState : BaseState
 {
     float multiplyValue = 1f;
     
-    public JumpState( PlayerController controller) : base(controller)
+    public JumpState( PlayerController controller, Inputs inputManager) : base(controller,inputManager)
     {
         Debug.Log("JumpState 생성");
     }
@@ -269,10 +287,7 @@ public class JumpState : BaseState
     public override void OnEnterState()
     {
         controller.isJumping = true;
-    }
 
-    public override void OnUpdateState()
-    {
     	if(controller.OnLadder)
         {
             controller.OnLadder = false;
@@ -282,14 +297,21 @@ public class JumpState : BaseState
         {
             multiplyValue = (controller.canSuperJumpTimer > 0) ? 2f : 1f;
         }
-        
-        controller._verticalVelocity = Mathf.Sqrt(controller.JumpHeight * -2f * controller.Gravity * multiplyValue);
+    }
 
+    public override void OnUpdateState()
+    {        
+        controller._verticalVelocity = Mathf.Sqrt(controller.JumpHeight * -2f * controller.Gravity * multiplyValue);
 
 
         // 언제 state 전환? 
         // 땅에 닿을때 끝
-        if(controller.isJumping && controller._controller.isGrounded)
+        if(controller.isJumping && controller._controller.isGrounded) // 땅바닥 점프 후
+        {            
+            controller.stateMachine.ChangeState(StateName.WALK); // to IdleState
+        }
+
+        if(controller.isJumping ) // 사다리에서 점프 후
         {            
             controller.stateMachine.ChangeState(StateName.WALK); // to IdleState
         }
@@ -305,13 +327,11 @@ public class JumpState : BaseState
         controller.isJumping = false;
     }
 }
-
-
 public class WallJumpState : BaseState
 {
     float wallJumpTime = 0.35f;
 
-    public WallJumpState( PlayerController controller) : base(controller)
+    public WallJumpState( PlayerController controller, Inputs inputManager) : base(controller,inputManager)
     {
         Debug.Log("WallJumpState 생성");
     }
@@ -351,12 +371,11 @@ public class WallJumpState : BaseState
         controller.isWallJumping = false;
     }
 }
-
 public class BackflipState : BaseState
 {
     readonly float backflipTime = .5f;
 
-    public BackflipState( PlayerController controller) : base(controller)
+    public BackflipState( PlayerController controller, Inputs inputManager) : base(controller,inputManager)
     {
         Debug.Log("BackflipState 생성");
     }
@@ -395,11 +414,9 @@ public class BackflipState : BaseState
         controller.isBackflip = false;
     }
 }
-
-
 public class AttackState : BaseState
 {
-    public AttackState( PlayerController controller) : base(controller)
+    public AttackState( PlayerController controller, Inputs inputManager) : base(controller,inputManager)
     {
         Debug.Log("AttackState 생성");
     }
@@ -446,24 +463,18 @@ public class AttackState : BaseState
     }
 
     public override void OnUpdateState()
-    {
-    }
-
+    {}
 
     public override void OnFixedUpdateState()
     {}
 
     public override void OnExitState()
-    {
-
-    }
+    {}
 }
-
 
 public class LadderState : BaseState
 {
-
-    public LadderState( PlayerController controller) : base(controller)
+    public LadderState( PlayerController controller, Inputs inputManager) : base(controller,inputManager)
     {
         Debug.Log("LadderState 생성");
     }
@@ -471,10 +482,29 @@ public class LadderState : BaseState
     public override void OnEnterState()
     {
 
+        controller._speed = controller.MoveSpeed;
     }
 
     public override void OnUpdateState()
     {
+
+        controller._verticalVelocity = 0; // 사다리에서 내려가거나 점프할 때, 수직 가속이 높아지는 것을 막음
+
+        if (inputManager.move != default)
+        {
+            Vector3 value = inputManager.move * Time.deltaTime * controller._speed;
+
+            controller._controller.Move(value);
+        }
+
+        if( !controller.OnLadder )
+        {
+            controller.stateMachine.ChangeState(StateName.WALK); // IDLE
+        }
+
+        if (inputManager.jump) {
+            controller.stateMachine.ChangeState(StateName.JUMP);
+        }
     }
 
 

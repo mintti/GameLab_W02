@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour
 
     #region 사다리
     [Tooltip("사다리 콜라이더와 접촉 시 true")]
-    [SerializeField] private bool _touchLadder;
+    [SerializeField] public bool _touchLadder;
     
     [Tooltip("사다리 매달린 상태 여부")]
     [SerializeField] private bool _onladder;
@@ -258,7 +258,6 @@ public class PlayerController : MonoBehaviour
             _animator.SetTrigger("GoToIdle");
         }
 
-        if (_controller.isGrounded) isAttackGrounded = true;
         
         ComboRecentlyChangedTimer -= Time.deltaTime;
         CheckEmit();
@@ -382,11 +381,11 @@ public class PlayerController : MonoBehaviour
         MoveSliding(); 
         
         // move the player
-        if (!CheckLadder())
-        {
+        //if (!CheckLadder())
+        //{
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-        }
+        //}
     }
 
     private bool MoveSliding()
@@ -427,7 +426,9 @@ public class PlayerController : MonoBehaviour
                 dashCounter =  1;
                 // 대쉬는 공중에서 한번만 가능. 땅에 닿은 후에 충전됨. 최대충전횟수 1회.
             }
-        }        
+
+            isAttackGrounded = true;
+        }
     }
 
     private void SetGravity()
@@ -472,23 +473,40 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-    public void HandlingJump()
-    {
-    	if(OnLadder)
-        {
-            OnLadder = false;
-            _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-        }
-        else if (_controller.isGrounded)
-        {
-            #region Jump
+    // public void HandlingJump()
+    // {
+    // 	if(OnLadder)
+    //     {
+    //         OnLadder = false;
+    //         _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+    //     }
+    //     else if (_controller.isGrounded)
+    //     {
+    //         #region Jump
 
-            float multiplyValue = (canSuperJumpTimer > 0) ? 2f : 1f;
-            _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity * multiplyValue);
+    //         float multiplyValue = (canSuperJumpTimer > 0) ? 2f : 1f;
+    //         _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity * multiplyValue);
             
-            #endregion
+    //         #endregion
+    //     }
+    // }
+
+
+    public void Jump()
+    {
+        if( !isWallJumping && wallJumpCounter > 0 ) // 벽점프
+        {
+            stateMachine.ChangeState(StateName.WALLJUMP);
         }
+        else if(!isJumping && _controller.isGrounded){ // 땅바닥에서 점프
+            stateMachine.ChangeState(StateName.JUMP);
+        }else if(OnLadder) // 사다리에서 점프
+        {
+            stateMachine.ChangeState(StateName.JUMP);
+        }
+
     }
+    
 
     public void Dash()
     {
@@ -626,33 +644,60 @@ public class PlayerController : MonoBehaviour
     /// 사다리 액션 수행 시, 기본 Move 를 수행하지 않음
     /// </summary>
     /// <returns>사다리 액션 여부 반환</returns>
-    private bool CheckLadder()
-    {
-        if (_touchLadder)
-        {
-            // 사다리에 붙고
-            if (_input.move == Vector2.up)
-            {
-                // [TODO] 사다리를 바라봐야한다면, 바라보는 대상 카메라 -> 사다리 변경 필요
-                OnLadder = true;
-            }
+    // private bool CheckLadder()
+    // {
+    //     if (_touchLadder)
+    //     {
+    //         // 사다리에 붙고
+    //         if (_input.move == Vector2.up)  // 화살표Up 누르는 순간
+    //         {
+    //             // [TODO] 사다리를 바라봐야한다면, 바라보는 대상 카메라 -> 사다리 변경 필요
+    //             OnLadder = true; // state 상태 진입
+    //         }
             
-            // 붙었으면 이동
-            if (OnLadder)
-            {
-                _verticalVelocity = 0; // 사다리에서 내려가거나 점프할 때, 수직 가속이 높아지는 것을 막음
-                if (_input.move != default)
-                {
-                    Vector3 value = _input.move * Time.deltaTime * _speed;
-                    //transform.Translate(value);
-                    _controller.Move(value);
-                }
-            }
-        }
+    //         // 붙었으면 이동
+    //         if (OnLadder)
+    //         {
+    //             _verticalVelocity = 0; // 사다리에서 내려가거나 점프할 때, 수직 가속이 높아지는 것을 막음
+    //             if (_input.move != default)
+    //             {
+    //                 Vector3 value = _input.move * Time.deltaTime * _speed;
+    //                 //transform.Translate(value);
+    //                 _controller.Move(value);
+    //             }
+    //         }
+    //     }
 
-        return OnLadder;
-    }
+    //     return OnLadder;
+    // }
     
+    // private bool CheckLadderS()
+    // {
+    //     if (_touchLadder)
+    //     {
+    //         // 사다리에 붙고
+    //         if (_input.move == Vector2.up)  // 화살표Up 누르는 순간
+    //         {
+    //             // [TODO] 사다리를 바라봐야한다면, 바라보는 대상 카메라 -> 사다리 변경 필요
+    //             OnLadder = true; // ladder state 상태 진입
+    //             stateMachine.ChangeState(StateName.LADDER); // walk state에서 전환
+    //         }
+            
+    //         // // 붙었으면 이동
+    //         // if (OnLadder)
+    //         // {
+    //         //     _verticalVelocity = 0; // 사다리에서 내려가거나 점프할 때, 수직 가속이 높아지는 것을 막음
+    //         //     if (_input.move != default)
+    //         //     {
+    //         //         Vector3 value = _input.move * Time.deltaTime * _speed;
+    //         //         _controller.Move(value);
+    //         //     }
+    //         // }
+    //     }
+
+    //     return OnLadder;
+    // }
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -738,14 +783,15 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("InitStateMachine");
 
-        stateMachine = new StateMachine(StateName.WALK, new WalkState(this));
+        stateMachine = new StateMachine();
 
-        stateMachine.AddState(StateName.DASH,     new DashState(this));
-        stateMachine.AddState(StateName.JUMP,     new JumpState(this));
-        stateMachine.AddState(StateName.WALLJUMP, new WallJumpState(this));
-        stateMachine.AddState(StateName.BACKFLIP, new BackflipState(this));
-        stateMachine.AddState(StateName.ATTACK,   new AttackState(this));
-        stateMachine.AddState(StateName.LADDER,   new LadderState(this));
+        stateMachine.AddState(StateName.WALK,     new WalkState(this,inputManager));
+        stateMachine.AddState(StateName.DASH,     new DashState(this,inputManager));
+        stateMachine.AddState(StateName.JUMP,     new JumpState(this,inputManager));
+        stateMachine.AddState(StateName.WALLJUMP, new WallJumpState(this,inputManager));
+        stateMachine.AddState(StateName.BACKFLIP, new BackflipState(this,inputManager));
+        stateMachine.AddState(StateName.ATTACK,   new AttackState(this,inputManager));
+        stateMachine.AddState(StateName.LADDER,   new LadderState(this,inputManager));
 
     }
 }

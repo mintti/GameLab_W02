@@ -44,14 +44,9 @@ public class Inputs : MonoBehaviour
 	public void OnJump(InputValue value)
 	{
 		jump = value.isPressed;
-        //playerController.HandlingJump();
-        //if(playerController.canWallJump) // 왜 true?
-        if( !playerController.isWallJumping && playerController.wallJumpCounter > 0 ) // 왜 true?
+        if(jump)
         {
-            playerController.stateMachine.ChangeState(StateName.WALLJUMP);
-        }
-        else if(!playerController.isJumping && playerController._controller.isGrounded){
-            playerController.stateMachine.ChangeState(StateName.JUMP);
+            playerController.Jump();
         }
 	}
 
