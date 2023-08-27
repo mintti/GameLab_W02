@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 wallJumpVector;
     
     private PlayerInput _playerInput;
-    private CharacterController _controller;
+    public CharacterController _controller;
     private Inputs _input;
     private GameObject _mainCamera;
     public Animator _animator;
@@ -69,6 +69,7 @@ public class PlayerController : MonoBehaviour
 
     public float coyoteTimer = 0f;
     public bool canJumpBuffer = false;
+    public float warpTimer = 0f;
     
     #region 사다리
     [Tooltip("사다리 콜라이더와 접촉 시 true")]
@@ -209,10 +210,11 @@ public class PlayerController : MonoBehaviour
                 _verticalVelocity = -10.0f;
             }
         }
-        else
+        else if (warpTimer <= 0f)
         {
             Move();
         }
+        if (warpTimer > 0f) warpTimer -= Time.deltaTime;
         
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, 1f, LayerMask.GetMask("WallLayer")))

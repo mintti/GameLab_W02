@@ -47,7 +47,10 @@ public class Portal : MonoBehaviour
 
     private void Warp()
     {
+        // Character Controller의 Move 메서드에 새로운 위치 전달
+        //_player.GetComponent<PlayerController>()._controller.Move(warpTransform.position - transform.position);
         _player.gameObject.transform.position = warpTransform.position;
+        _player.GetComponent<PlayerController>().warpTimer = .5f;
         // _player.GetComponent<PlayerController>().gameObject.transform.position = warpTransform.position;
         UIManager.Instance.ShowQuestion();
     }

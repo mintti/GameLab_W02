@@ -6202,7 +6202,7 @@ GameObject:
   - component: {fileID: 1144318980}
   m_Layer: 0
   m_Name: Info (3)
-  m_TagString: Untagged
+  m_TagString: Finish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6791,10 +6791,15 @@ MonoBehaviour:
   isWalled: 0
   isWallSliding: 0
   wallJumpCounter: 0
+  _controller: {fileID: 0}
   _animator: {fileID: 573654772}
   Tyremarks: []
-  dashParticle: {fileID: 0}
-  slashParticle: {fileID: 0}
+  dashParticle: {fileID: 5122965104678279352, guid: a00a1a12699e87b4caffc8b00e3f0459, type: 3}
+  slashParticle: {fileID: 2215235783638232668, guid: 1fa9c50adae2b154d85f1bc9fe49db95, type: 3}
+  boxParticle: {fileID: 1825809920480149035, guid: 4c0b9d15e047a144c92ed85c4a1ccc8d, type: 3}
+  coyoteTimer: 0
+  canJumpBuffer: 0
+  warpTimer: 0
   _touchLadder: 0
   _onladder: 0
   _lastTouchObject: {fileID: 0}
@@ -6839,6 +6844,7 @@ MonoBehaviour:
   dash: 0
   backflip: 0
   attack: 0
+  resetCamera: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
@@ -11831,8 +11837,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1979252418}
+  - component: {fileID: 1979252419}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: FlagHead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11870,6 +11877,27 @@ Transform:
   m_Father: {fileID: 596839351}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
+--- !u!95 &1979252419
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1979252417}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ab8b2a2240010e74daf66ed781271990, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1990373503
 GameObject:
   m_ObjectHideFlags: 0
