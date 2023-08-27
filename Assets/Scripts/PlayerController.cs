@@ -507,7 +507,6 @@ public class PlayerController : MonoBehaviour
     #endregion
     
     #region Attack
-
     public void CreateParticle(float yAng)
     {
         //create particle
@@ -517,6 +516,61 @@ public class PlayerController : MonoBehaviour
         float rad = (Mathf.PI / 180) * yAng;
         particlesys.startRotation3D = new Vector3(0.0f, rad, 0.0f);
         particlesys.Play();
+    }
+    
+    
+    public void Attack()
+    {
+        bool canAttack =
+            (!isWalled && !isWallSliding && !isBackflip && !isBackflipDown);
+
+        if(canAttack)
+        {
+            //카메라가 보는 시점으로 곻격하게 하고 싶은데 안됨
+            /* 방법 1
+            Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+
+            Vector3 cameraForward = _mainCamera.transform.forward;
+            cameraForward.y = 0.0f; // Make sure the vector is horizontal
+            cameraForward.Normalize();
+
+            if (cameraForward != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 10.0f * Time.deltaTime);
+            }
+            */
+            
+            // 방법 2. transform.rotation = Quaternion.Inverse(Quaternion.Euler(_mainCamera.transform.rotation.x, _mainCamera.transform.rotation.y, _mainCamera.transform.rotation.z));
+            isAttackGrounded = false;
+            isAttack = true;
+            wallJumpCounter = 0f;
+            lastClickedTime = Time.time;
+            nextFireTime = lastClickedTime + 0.5f;
+            comboCount++;
+            ComboRecentlyChangedTimer = .2f;
+            
+            if (comboCount == 1)
+            {
+                //ComboRecentlyChangedTimer = .3f;
+                CreateParticle(180.0f);
+                _animator.SetTrigger("AttackTrigger1");
+            }
+            else if (comboCount == 2 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
+                _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
+            {
+                //ComboRecentlyChangedTimer = .4f;
+                CreateParticle(45.0f);
+                _animator.SetTrigger("AttackTrigger2");
+            }
+            else if (comboCount == 3 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
+                _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
+            {
+                //ComboRecentlyChangedTimer = .53f;
+                CreateParticle(110.0f);
+                _animator.SetTrigger("AttackTrigger3");
+            }
+        }
     }
     
     
