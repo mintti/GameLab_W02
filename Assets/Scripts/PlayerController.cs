@@ -480,6 +480,20 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine("TurnOnBackflipDown");
             }
         }
+        
+        if (hit.collider.CompareTag("Box"))
+        {
+            if (hit.transform.position.y < transform.position.y && isBackflipDown == true)
+            {
+                //create particle
+                GameObject particle = Instantiate(boxParticle, hit.transform.position, hit.transform.rotation);
+                ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
+                particlesys.Play();
+                
+                Destroy(hit.gameObject);
+                StartCoroutine("TurnOnBackflipDown");
+            }
+        }
     }
 
     IEnumerator TurnOnBackflipDown()
@@ -487,13 +501,17 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(.2f);
         isBackflipDown = true;
     }
+    
+
     public void Jump()
     {
         if( !isWallJumping && wallJumpCounter > 0 ) // 벽점프
         {
             stateMachine.ChangeState(StateName.WALLJUMP);
         }
-        else if(!isJumping && _controller.isGrounded || (coyoteTimer > 0f && _controller.velocity.y < 0.0f)){ // 땅바닥에서 점프
+        else if(!isJumping && _controller.isGrounded || (coyoteTimer > 0f && _controller.velocity.y < 0.0f))
+        //else if (_controller.isGrounded || (coyoteTimer > 0f && _controller.velocity.y < 0.0f))
+        { // 땅바닥에서 점프
             stateMachine.ChangeState(StateName.JUMP);
         }else if(OnLadder) // 사다리에서 점프
         {
@@ -526,6 +544,7 @@ public class PlayerController : MonoBehaviour
             canJumpBuffer = false;
         }
     }
+
 
     #region Dash
     public void Dash()
@@ -701,8 +720,6 @@ public class PlayerController : MonoBehaviour
         stateMachine.AddState(StateName.LADDER,   new LadderState(this,inputManager));
 
     }
-    
-    
     #region ResetCamera
     
     public void ResetCamera()
