@@ -199,6 +199,9 @@ public class DashState : BaseState
 
     public override void OnEnterState()
     {
+        controller.dashCounter = 0;
+        controller.isDashing = true;
+        Timer.CreateTimer(controller.gameObject, dashRollTime, DashRollTimer);
 
     }
 
@@ -217,15 +220,6 @@ public class DashState : BaseState
         // controller._controller.Move(targetDirection.normalized * (controller._speed * Time.deltaTime) +
         //                     new Vector3(0.0f, controller._verticalVelocity, 0.0f) * Time.deltaTime);
 
-        if(!isTimer){
-            isTimer = true;
-
-            controller.dashCounter = 0;
-            controller.isDashing = true;
-
-            Timer.CreateTimer(controller.gameObject, dashRollTime, DashRollTimer);
-        }
-    
     }
 
     void DashRollTimer()
@@ -243,26 +237,18 @@ public class DashState : BaseState
         controller.isDashTetany = false;
 
         controller.stateMachine.ChangeState(StateName.WALK);
-
-        controller.isDashCool = true;
-        Timer.CreateTimer(controller.gameObject, dashCoolTime, DashCoolTimer); // dashCoolTime 후에 DashCoolTimer() 실행
     }
 
-
+    public override void OnFixedUpdateState() {}
+    public override void OnExitState()
+    {
+        controller.isDashCool = true;
+        Timer.CreateTimer(controller.gameObject, dashCoolTime, DashCoolTimer); // dashCoolTime 후에 DashCoolTimer() 실행   
+    }
     void DashCoolTimer()
     {
         controller.isDashCool = false;
         isTimer = false;
-    }
-
-
-    public override void OnFixedUpdateState()
-    {
-
-    }
-    public override void OnExitState()
-    {
-        
     }
 }
 
@@ -367,23 +353,33 @@ public class WallJumpState : BaseState
 
 public class BackflipState : BaseState
 {
+    readonly float backflipTime = .5f;
 
     public BackflipState( PlayerController controller) : base(controller)
     {
         Debug.Log("BackflipState 생성");
     }
 
-
     public override void OnEnterState()
     {
-        controller.isWallJumping = true;
+        controller.isBackflip = true;
+
+        controller.wallJumpCounter = 0f; // canWallJump = false;
+        controller.isBackflip = true;        // TODO: playerState = backflip
+   
+        controller._animator.SetTrigger("Backflip");
+
+        Timer.CreateTimer(controller.gameObject, backflipTime, BackFlipTimer);
     }
 
     public override void OnUpdateState()
     {
+        controller._verticalVelocity = Mathf.Sqrt(controller.JumpHeight * controller.Gravity * .2f);
+    }
 
-
-
+    void BackFlipTimer()
+    {
+        controller.stateMachine.ChangeState(StateName.WALK); // to idle
     }
 
 
@@ -392,7 +388,10 @@ public class BackflipState : BaseState
 
     public override void OnExitState()
     {
-        controller.isWallJumping = false;
+        controller.isBackflipDown = true;
+        controller._animator.SetTrigger("GoToIdle");
+
+        controller.isBackflip = false;
     }
 }
 

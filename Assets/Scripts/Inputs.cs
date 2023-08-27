@@ -70,15 +70,7 @@ public class Inputs : MonoBehaviour
         dash = value.isPressed;
         if(dash)
         {
-            //playerController.Dash();
-            bool isAvailableDash = !playerController.isDashing && !playerController.isDashTetany && !playerController.isDashCool && (playerController.dashCounter > 0); 
-            if(isAvailableDash){
-                playerController.stateMachine.ChangeState(StateName.DASH);
-            }else{
-
-                //Debug.Log("playerController.isDashing(" +playerController.isDashing + ") playerController.isDashTetany("+playerController.isDashTetany+") " + " playerController.dashCounter("+ playerController.dashCounter+")");
-            }
-
+            playerController.Dash();
         }
 	}
     
@@ -86,10 +78,7 @@ public class Inputs : MonoBehaviour
     {
 	    if(value.isPressed)
 	    {
-		    // playerController.wallJumpCounter = 0f;
 		    playerController.Backflip();
-            // playerController.stateMachine.ChangeState(StateName.DASH);
-
 	    }
     }
     

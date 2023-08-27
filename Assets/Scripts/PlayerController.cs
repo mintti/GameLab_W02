@@ -120,8 +120,8 @@ public class PlayerController : MonoBehaviour
     
     #region Backflip
     [Header("Backflip")]
-    [SerializeField] bool isBackflip;
-    [SerializeField] bool isBackflipDown;
+    [SerializeField] public bool isBackflip;
+    [SerializeField] public bool isBackflipDown;
 
     private float backflipTime = .5f;
     public float canSuperJumpTimer = 0f;
@@ -491,6 +491,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void Dash()
+    {
+        bool isAvailableDash = !isDashing && !isDashTetany && !isDashCool && (dashCounter > 0); 
+        if(isAvailableDash){
+            stateMachine.ChangeState(StateName.DASH);
+        }else{
+            //Debug.Log("playerController.isDashing(" +playerController.isDashing + ") playerController.isDashTetany("+playerController.isDashTetany+") " + " playerController.dashCounter("+ playerController.dashCounter+")");
+        }   
+    }
+
     #region Backflip
     
     public void Backflip()
@@ -500,21 +510,24 @@ public class PlayerController : MonoBehaviour
 
         if(isAvailableBackflip)
         {
-            wallJumpCounter = 0f; // canWallJump = false;
-            isBackflip = true;        // TODO: playerState = backflip
-            _verticalVelocity = Mathf.Sqrt(JumpHeight * Gravity * .2f);
-            StartCoroutine(BackflipCO());
+            wallJumpCounter = 0f;
+            stateMachine.ChangeState(StateName.BACKFLIP);
+
+            // wallJumpCounter = 0f; // canWallJump = false;
+            // isBackflip = true;        // TODO: playerState = backflip
+            // _verticalVelocity = Mathf.Sqrt(JumpHeight * Gravity * .2f);
+            // StartCoroutine(BackflipCO());
         }
     }
     
-    IEnumerator BackflipCO()
-    {
-        _animator.SetTrigger("Backflip");
-        yield return new WaitForSeconds(backflipTime);
-        _animator.SetTrigger("GoToIdle");
-        isBackflip = false;
-        isBackflipDown = true;
-    }
+    // IEnumerator BackflipCO()
+    // {
+    //     _animator.SetTrigger("Backflip");
+    //     yield return new WaitForSeconds(backflipTime);
+    //     _animator.SetTrigger("GoToIdle");
+    //     isBackflip = false;
+    //     isBackflipDown = true;
+    // }
     
     #endregion
     
