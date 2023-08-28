@@ -58,6 +58,8 @@ public class StateMachine
     {
         Debug.Log("ChangeState from (" + CurrentState.stateName + ")  to (" + nextStateName + ")");
 
+        UIManager.Instance.UpdateKeyInfo(nextStateName);
+        
         CurrentState?.OnExitState();
         if( states.TryGetValue(nextStateName, out BaseState newState ))
         {

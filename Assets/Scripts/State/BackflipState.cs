@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BackflipState : BaseState
 {
-    readonly float backflipTime = .5f;
+    public static readonly float backflipTime = .5f;
 
     public BackflipState( PlayerController pController, Inputs inputManager) : base(pController,inputManager,stateName: StateName.BACKFLIP)
     {
