@@ -108,18 +108,18 @@ public class PlayerController : MonoBehaviour
     
     #region Dash
     [Header("Dash")]
-    [SerializeField] public bool  isDashing;     // 이걸 사용할 필요가 없어져야함
-    [SerializeField] public bool  isDashTetany;
-    [SerializeField] public bool  isDashCool;
+    public bool  isDashing;
+    public bool  isDashTetany;
+    public bool  isDashCool;
 
-    [SerializeField] public int   dashCounter = 1;
+    public int   dashCounter = 1;
     
     #endregion
     
     #region Backflip
     [Header("Backflip")]
-    [SerializeField] public bool isBackflip;
-    [SerializeField] public bool isBackflipDown;
+    public bool isBackflip;
+    public bool isBackflipDown;
 
     public float canSuperJumpTimer = 0f;
     
@@ -128,17 +128,16 @@ public class PlayerController : MonoBehaviour
     #region Attack
 
     [Header("Attack")] 
-    [SerializeField] public bool isAttack;
+    public bool isAttack;
     public int comboCount;
-    [SerializeField] public float lastClickedTime = 0f;
-    [SerializeField] public float maxComboDelay = 1.0f;
+    public float lastClickedTime = 0f;
+    public float maxComboDelay = 1.0f;
     public float nextFireTime = 0f;
     public float ComboRecentlyChangedTimer = 0f;
     public bool isAttackGrounded = true; //점프 어택 이후 내려찍기 기술 못쓰게 하기 위한 변수
     
     #endregion
     
-
 
     private bool IsCurrentDeviceMouse
     {
@@ -151,13 +150,10 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        // get a reference to our main camera
         if (_mainCamera == null)
         {
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
-
-        
     }
 
     void Start()
@@ -167,9 +163,6 @@ public class PlayerController : MonoBehaviour
         _input       = GetComponent<Inputs>();
         _playerInput = GetComponent<PlayerInput>();
         
-
-        // DASH_FORWARD_ROLL_TIME = new WaitForSeconds(dashForwardRollTime);
-        // DASH_TETANY_TIME       = new WaitForSeconds(dashTetanyTime);
 
         isSliding = false;
 
@@ -282,106 +275,6 @@ public class PlayerController : MonoBehaviour
         CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
     }
 
-    public void Move_mj()
-    {
-        // set target speed based on move speed, sprint speed and if sprint is pressed
-        float targetSpeed = MoveSpeed;
-
-        if (_input.move == Vector2.zero) targetSpeed = 0.0f;
-
-        // a reference to the players current horizontal velocity
-        float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
-
-        float speedOffset = 0.1f;
-        float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
-
-        // accelerate or decelerate to target speed
-        if ( currentHorizontalSpeed < targetSpeed - speedOffset ||
-             currentHorizontalSpeed > targetSpeed + speedOffset )
-        {
-            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
-
-            // round speed to 3 decimal places
-            _speed = Mathf.Round(_speed * 1000f) / 1000f;
-        }
-        else
-        {
-            _speed = targetSpeed;
-        }
-        // normalise input direction
-        Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-
-        if (_input.move != Vector2.zero)
-        {
-            _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
-            float rotation  = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
-
-            // 카메라 방향으로 플레이어 회전
-            transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
-        }
-        Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-
-        // move the player
-        _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                            new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-    }
-
-    private void Move()
-    {
-        // set target speed based on move speed, sprint speed and if sprint is pressed
-        float targetSpeed = MoveSpeed;
-
-        if( _input.slowWalk ){ targetSpeed = SlowWalkSpeed; }
-        if( _input.sprint   ){ targetSpeed = SprintSpeed;   } // 같이 누르면 sprint speed
-
-
-        if (_input.move == Vector2.zero) targetSpeed = 0.0f;
-
-        // a reference to the players current horizontal velocity
-        float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
-
-        float speedOffset = 0.1f;
-        float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
-
-        // accelerate or decelerate to target speed
-        if (!OnLadder && 
-            (currentHorizontalSpeed < targetSpeed - speedOffset ||
-             currentHorizontalSpeed > targetSpeed + speedOffset))
-        {
-            _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
-
-            // round speed to 3 decimal places
-            _speed = Mathf.Round(_speed * 1000f) / 1000f;
-        }
-        else
-        {
-            _speed = targetSpeed;
-        }
-        // normalise input direction
-        Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-
-        if (_input.move != Vector2.zero)
-        {
-            _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
-            float rotation  = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
-
-            // 카메라 방향으로 플레이어 회전
-            if (dontMoveRotationTimer <= 0) transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
-        }
-
-        Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-
-
-        MoveSliding(); 
-        
-        // move the player
-        //if (!CheckLadder())
-        //{
-            _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-        //}
-    }
-
     private bool MoveSliding()
     {
         SetSlopeSlideVelocity();
@@ -443,68 +336,6 @@ public class PlayerController : MonoBehaviour
         
     }
     
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        if (inputManager.jump && isWallSliding) // 이 코드의 정체는??
-        { 
-            if(OnLadder)
-            {
-                OnLadder = false;
-                _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-            }
-            else if (!_controller.isGrounded && hit.normal.y < 0.1f)
-            {
-                Debug.DrawRay(hit.point, hit.normal, Color.red, 1.25f);
-  
-                stateMachine.ChangeState(StateName.WALLJUMP);
-  
-                wallJumpCounter = wallJumpTime;
-                //canWallJump = true;
-                wallJumpVector = hit.normal;
-                _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-                
-                Vector3 newRotation = transform.eulerAngles + new Vector3(0f, 180f, 0f);
-                transform.eulerAngles = newRotation;
-
-            }
-        }
-        
-        if (hit.collider.CompareTag("Box"))
-        {
-            if (hit.transform.position.y < transform.position.y && isBackflipDown == true)
-            {
-                //create particle
-                GameObject particle = Instantiate(boxParticle, hit.transform.position, hit.transform.rotation);
-                ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
-                particlesys.Play();
-                
-                Destroy(hit.gameObject);
-                StartCoroutine("TurnOnBackflipDown");
-            }
-        }
-        
-        if (hit.collider.CompareTag("Box"))
-        {
-            if (hit.transform.position.y < transform.position.y && isBackflipDown == true)
-            {
-                //create particle
-                GameObject particle = Instantiate(boxParticle, hit.transform.position, hit.transform.rotation);
-                ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
-                particlesys.Play();
-                
-                Destroy(hit.gameObject);
-                StartCoroutine("TurnOnBackflipDown");
-            }
-        }
-    }
-
-    IEnumerator TurnOnBackflipDown()
-    {
-        yield return new WaitForSeconds(.2f);
-        isBackflipDown = true;
-    }
-    
-    
     public void Jump()
     {
         if (!isJumping && _controller.isGrounded || (coyoteTimer > 0f && _controller.velocity.y < 0.0f)){ // 땅바닥에서 점프
@@ -563,7 +394,6 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Backflip
-    
     public void Backflip()
     {
         bool isAvailableBackflip =
@@ -576,73 +406,15 @@ public class PlayerController : MonoBehaviour
 
         }
     }
-    
-
-    
+    IEnumerator TurnOnBackflipDown()
+    {
+        yield return new WaitForSeconds(.2f);
+        isBackflipDown = true;
+    }
     #endregion
     
     #region Attack
-    public void CreateParticle(float yAng)
-    {
-        //create particle
-        GameObject particle = Instantiate(slashParticle, transform.position, transform.rotation);
-        particle.transform.parent = gameObject.transform;
-        ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
-        float rad = (Mathf.PI / 180) * yAng;
-        particlesys.startRotation3D = new Vector3(0.0f, rad, 0.0f);
-        particlesys.Play();
-    }
-    
-    
     public void Attack()
-    {
-        bool canAttack =
-            (!isWalled && !isWallSliding && !isBackflip && !isBackflipDown);
-
-        if(canAttack)
-        {
-            
-            //카메라가 보는 방향으로 변경
-            Quaternion newRotation = _mainCamera.transform.rotation;
-            newRotation.x = 0.0f;
-            newRotation.z = 0.0f;
-            transform.rotation = newRotation;
-            _targetRotation = Mathf.Atan2(newRotation.x, newRotation.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
-            
-            isAttackGrounded = false;
-            isAttack = true;
-            wallJumpCounter = 0f;
-            lastClickedTime = Time.time;
-            nextFireTime = lastClickedTime + 0.5f;
-            comboCount++;
-            ComboRecentlyChangedTimer = .2f;
-            
-            if (comboCount == 1)
-            {
-                //ComboRecentlyChangedTimer = .3f;
-                CreateParticle(180.0f);
-                _animator.SetTrigger("AttackTrigger1");
-            }
-            else if (comboCount == 2 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
-                _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
-            {
-                //ComboRecentlyChangedTimer = .4f;
-                CreateParticle(45.0f);
-                _animator.SetTrigger("AttackTrigger2");
-            }
-            else if (comboCount == 3 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
-                _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
-            {
-                //ComboRecentlyChangedTimer = .53f;
-                CreateParticle(110.0f);
-                _animator.SetTrigger("AttackTrigger3");
-            }
-        }
-    }
-    
-    
-
-    public void AttackS()
     {
 	    if( Time.time > nextFireTime && comboCount < 3)
 	    {
@@ -654,6 +426,17 @@ public class PlayerController : MonoBehaviour
             }
 	    }
     }
+
+    public void CreateParticle(float yAng)
+    {
+        //create particle
+        GameObject particle = Instantiate(slashParticle, transform.position, transform.rotation);
+        particle.transform.parent = gameObject.transform;
+        ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
+        float rad = (Mathf.PI / 180) * yAng;
+        particlesys.startRotation3D = new Vector3(0.0f, rad, 0.0f);
+        particlesys.Play();
+    }
     #endregion
     
     
@@ -664,7 +447,60 @@ public class PlayerController : MonoBehaviour
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
 
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (inputManager.jump && isWallSliding) // 이 코드의 정체는??
+        { 
+            if(OnLadder)
+            {
+                OnLadder = false;
+                _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+            }
+            else if (!_controller.isGrounded && hit.normal.y < 0.1f)
+            {
+                Debug.DrawRay(hit.point, hit.normal, Color.red, 1.25f);
+  
+                stateMachine.ChangeState(StateName.WALLJUMP);
+  
+                wallJumpCounter = wallJumpTime;
+                //canWallJump = true;
+                wallJumpVector = hit.normal;
+                _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+                
+                Vector3 newRotation = transform.eulerAngles + new Vector3(0f, 180f, 0f);
+                transform.eulerAngles = newRotation;
 
+            }
+        }
+        
+        if (hit.collider.CompareTag("Box"))
+        {
+            if (hit.transform.position.y < transform.position.y && isBackflipDown == true)
+            {
+                //create particle
+                GameObject particle = Instantiate(boxParticle, hit.transform.position, hit.transform.rotation);
+                ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
+                particlesys.Play();
+                
+                Destroy(hit.gameObject);
+                StartCoroutine("TurnOnBackflipDown");
+            }
+        }
+        
+        if (hit.collider.CompareTag("Box"))
+        {
+            if (hit.transform.position.y < transform.position.y && isBackflipDown == true)
+            {
+                //create particle
+                GameObject particle = Instantiate(boxParticle, hit.transform.position, hit.transform.rotation);
+                ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
+                particlesys.Play();
+                
+                Destroy(hit.gameObject);
+                StartCoroutine("TurnOnBackflipDown");
+            }
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Ladder")
@@ -706,8 +542,6 @@ public class PlayerController : MonoBehaviour
             stopEmmiter();
         }
     }
-    #endregion
-
     private void startEmmiter()
     {
         foreach (TrailRenderer T in Tyremarks)
@@ -715,7 +549,6 @@ public class PlayerController : MonoBehaviour
             T.emitting = true;
         }
     }
-    
     private void stopEmmiter()
     {
         foreach (TrailRenderer T in Tyremarks)
@@ -723,11 +556,7 @@ public class PlayerController : MonoBehaviour
             T.emitting = false;
         }
     }
-
-    public float getVerticalVelocity()
-    {
-        return _verticalVelocity;
-    }
+    #endregion
 
     public GameObject GetMainCamera()
     {
@@ -755,10 +584,6 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    
-    
-    #region ResetCamera
-    
     public void ResetCamera()
     {
         Vector3 playerDirection = transform.forward;
@@ -767,7 +592,4 @@ public class PlayerController : MonoBehaviour
         _cinemachineTargetPitch = 0.0f;
         dontMoveRotationTimer = .2f;
     }
-    
-    #endregion
 }
-

@@ -29,7 +29,7 @@ public class DashState : BaseState
         Vector3 dashDirection = (pController.transform.forward).normalized; // TODO 계산 필요. 경사면 등
         float   minimumDash   = dashPower * Time.deltaTime;
         float   addDash       = pController._speed * Time.deltaTime;
-        Vector3 verticalDash  = new Vector3(0.0f, pController.getVerticalVelocity(), 0.0f) * Time.deltaTime;
+        Vector3 verticalDash  = new Vector3(0.0f, pController._verticalVelocity, 0.0f) * Time.deltaTime;
         
         pController._controller.Move( dashDirection * (minimumDash + addDash) + verticalDash); // 이걸 playerController에서 call 하고 param을 바꾸는 방향
 

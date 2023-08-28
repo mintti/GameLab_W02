@@ -83,7 +83,7 @@ public class Inputs : MonoBehaviour
 	    attack = value.isPressed;
 	    if(attack)
 	    {
-		    playerController.AttackS();
+		    playerController.Attack();
 	    }
     }
     
