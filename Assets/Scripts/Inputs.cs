@@ -72,7 +72,8 @@ public class Inputs : MonoBehaviour
     
     public void OnBackflip(InputValue value)
     {
-	    if(value.isPressed)
+        backflip = value.isPressed;
+	    if(backflip)
 	    {
 		    playerController.Backflip();
 	    }

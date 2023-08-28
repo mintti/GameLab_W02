@@ -185,8 +185,8 @@ public class PlayerController : MonoBehaviour
         SetGravity();
         GroundCheck();
 
-        if (warpTimer                 > 0) warpTimer                  -= Time.deltaTime;
-        if (canSuperJumpTimer         > 0) canSuperJumpTimer          -= Time.deltaTime;
+        if (warpTimer                 > 0) warpTimer                 -= Time.deltaTime;
+        if (canSuperJumpTimer         > 0) canSuperJumpTimer         -= Time.deltaTime;
         if (ComboRecentlyChangedTimer > 0) ComboRecentlyChangedTimer -= Time.deltaTime;
         if (dontMoveRotationTimer     > 0) dontMoveRotationTimer     -= Time.deltaTime;
 
@@ -215,24 +215,24 @@ public class PlayerController : MonoBehaviour
                 _verticalVelocity = -10.0f;
             }
         }
-
+        IfAttackClickLateGoIdle();     
         
 
         CheckIsWalled();
         CheckIsWallSliding();
+        
+        CheckEmit();
+        HandlingCoyoteTime();
+    }
 
-
-        if (Time.time - lastClickedTime > maxComboDelay && isAttack)
+    void IfAttackClickLateGoIdle()
+    {
+        if( Time.time - lastClickedTime > maxComboDelay && isAttack )
         {
             isAttack = false;
             comboCount = 0;
             _animator.SetTrigger("GoToIdle");
         }
-
-        
-        
-        CheckEmit();
-        HandlingCoyoteTime();
     }
 
 
@@ -428,9 +428,6 @@ public class PlayerController : MonoBehaviour
     #endregion
     
     #region Attack
-
-
-    
     public void Attack()
     {
 	    if( Time.time > nextFireTime && comboCount < 3)
