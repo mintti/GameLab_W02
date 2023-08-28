@@ -185,8 +185,12 @@ public class PlayerController : MonoBehaviour
         SetGravity();
         GroundCheck();
 
+        if (warpTimer                 > 0) warpTimer                  -= Time.deltaTime;
+        if (canSuperJumpTimer         > 0) canSuperJumpTimer          -= Time.deltaTime;
+        if (ComboRecentlyChangedTimer > 0) ComboRecentlyChangedTimer -= Time.deltaTime;
+        if (dontMoveRotationTimer     > 0) dontMoveRotationTimer     -= Time.deltaTime;
 
-        if (canSuperJumpTimer > 0) canSuperJumpTimer -= Time.deltaTime;
+
         if (isBackflipDown)
         {
             _controller.Move(Vector3.down * (Time.deltaTime * 50.0f));
@@ -211,11 +215,7 @@ public class PlayerController : MonoBehaviour
                 _verticalVelocity = -10.0f;
             }
         }
-        else if (warpTimer <= 0f)
-        {
-            //Move();
-        }
-        if (warpTimer > 0f) warpTimer -= Time.deltaTime;
+
         
 
         CheckIsWalled();
@@ -230,8 +230,7 @@ public class PlayerController : MonoBehaviour
         }
 
         
-        if (ComboRecentlyChangedTimer > 0f) ComboRecentlyChangedTimer -= Time.deltaTime;
-        if (dontMoveRotationTimer > 0f) dontMoveRotationTimer -= Time.deltaTime;
+        
         CheckEmit();
         HandlingCoyoteTime();
     }
@@ -386,8 +385,10 @@ public class PlayerController : MonoBehaviour
     #region Dash
     public void Dash()
     {
-        bool isAvailableDash = !isDashing && !isDashTetany && !isDashCool && (dashCounter > 0) && !isAttack &&
-                               isAttackGrounded && !isBackflip && !isBackflipDown && !isWallJumping;
+        bool isAvailableDash = !isDashing && !isDashTetany && !isDashCool && (dashCounter > 0) &&
+                                !isAttack && isAttackGrounded && 
+                                !isBackflip && !isBackflipDown && 
+                                !isWallJumping;
         if(isAvailableDash){
             wallJumpCounter = 0f;  // wall jump cancel
             CreateParticleDash();
