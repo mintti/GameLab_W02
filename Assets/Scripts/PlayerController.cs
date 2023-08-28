@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour
     public TrailRenderer[] Tyremarks;
     [SerializeField] private GameObject dashParticle = default;
     [SerializeField] private GameObject slashParticle = default;
+    [SerializeField] private GameObject slashCollider = default;
     [SerializeField] private GameObject boxParticle = default;
     
     private const float _threshold = 0.01f;
@@ -415,6 +416,58 @@ public class PlayerController : MonoBehaviour
     
     #region Attack
     public void Attack()
+    {
+        bool canAttack =
+            (!isWalled && !isWallSliding && !isBackflip && !isBackflipDown);
+
+        if(canAttack)
+        {
+            
+            //카메라가 보는 방향으로 변경
+            Quaternion newRotation = _mainCamera.transform.rotation;
+            newRotation.x = 0.0f;
+            newRotation.z = 0.0f;
+            transform.rotation = newRotation;
+            _targetRotation = Mathf.Atan2(newRotation.x, newRotation.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
+            
+            isAttackGrounded = false;
+            isAttack = true;
+            wallJumpCounter = 0f;
+            lastClickedTime = Time.time;
+            nextFireTime = lastClickedTime + 0.5f;
+            comboCount++;
+            ComboRecentlyChangedTimer = .2f;
+            
+            if (comboCount == 1)
+            {
+                //ComboRecentlyChangedTimer = .3f;
+                CreateParticle(180.0f);
+                _animator.SetTrigger("AttackTrigger1");
+            }
+            else if (comboCount == 2 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
+                _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
+            {
+                //ComboRecentlyChangedTimer = .4f;
+                CreateParticle(45.0f);
+                _animator.SetTrigger("AttackTrigger2");
+            }
+            else if (comboCount == 3 && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
+                _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
+            {
+                //ComboRecentlyChangedTimer = .53f;
+                CreateParticle(110.0f);
+                _animator.SetTrigger("AttackTrigger3");
+            }
+        }
+    }
+
+    public void CreateParticleCollider()
+    {
+        Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+        GameObject _slashCollider = Instantiate(slashCollider, transform.position + targetDirection * 1.5f, transform.rotation);
+    }
+    
+    public void AttackS()
     {
 	    if( Time.time > nextFireTime && comboCount < 3)
 	    {

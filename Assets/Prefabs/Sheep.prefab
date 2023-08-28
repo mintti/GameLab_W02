@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1147707327847529626}
   - component: {fileID: 1147707327847529605}
   - component: {fileID: 1147707327847529604}
+  - component: {fileID: 9189361246903609990}
   m_Layer: 0
   m_Name: LegRight
   m_TagString: Untagged
@@ -97,6 +98,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &9189361246903609990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147707327847529606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3e0f0094b1c3b41831e8dfe9406797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  duration: 0.3
 --- !u!1 &1147707327895179789
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,6 +124,7 @@ GameObject:
   - component: {fileID: 1147707327895179777}
   - component: {fileID: 1147707327895179776}
   - component: {fileID: 1147707327895179779}
+  - component: {fileID: 7424840551078104060}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -194,6 +210,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7424840551078104060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147707327895179789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3e0f0094b1c3b41831e8dfe9406797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  duration: 0.3
 --- !u!1 &1147707328207043080
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,7 +307,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6ba56a0617901f44b4cea1e95eb417a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  childObjects: []
+  childObjects:
+  - {fileID: 1147707327895179789}
+  - {fileID: 1147707327847529606}
+  - {fileID: 3512034399521392357}
+  - {fileID: 2786904395203060121}
+  - {fileID: 4344413251768113618}
+  - {fileID: 4441529981761065044}
+  - {fileID: 4803027520448604492}
+  - {fileID: 2946046722084848258}
+  - {fileID: 3675939792584520918}
+  - {fileID: 6239919407153296142}
+  - {fileID: 4106245655946306500}
   hitDelay: 0
 --- !u!1 &1934753902503731979
 GameObject:
@@ -326,6 +367,7 @@ GameObject:
   - component: {fileID: 2107719461335164150}
   - component: {fileID: 8433307704850023842}
   - component: {fileID: 1154705768113944805}
+  - component: {fileID: 8156506119994906019}
   m_Layer: 0
   m_Name: LegRight (2)
   m_TagString: Untagged
@@ -411,6 +453,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8156506119994906019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2786904395203060121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3e0f0094b1c3b41831e8dfe9406797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  duration: 0.3
 --- !u!1 &2946046722084848258
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,6 +479,7 @@ GameObject:
   - component: {fileID: 7813019896869074286}
   - component: {fileID: 6925991545275028415}
   - component: {fileID: 7670165454045345074}
+  - component: {fileID: 5379864035089575276}
   m_Layer: 0
   m_Name: Body (1)
   m_TagString: Untagged
@@ -508,6 +565,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5379864035089575276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2946046722084848258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3e0f0094b1c3b41831e8dfe9406797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  duration: 0.3
 --- !u!1 &3512034399521392357
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,6 +591,7 @@ GameObject:
   - component: {fileID: 2566679843490303168}
   - component: {fileID: 8939639635609070531}
   - component: {fileID: 3665571213942894606}
+  - component: {fileID: 6339063428487488370}
   m_Layer: 0
   m_Name: LegRight (1)
   m_TagString: Untagged
@@ -605,6 +677,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6339063428487488370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3512034399521392357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3e0f0094b1c3b41831e8dfe9406797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  duration: 0.3
 --- !u!1 &3675939792584520918
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,6 +703,7 @@ GameObject:
   - component: {fileID: 5336895794512852066}
   - component: {fileID: 3118061097810278170}
   - component: {fileID: 1375983621894638133}
+  - component: {fileID: 7824184046986415861}
   m_Layer: 0
   m_Name: LegRight (6)
   m_TagString: Untagged
@@ -702,6 +789,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7824184046986415861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3675939792584520918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3e0f0094b1c3b41831e8dfe9406797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  duration: 0.3
 --- !u!1 &4106245655946306500
 GameObject:
   m_ObjectHideFlags: 0
@@ -714,6 +815,7 @@ GameObject:
   - component: {fileID: 2503319332361478587}
   - component: {fileID: 7266042065466648054}
   - component: {fileID: 2720618323813836041}
+  - component: {fileID: 4548182460504805929}
   m_Layer: 0
   m_Name: Body (3)
   m_TagString: Untagged
@@ -799,6 +901,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4548182460504805929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4106245655946306500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3e0f0094b1c3b41831e8dfe9406797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  duration: 0.3
 --- !u!1 &4344413251768113618
 GameObject:
   m_ObjectHideFlags: 0
@@ -811,6 +927,7 @@ GameObject:
   - component: {fileID: 1604856866599841282}
   - component: {fileID: 8847917679063846734}
   - component: {fileID: 884493610034496116}
+  - component: {fileID: 8247293072898513237}
   m_Layer: 0
   m_Name: LegRight (3)
   m_TagString: Untagged
@@ -896,6 +1013,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8247293072898513237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4344413251768113618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3e0f0094b1c3b41831e8dfe9406797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  duration: 0.3
 --- !u!1 &4441529981761065044
 GameObject:
   m_ObjectHideFlags: 0
@@ -908,6 +1039,7 @@ GameObject:
   - component: {fileID: 4859447354496224917}
   - component: {fileID: 266294860149523266}
   - component: {fileID: 8234805577741750768}
+  - component: {fileID: 7832411948328281235}
   m_Layer: 0
   m_Name: LegRight (4)
   m_TagString: Untagged
@@ -993,6 +1125,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7832411948328281235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4441529981761065044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3e0f0094b1c3b41831e8dfe9406797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  duration: 0.3
 --- !u!1 &4803027520448604492
 GameObject:
   m_ObjectHideFlags: 0
@@ -1005,6 +1151,7 @@ GameObject:
   - component: {fileID: 197666835556470818}
   - component: {fileID: 3825093522564990841}
   - component: {fileID: 1579394499252029810}
+  - component: {fileID: 1922797384739076473}
   m_Layer: 0
   m_Name: LegRight (5)
   m_TagString: Untagged
@@ -1090,6 +1237,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1922797384739076473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4803027520448604492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3e0f0094b1c3b41831e8dfe9406797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  duration: 0.3
 --- !u!1 &6239919407153296142
 GameObject:
   m_ObjectHideFlags: 0
@@ -1102,6 +1263,7 @@ GameObject:
   - component: {fileID: 66395518978771215}
   - component: {fileID: 9218800840937044344}
   - component: {fileID: 6681382925145997559}
+  - component: {fileID: 4297194575776197415}
   m_Layer: 0
   m_Name: Body (2)
   m_TagString: Untagged
@@ -1187,3 +1349,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4297194575776197415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6239919407153296142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3e0f0094b1c3b41831e8dfe9406797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  duration: 0.3
