@@ -724,25 +724,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-    public float getSpeed()
-    {
-        return _speed;
-    }
-
     public float getVerticalVelocity()
     {
         return _verticalVelocity;
-    }
-
-
-    public Inputs GetInputs()
-    {
-        if( _input == null){
-            Debug.Log("_input is null");
-            return null;
-        }
-        return _input;
     }
 
     public GameObject GetMainCamera()

@@ -11,15 +11,13 @@ public class DashState : BaseState
     public float dashRollTime = 0.2f; // 대시 앞구르기 모션 시간.
     public float dashTetanyTime = 0.1f;      // 대시 후, 경직시간 
     public float dashCoolTime = 0.2f;
-    public Inputs _input;
     public GameObject _mainCamera;
     float moveSpeed = 7f;
     float targetSpeed;
     
-    public DashState( PlayerController pController, Inputs inputManager) : base(pController,inputManager, StateName.DASH)
+    public DashState( PlayerController pController, Inputs inputManager) : base(pController, inputManager, StateName.DASH)
     {
         Debug.Log("DashState 생성");
-        _input      = pController.GetInputs();
         _mainCamera = pController.GetMainCamera();
     }
 
@@ -33,7 +31,7 @@ public class DashState : BaseState
         Vector3 dashDirection = (pController.transform.forward).normalized; // TODO 계산 필요. 경사면 등
 
         float minimumDash = dashPower * Time.deltaTime;
-        float addDash     = pController.getSpeed()    * Time.deltaTime;
+        float addDash     = pController._speed * Time.deltaTime;
 
         Vector3 verticalDash = new Vector3(0.0f, pController.getVerticalVelocity(), 0.0f) * Time.deltaTime;
         
@@ -54,13 +52,13 @@ public class DashState : BaseState
                                     
         targetSpeed = moveSpeed;
 
-        if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+        if (inputManager.move == Vector2.zero) targetSpeed = 0.0f;
 
         // a reference to the players current horizontal velocity
         float currentHorizontalSpeed = new Vector3( pController._controller.velocity.x, 0.0f, pController._controller.velocity.z).magnitude;
 
         float speedOffset = 0.1f;
-        float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+        float inputMagnitude = inputManager.analogMovement ? inputManager.move.magnitude : 1f;
 
         // accelerate or decelerate to target speed
         if (currentHorizontalSpeed < targetSpeed - speedOffset || 
@@ -80,10 +78,10 @@ public class DashState : BaseState
 
 
         // normalise input direction
-        Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+        Vector3 inputDirection = new Vector3(inputManager.move.x, 0.0f, inputManager.move.y).normalized;
 
         // if there is a move input rotate player when the player is moving
-        if (_input.move != Vector2.zero)
+        if (inputManager.move != Vector2.zero)
         {
             pController._targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
             float  rotation = Mathf.SmoothDampAngle(pController.transform.eulerAngles.y, pController._targetRotation, ref pController._rotationVelocity, pController.RotationSmoothTime);

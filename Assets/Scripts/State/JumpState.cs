@@ -11,16 +11,14 @@ public class JumpState : BaseState
     float multiplyValue = 1f;
     float checkJumpTimer;
     
-    Inputs _input;
     GameObject _mainCamera;
 
     float moveSpeed = 7f;
     float targetSpeed;
     
-    public JumpState( PlayerController pController, Inputs inputManager) : base(pController,inputManager,stateName: StateName.JUMP)
+    public JumpState( PlayerController pController, Inputs inputManager) : base(pController, inputManager, stateName: StateName.JUMP)
     {
         Debug.Log("JumpState 생성");
-        _input      = pController.GetInputs();
         _mainCamera = pController.GetMainCamera();
     }
 
@@ -49,13 +47,13 @@ public class JumpState : BaseState
         }
         targetSpeed = moveSpeed;
 
-        if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+        if (inputManager.move == Vector2.zero) targetSpeed = 0.0f;
 
         // a reference to the players current horizontal velocity
         float currentHorizontalSpeed = new Vector3( pController._controller.velocity.x, 0.0f, pController._controller.velocity.z).magnitude;
 
         float speedOffset = 0.1f;
-        float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+        float inputMagnitude = inputManager.analogMovement ? inputManager.move.magnitude : 1f;
 
         // accelerate or decelerate to target speed
         if (currentHorizontalSpeed < targetSpeed - speedOffset || 
@@ -75,10 +73,10 @@ public class JumpState : BaseState
 
 
         // normalise input direction
-        Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+        Vector3 inputDirection = new Vector3(inputManager.move.x, 0.0f, inputManager.move.y).normalized;
 
         // if there is a move input rotate player when the player is moving
-        if (_input.move != Vector2.zero)
+        if (inputManager.move != Vector2.zero)
         {
             pController._targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
             float  rotation = Mathf.SmoothDampAngle(pController.transform.eulerAngles.y, pController._targetRotation, ref pController._rotationVelocity, pController.RotationSmoothTime);

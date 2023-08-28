@@ -9,7 +9,6 @@ public class WallJumpState : BaseState
         Debug.Log("WallJumpState 생성");
     }
 
-
     public override void OnEnterState()
     {
         pController.isWallJumping = true;
