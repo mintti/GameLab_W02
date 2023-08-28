@@ -12,6 +12,7 @@ TagManager:
   - Box
   - FlyingEnemy
   - ExitLadder
+  - DeadLine
   layers:
   - Default
   - TransparentFX
