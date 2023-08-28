@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7f4366c4-dd79-4469-9c62-e02f5c54abbc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.JungleJam02/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.JungleJam02/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Map.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Map.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/PlayerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/JumpState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/JumpState.cs" afterDir="false" />
-    </list>
+    <list default="true" id="7f4366c4-dd79-4469-9c62-e02f5c54abbc" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -138,6 +133,7 @@
       <workItem from="1693121103539" duration="3896000" />
       <workItem from="1693192106792" duration="2415000" />
       <workItem from="1693194834510" duration="738000" />
+      <workItem from="1693202080178" duration="24000" />
     </task>
     <servers />
   </component>
