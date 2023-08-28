@@ -361,8 +361,8 @@
                 },
                 {
                     "name": "",
-                    "id": "36060e25-9faf-4a0f-bac6-83fd3de146f2",
-                    "path": "<Keyboard>/comma",
+                    "id": "94161d1a-0036-4622-b82c-cc7df51b8f57",
+                    "path": "<Keyboard>/period",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
@@ -383,8 +383,8 @@
                 },
                 {
                     "name": "",
-                    "id": "94161d1a-0036-4622-b82c-cc7df51b8f57",
-                    "path": "<Keyboard>/period",
+                    "id": "36060e25-9faf-4a0f-bac6-83fd3de146f2",
+                    "path": "<Keyboard>/comma",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
