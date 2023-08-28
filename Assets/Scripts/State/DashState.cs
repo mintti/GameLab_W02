@@ -44,18 +44,20 @@ public class DashState : BaseState
         if (inputManager.move == Vector2.zero) targetSpeed = 0.0f;
 
         // a reference to the players current horizontal velocity
-        float currentHorizontalSpeed = new Vector3( pController._controller.velocity.x, 0.0f, pController._controller.velocity.z).magnitude;
+        float currentHorizontalSpeed =
+            new Vector3(pController._controller.velocity.x, 0.0f, pController._controller.velocity.z).magnitude;
 
         float speedOffset = 0.1f;
         float inputMagnitude = inputManager.analogMovement ? inputManager.move.magnitude : 1f;
 
         // accelerate or decelerate to target speed
-        if (currentHorizontalSpeed < targetSpeed - speedOffset || 
+        if (currentHorizontalSpeed < targetSpeed - speedOffset ||
             currentHorizontalSpeed > targetSpeed + speedOffset)
         {
             // creates curved result rather than a linear one giving a more organic speed change
             // note T in Lerp is clamped, so we don't need to clamp our speed
-            pController._speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * pController.SpeedChangeRate);
+            pController._speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
+                Time.deltaTime * pController.SpeedChangeRate);
 
             // round speed to 3 decimal places
             pController._speed = Mathf.Round(pController._speed * 1000f) / 1000f;
@@ -72,8 +74,10 @@ public class DashState : BaseState
         // if there is a move input rotate player when the player is moving
         if (inputManager.move != Vector2.zero)
         {
-            pController._targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
-            float  rotation = Mathf.SmoothDampAngle(pController.transform.eulerAngles.y, pController._targetRotation, ref pController._rotationVelocity, pController.RotationSmoothTime);
+            pController._targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
+                                          _mainCamera.transform.eulerAngles.y;
+            float rotation = Mathf.SmoothDampAngle(pController.transform.eulerAngles.y, pController._targetRotation,
+                ref pController._rotationVelocity, pController.RotationSmoothTime);
 
             // rotate to face input direction relative to camera position
             pController.transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
@@ -82,11 +86,15 @@ public class DashState : BaseState
 
         Vector3 targetDirection = Quaternion.Euler(0.0f, pController._targetRotation, 0.0f) * Vector3.forward;
 
-        // move the player
-        pController._controller.Move(targetDirection.normalized * (pController._speed * Time.deltaTime) +
-                            new Vector3(0.0f, pController._verticalVelocity, 0.0f) * Time.deltaTime);
+        if (pController.warpTimer <= 0f) // 워프 안되는 현상 방지
+        {
+            // move the player
+            pController._controller.Move(targetDirection.normalized * (pController._speed * Time.deltaTime) +
+                                         new Vector3(0.0f, pController._verticalVelocity, 0.0f) * Time.deltaTime);
+            
+        }
 
-    }
+}
 
     void DashRollTimer()
     {

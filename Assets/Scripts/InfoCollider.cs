@@ -7,17 +7,17 @@ using UnityEngine;
 public class InfoCollider : MonoBehaviour
 {
     [TextArea] public string infoText;
+    public GameObject flagHead;
 
     public void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
             UIManager.Instance.ActiveInfoText(infoText);
-        }
-
-        if (tag == "Finish")
-        {
-            GameObject.Find("FlagHead").GetComponent<Animator>().SetTrigger("FlagDown");
+            if (tag == "Finish")
+            {
+                flagHead.GetComponent<Animator>().SetTrigger("FlagDown");
+            }
         }
     }
 

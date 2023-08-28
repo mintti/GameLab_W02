@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7f4366c4-dd79-4469-9c62-e02f5c54abbc" name="Changes" comment="" />
+    <list default="true" id="7f4366c4-dd79-4469-9c62-e02f5c54abbc" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InfoCollider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/InfoCollider.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -134,6 +136,7 @@
       <workItem from="1693192106792" duration="2415000" />
       <workItem from="1693194834510" duration="738000" />
       <workItem from="1693202080178" duration="24000" />
+      <workItem from="1693204821429" duration="43000" />
     </task>
     <servers />
   </component>

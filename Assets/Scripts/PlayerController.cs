@@ -525,6 +525,7 @@ public class PlayerController : MonoBehaviour
         if (other.tag == "Ladder")
         {
             _touchLadder = true;
+            stateMachine.ChangeState(StateName.LADDER);
             _lastTouchObject = other.gameObject;
         }
 

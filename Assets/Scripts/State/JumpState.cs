@@ -89,11 +89,14 @@ public class JumpState : BaseState
         Vector3 targetDirection = Quaternion.Euler(0.0f, pController._targetRotation, 0.0f) * Vector3.forward;
 
         // move the player
-        pController._controller.Move(targetDirection.normalized * (pController._speed * Time.deltaTime) +
-                            new Vector3(0.0f, pController._verticalVelocity, 0.0f) * Time.deltaTime);
+        if (pController.warpTimer <= 0f) // 워프 안되는 현상 방지
+        {
+            pController._controller.Move(targetDirection.normalized * (pController._speed * Time.deltaTime) +
+                                         new Vector3(0.0f, pController._verticalVelocity, 0.0f) * Time.deltaTime);
+        }
         /*
         if(pController.isJumping ) // 사다리에서 점프 후
-        {            
+        {
             pController.stateMachine.ChangeState(StateName.WALK); // to IdleState
         }
         */
