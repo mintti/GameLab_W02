@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class DashState : BaseState
 {
-    bool isTimer = false;
-    // TODO: dashPOWER 입력하기 in script
-
-    public float dashPower = 60;
-    public float dashRollTime = 0.2f; // 대시 앞구르기 모션 시간.
-    public float dashTetanyTime = 0.1f;      // 대시 후, 경직시간 
-    public float dashCoolTime = 0.2f;
-    public GameObject _mainCamera;
-    float moveSpeed = 7f;
+    float dashPower      = 60;    // TODO: dashPOWER 입력하기 in script
+    float dashRollTime   = 0.2f;  // 대시 앞구르기 모션 시간.
+    float dashTetanyTime = 0.1f;  // 대시 후, 경직시간.  현재 안 쓰는중
+    float dashCoolTime   = 0.2f;
+    float moveSpeed      = 7f;
     float targetSpeed;
     
+    GameObject _mainCamera;
+
     public DashState( PlayerController pController, Inputs inputManager) : base(pController, inputManager, StateName.DASH)
     {
         Debug.Log("DashState 생성");
@@ -26,30 +24,20 @@ public class DashState : BaseState
     {
         pController.dashCounter = 0;
         pController.isDashing = true;
-        Timer.CreateTimer(pController.gameObject, dashRollTime, DashRollTimer);
         
         Vector3 dashDirection = (pController.transform.forward).normalized; // TODO 계산 필요. 경사면 등
-
-        float minimumDash = dashPower * Time.deltaTime;
-        float addDash     = pController._speed * Time.deltaTime;
-
-        Vector3 verticalDash = new Vector3(0.0f, pController.getVerticalVelocity(), 0.0f) * Time.deltaTime;
+        float   minimumDash   = dashPower * Time.deltaTime;
+        float   addDash       = pController._speed * Time.deltaTime;
+        Vector3 verticalDash  = new Vector3(0.0f, pController.getVerticalVelocity(), 0.0f) * Time.deltaTime;
         
         pController._controller.Move( dashDirection * (minimumDash + addDash) + verticalDash); // 이걸 playerController에서 call 하고 param을 바꾸는 방향
+
+
+        Timer.CreateTimer(pController.gameObject, dashRollTime, DashRollTimer);
     }
 
     public override void OnUpdateState()
     {
-
-        //Vector3 value = inputManager.move * Time.deltaTime * pController._speed;
-        //pController._controller.Move(value);
-        
-        // move the player
-        //Vector3 targetDirection = Quaternion.Euler(0.0f, pController._targetRotation, 0.0f) * Vector3.forward;
-        //pController._controller.Move(targetDirection.normalized * (pController._speed * Time.deltaTime) +
-                                    //new Vector3(0.0f, pController._verticalVelocity, 0.0f) * Time.deltaTime);
-                           
-                                    
         targetSpeed = moveSpeed;
 
         if (inputManager.move == Vector2.zero) targetSpeed = 0.0f;
@@ -101,12 +89,10 @@ public class DashState : BaseState
 
     void DashRollTimer()
     {
-        pController.isDashing    = false; // 이게 왜 실행 안됨?
+        pController.isDashing    = false;
         pController.isDashTetany = true;
 
-        //Debug.Log( "DashRollTimer : pController.isDashing " + pController.isDashing);
-
-        Timer.CreateTimer(pController.gameObject, dashRollTime, DashTetanyTimer);
+        Timer.CreateTimer(pController.gameObject, dashTetanyTime, DashTetanyTimer);
     }
 
     void DashTetanyTimer()
@@ -128,6 +114,5 @@ public class DashState : BaseState
     void DashCoolTimer()
     {
         pController.isDashCool = false;
-        isTimer = false;
     }
 }
