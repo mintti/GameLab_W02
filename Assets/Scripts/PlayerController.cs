@@ -289,10 +289,10 @@ public class PlayerController : MonoBehaviour
     public void DisplayCurrentSensitivity()
     {
         String AddText = "";
-        if (GetComponent<PlayerController>().cameraSensitivity == .2f)
+        if (GetComponent<PlayerController>().cameraSensitivity == .1f)
         {
             AddText = "(최소)";
-        } else if (GetComponent<PlayerController>().cameraSensitivity == 4f)
+        } else if (GetComponent<PlayerController>().cameraSensitivity == 1f)
         {
             AddText = "(최대)";
         }

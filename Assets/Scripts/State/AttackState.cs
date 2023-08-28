@@ -28,6 +28,7 @@ public class AttackState : BaseState
         pController.comboCount++;
         pController.ComboRecentlyChangedTimer = .2f;
         
+ 
         if (pController.comboCount == 1)
         {
             pController.CreateParticle(180.0f);
@@ -36,7 +37,7 @@ public class AttackState : BaseState
             Timer.CreateTimer(pController.gameObject, .5f, ComboTimer);
         }
         else if (pController.comboCount == 2 && pController._animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
-            pController._animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
+                 pController._animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
         {
             pController.CreateParticle(45.0f);
             pController.CreateParticleCollider();
@@ -44,21 +45,21 @@ public class AttackState : BaseState
             Timer.CreateTimer(pController.gameObject, .5f, ComboTimer);
         }
         else if (pController.comboCount == 3 && pController._animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4f &&
-            pController._animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
+                 pController._animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
         {
             pController.CreateParticle(110.0f);
             pController.CreateParticleCollider();
             pController._animator.SetTrigger("AttackTrigger3");
             Timer.CreateTimer(pController.gameObject, .5f, ComboTimer);
         }
-        
+    
     }
 
     void ComboTimer()
     {
         pController.stateMachine.ChangeState(StateName.WALK); // IDLE
     }
-    
+
     public override void OnUpdateState()
     {}
 

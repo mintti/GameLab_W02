@@ -16,7 +16,7 @@ public class Portal : MonoBehaviour
     
     private GameObject _player;
 
-    public void OnTriggerEnter(Collider other)
+    public void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))
         {
@@ -38,7 +38,6 @@ public class Portal : MonoBehaviour
     {
         if (time == 0)
         {
-            Debug.Log("Wow!");
             Warp();
         }
         else
