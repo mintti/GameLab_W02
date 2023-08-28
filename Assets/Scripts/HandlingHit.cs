@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using BarthaSzabolcs.Tutorial_SpriteFlash;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public class HandlingHit: MonoBehaviour
