@@ -34,6 +34,9 @@ public class DashState : BaseState
         pController._controller.Move( dashDirection * (minimumDash + addDash) + verticalDash); // 이걸 playerController에서 call 하고 param을 바꾸는 방향
 
 
+        startEmmiter();
+
+
         Timer.CreateTimer(pController.gameObject, dashRollTime, DashRollTimer);
     }
 
@@ -119,6 +122,9 @@ public class DashState : BaseState
     {
         pController.isDashCool = true;
         Timer.CreateTimer(pController.gameObject, dashCoolTime, DashCoolTimer); // dashCoolTime 후에 DashCoolTimer() 실행   
+
+        stopEmmiter();
+
     }
     void DashCoolTimer()
     {
@@ -126,5 +132,21 @@ public class DashState : BaseState
     }
 
     public override void HandleInputs(){}
+
+
+    private void startEmmiter()
+    {
+        foreach (TrailRenderer T in pController.Tyremarks)
+        {
+            T.emitting = true;
+        }
+    }
+    private void stopEmmiter()
+    {
+        foreach (TrailRenderer T in pController.Tyremarks)
+        {
+            T.emitting = false;
+        }
+    }
 
 }

@@ -221,7 +221,6 @@ public class PlayerController : MonoBehaviour
         CheckIsWalled();
         CheckIsWallSliding();
         
-        CheckEmit();
         HandlingCoyoteTime();
     }
 
@@ -347,7 +346,7 @@ public class PlayerController : MonoBehaviour
     
     public void Jump()
     {
-        Debug.Log("jump");
+        Debug.Log("");
 
         if (!isJumping && _controller.isGrounded || (coyoteTimer > 0f && _controller.velocity.y < 0.0f)){ // 땅바닥에서 점프
             stateMachine.ChangeState(StateName.JUMP);
@@ -551,34 +550,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    #region SkidMark
-
-    private void CheckEmit()
-    {
-        if ((isDashing) || inputManager.sprint)
-        {
-            startEmmiter();
-        }
-        else
-        {
-            stopEmmiter();
-        }
-    }
-    private void startEmmiter()
-    {
-        foreach (TrailRenderer T in Tyremarks)
-        {
-            T.emitting = true;
-        }
-    }
-    private void stopEmmiter()
-    {
-        foreach (TrailRenderer T in Tyremarks)
-        {
-            T.emitting = false;
-        }
-    }
-    #endregion
 
     public GameObject GetMainCamera()
     {

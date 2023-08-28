@@ -97,6 +97,13 @@ public class WalkState : BaseState
             }
         }
 
+         if ( targetSpeed == SprintSpeed)
+         {
+            startEmmiter();
+         }else{
+            stopEmmiter();
+         }
+
     }
 
     public override void OnFixedUpdateState()
@@ -111,6 +118,22 @@ public class WalkState : BaseState
     public override void HandleInputs()
     {
 
+    }
+
+
+    private void startEmmiter()
+    {
+        foreach (TrailRenderer T in pController.Tyremarks)
+        {
+            T.emitting = true;
+        }
+    }
+    private void stopEmmiter()
+    {
+        foreach (TrailRenderer T in pController.Tyremarks)
+        {
+            T.emitting = false;
+        }
     }
 
 }
