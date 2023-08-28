@@ -48,13 +48,14 @@ public class Portal : MonoBehaviour
     IEnumerator WarpTimer()
     {
         isTimer = true;
-
         int count = time;
+        
+        UIManager.Instance.ShowQuestion($"{count}초 후 {infoText}");
         while(count > 0)
         {
-            UIManager.Instance.ShowQuestion($"{count}초 후 {infoText}");
             yield return new WaitForSeconds(1f);
             count--;
+            UIManager.Instance.ShowQuestion($"{count}초 후 {infoText}");
         }
         isTimer = false;
         Warp();
