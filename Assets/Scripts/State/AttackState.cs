@@ -31,6 +31,7 @@ public class AttackState : BaseState
         if (pController.comboCount == 1)
         {
             pController.CreateParticle(180.0f);
+            pController.CreateParticleCollider();
             pController._animator.SetTrigger("AttackTrigger1");
             Timer.CreateTimer(pController.gameObject, .5f, ComboTimer);
         }
@@ -38,6 +39,7 @@ public class AttackState : BaseState
             pController._animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
         {
             pController.CreateParticle(45.0f);
+            pController.CreateParticleCollider();
             pController._animator.SetTrigger("AttackTrigger2");
             Timer.CreateTimer(pController.gameObject, .5f, ComboTimer);
         }
@@ -45,6 +47,7 @@ public class AttackState : BaseState
             pController._animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
         {
             pController.CreateParticle(110.0f);
+            pController.CreateParticleCollider();
             pController._animator.SetTrigger("AttackTrigger3");
             Timer.CreateTimer(pController.gameObject, .5f, ComboTimer);
         }

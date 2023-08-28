@@ -637,6 +637,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f65c10322c7c5824a8d1c4c2f111a612, type: 3}
+--- !u!1 &78166623
 GameObject:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -645,6 +646,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 78166624}
+  - component: {fileID: 78166625}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged

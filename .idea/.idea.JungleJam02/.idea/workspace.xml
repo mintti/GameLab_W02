@@ -5,18 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7f4366c4-dd79-4469-9c62-e02f5c54abbc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/SlashCollider.prefab" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/SlashCollider.prefab.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/DestroyInstantly.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/DestroyInstantly.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.JungleJam02/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.JungleJam02/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Bee.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Bee.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Player.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Player.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Sheep.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Sheep.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/SlashCollider.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/SlashCollider.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Map.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Map.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/HandlingParticle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/HandlingParticle.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/PlayerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/StateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/StateMachine.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/AttackState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/AttackState.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,7 +137,7 @@
       <workItem from="1692928988234" duration="7348000" />
       <workItem from="1692944876209" duration="15984000" />
       <workItem from="1693121103539" duration="3896000" />
-      <workItem from="1693192106792" duration="1601000" />
+      <workItem from="1693192106792" duration="2415000" />
     </task>
     <servers />
   </component>
