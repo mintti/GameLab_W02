@@ -17,20 +17,22 @@ public class WallJumpState : BaseState
 
     public override void OnUpdateState()
     {
-        if (pController.wallJumpCounter > 0)  // isWallJump-ing
+        if (pController.wallJumpCounter >  0) // isWallJump-ing
         {
             pController._controller.Move(pController.wallJumpVector.normalized * (Time.deltaTime * 15.0f) +
                              new Vector3(0.0f, pController._verticalVelocity, 0.0f) * Time.deltaTime);
-        } 
 
-        if (pController.wallJumpCounter >  0){ pController.wallJumpCounter -= Time.deltaTime; }
-        if (pController.wallJumpCounter <= 0){ pController.stateMachine.ChangeState(StateName.WALK); }
+            pController.wallJumpCounter -= Time.deltaTime; 
+        }
+        else
+        { 
+            pController.stateMachine.ChangeState(StateName.WALK); 
+        }
 
-        if (inputManager.dash)
+        if (inputManager.dash) // 벽점프 중 Dash입력시 벽점프 캔슬
         {
             pController.wallJumpCounter = 0f;
             pController.stateMachine.ChangeState(StateName.DASH);
-
         }
     }
 
