@@ -14,9 +14,9 @@ public class PlayerController : MonoBehaviour
 
     public Inputs inputManager;
     [Header("Player")]
-    public float SlowWalkSpeed = 1.0f;
+
     public float MoveSpeed     = 7.0f;
-    public float SprintSpeed   = 10.0f;
+    float SprintSpeed   = 10.0f;
 
     [Range(0.0f, 0.3f)]
     public float RotationSmoothTime = 0.12f;
@@ -347,6 +347,8 @@ public class PlayerController : MonoBehaviour
     
     public void Jump()
     {
+        Debug.Log("jump");
+
         if (!isJumping && _controller.isGrounded || (coyoteTimer > 0f && _controller.velocity.y < 0.0f)){ // 땅바닥에서 점프
             stateMachine.ChangeState(StateName.JUMP);
         }else if(OnLadder) // 사다리에서 점프

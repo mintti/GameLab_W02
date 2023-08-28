@@ -10,7 +10,10 @@ public class WalkState : BaseState
 
     GameObject _mainCamera;
 
-    float moveSpeed = 7f;
+    float SlowWalkSpeed = 1.0f;
+    float SprintSpeed   = 10.0f;
+    float moveSpeed     = 7f;
+
     float targetSpeed;
 
     public WalkState( PlayerController pController, Inputs inputManager) : base(pController, inputManager, StateName.WALK)
@@ -28,8 +31,13 @@ public class WalkState : BaseState
     {
         targetSpeed = moveSpeed;
 
+        if( inputManager.slowWalk ){ targetSpeed = SlowWalkSpeed; }
+        if( inputManager.sprint   ){ targetSpeed = SprintSpeed;   } // 같이 누르면 sprint speed
+
+
         if (inputManager.move == Vector2.zero) targetSpeed = 0.0f;
 
+  
         // a reference to the players current horizontal velocity
         float currentHorizontalSpeed = new Vector3( pController._controller.velocity.x, 0.0f, pController._controller.velocity.z).magnitude;
 
@@ -97,6 +105,11 @@ public class WalkState : BaseState
     public override void OnExitState()
     {
         
+    }
+
+    public override void HandleInputs()
+    {
+
     }
 
 }

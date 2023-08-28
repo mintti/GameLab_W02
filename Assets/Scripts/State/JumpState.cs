@@ -110,4 +110,6 @@ public class JumpState : BaseState
         pController.isJumping = false;
         multiplyValue = 1f;
     }
+
+    public override void HandleInputs(){}
 }

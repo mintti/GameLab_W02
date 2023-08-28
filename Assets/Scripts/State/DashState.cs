@@ -124,4 +124,7 @@ public class DashState : BaseState
     {
         pController.isDashCool = false;
     }
+
+    public override void HandleInputs(){}
+
 }

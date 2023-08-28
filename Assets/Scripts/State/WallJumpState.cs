@@ -42,4 +42,7 @@ public class WallJumpState : BaseState
     {
         pController.isWallJumping = false;
     }
+
+    public override void HandleInputs(){}
+
 }

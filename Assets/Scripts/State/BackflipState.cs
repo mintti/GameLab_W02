@@ -44,4 +44,10 @@ public class BackflipState : BaseState
 
         pController.isBackflip = false;
     }
+
+    public override void HandleInputs()
+    {
+        
+    }
+
 }

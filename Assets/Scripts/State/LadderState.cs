@@ -35,4 +35,7 @@ public class LadderState : BaseState
     }
     public override void OnFixedUpdateState() {}
     public override void OnExitState() {}
+
+    public override void HandleInputs(){}
+
 }

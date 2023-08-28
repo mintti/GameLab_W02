@@ -67,4 +67,7 @@ public class AttackState : BaseState
 
     public override void OnExitState()
     {}
+
+    public override void HandleInputs(){}
+
 }
