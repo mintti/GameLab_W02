@@ -8,6 +8,7 @@ public class DashState : BaseState
     float dashRollTime   = 0.2f;  // 대시 앞구르기 모션 시간.
     float dashTetanyTime = 0.1f;  // 대시 후, 경직시간.  현재 안 쓰는중
     float dashCoolTime   = 0.2f;
+
     float moveSpeed      = 7f;
     float targetSpeed;
     
