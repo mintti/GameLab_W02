@@ -507,17 +507,11 @@ public class PlayerController : MonoBehaviour
             }
         }
         
-        if (hit.collider.CompareTag("Box"))
+        if (hit.collider.CompareTag("Enemy"))
         {
-            if (hit.transform.position.y < transform.position.y && isBackflipDown == true)
+            if (isBackflipDown == true)
             {
-                //create particle
-                GameObject particle = Instantiate(boxParticle, hit.transform.position, hit.transform.rotation);
-                ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
-                particlesys.Play();
-                
-                Destroy(hit.gameObject);
-                StartCoroutine("TurnOnBackflipDown");
+                hit.collider.GetComponent<HandlingHit>().handlingZzibu();
             }
         }
     }
