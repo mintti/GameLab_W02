@@ -10,6 +10,7 @@ public class ResetCollider : MonoBehaviour
     {
         if (collider.CompareTag("Player"))
         {
+            UIManager.Instance.Destroy();
             SceneManager.LoadScene("Map");
         }
     }

@@ -4400,10 +4400,10 @@ Transform:
   - {fileID: 911574172}
   - {fileID: 1351714969}
   - {fileID: 1272657181}
+  - {fileID: 2055987005}
   - {fileID: 2019581524}
   - {fileID: 270840278}
   - {fileID: 806854288}
-  - {fileID: 2055987005}
   - {fileID: 495079750}
   - {fileID: 1559712124}
   m_Father: {fileID: 2014038720}
@@ -30163,7 +30163,7 @@ Transform:
   m_Children:
   - {fileID: 1157018138}
   m_Father: {fileID: 303117193}
-  m_RootOrder: 6
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2064282887
 PrefabInstance:

@@ -28,4 +28,5 @@ public class InfoCollider : MonoBehaviour
             UIManager.Instance.DeactivateInfoText(infoText);
         }
     }
+    
 }

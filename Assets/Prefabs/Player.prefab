@@ -69,9 +69,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputManager: {fileID: 6993606324682612576}
-  SlowWalkSpeed: 1
+  cameraSensitivity: 1
   MoveSpeed: 7
-  SprintSpeed: 10
   RotationSmoothTime: 0.12
   SpeedChangeRate: 10
   JumpHeight: 3.5
@@ -180,6 +179,8 @@ MonoBehaviour:
   backflip: 0
   attack: 0
   resetCamera: 0
+  cameraSenseUp: 0
+  cameraSenseDown: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1

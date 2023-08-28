@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -26,7 +27,9 @@ public class UIManager : MonoBehaviour
                              "대시     : 우클릭(L-Shoulder)\n" +
                              "스프린트 : SHIFT(L-StickPress)\n" +
                              "살금살금 : CTRL(Right-Trigger)\n" +
-                             "공격     : 좌클릭(B)\n"},
+                             "공격     : 좌클릭(B)\n" +
+                             "감도설정 : <, >(D-Pad)\n" 
+        },
         {StateName.JUMP,     "백플립   : E(X)\n"+
                              "공격     : 좌클릭(B)\n"},
         {StateName.DASH,     "공격     : 좌클릭(B)\n"},
@@ -54,6 +57,11 @@ public class UIManager : MonoBehaviour
         textBoxObj.SetActive(false);
         questionObj.SetActive(false);
         UpdateKeyInfo(StateName.WALK);
+    }
+
+    public void Destroy()
+    {
+        Destroy(gameObject);
     }
 
     public void ActiveInfoText(string text)

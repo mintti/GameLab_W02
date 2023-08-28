@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     public Inputs inputManager;
     
     
-    public float cameraSensitivity = 1f;
+    private float cameraSensitivity = 0.4f;
 
 
     [Header("Player")]
@@ -84,6 +84,9 @@ public class PlayerController : MonoBehaviour
     public float coyoteTimer = 0f;
     public bool canJumpBuffer = false;
     public float warpTimer = 0f;
+    
+    public string newSensitivityText;
+    public bool sensitivityFlag;
     
     #region 사다리
     [Tooltip("사다리 콜라이더와 접촉 시 true")]
@@ -268,21 +271,51 @@ public class PlayerController : MonoBehaviour
     public void CameraSenseUp(bool up)
     {
         if( up ){
-            cameraSensitivity += 0.2f;
-            if(cameraSensitivity >= 4f)
+            cameraSensitivity += 0.1f;
+            if(cameraSensitivity >= 1f)
             {
-                cameraSensitivity = 4f;
+                cameraSensitivity = 1f;
             }
         }else{
-            cameraSensitivity -= 0.2f;
-            if(cameraSensitivity <= 0.2f)
+            cameraSensitivity -= 0.1f;
+            if(cameraSensitivity <= 0.1f)
             {
-                cameraSensitivity = 0.2f;
+                cameraSensitivity = 0.1f;
             }
-            
         }
+        DisplayCurrentSensitivity();
+    }
+    
+    public void DisplayCurrentSensitivity()
+    {
+        String AddText = "";
+        if (GetComponent<PlayerController>().cameraSensitivity == .2f)
+        {
+            AddText = "(최소)";
+        } else if (GetComponent<PlayerController>().cameraSensitivity == 4f)
+        {
+            AddText = "(최대)";
+        }
+
+        newSensitivityText = "현재 마우스 감도: " + (Mathf.Round(cameraSensitivity * 10f) * .1f).ToString() + AddText;
+        UIManager.Instance.ActiveInfoText(newSensitivityText);
+        if (sensitivityFlag)
+        {
+            StopCoroutine(DisappearCurrentSensitivity());
+        }
+        
+        
+        StartCoroutine(DisappearCurrentSensitivity());
     }
 
+    IEnumerator DisappearCurrentSensitivity()
+    {
+        sensitivityFlag = true;
+        yield return new WaitForSeconds(1f);
+        UIManager.Instance.DeactivateInfoText(newSensitivityText);
+        sensitivityFlag = false;
+    }
+    
     private void CameraRotation()
     {
         // if there is an input and camera position is not fixed

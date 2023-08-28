@@ -109,7 +109,7 @@ public class Inputs : MonoBehaviour
     public void OnCameraSensitivityDown(InputValue value)
     {
         cameraSenseDown = value.isPressed;
-        if(cameraSenseUp)
+        if(cameraSenseDown)
 	    {
 		    playerController.CameraSenseUp(false);
 	    }
