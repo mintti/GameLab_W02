@@ -11,10 +11,13 @@ public class PlayerController : MonoBehaviour
 {
 
     public StateMachine stateMachine {get; private set;}
-
     public Inputs inputManager;
-    [Header("Player")]
+    
+    
+    public float cameraSensitivity = 1f;
 
+
+    [Header("Player")]
     public float MoveSpeed     = 7.0f;
     float SprintSpeed   = 10.0f;
 
@@ -262,6 +265,14 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    public void CameraSenseUp(bool up)
+    {
+        if( up ){
+            cameraSensitivity += 0.1f;
+        }else{
+            cameraSensitivity -= 0.1f;
+        }
+    }
 
     private void CameraRotation()
     {
@@ -271,8 +282,9 @@ public class PlayerController : MonoBehaviour
             //Don't multiply mouse input by Time.deltaTime;
             float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-            _cinemachineTargetYaw   += _input.look.x * deltaTimeMultiplier;
-            _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+
+            _cinemachineTargetYaw   += _input.look.x * deltaTimeMultiplier * cameraSensitivity;
+            _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier * cameraSensitivity;
         }
 
         // clamp our rotations so our values are limited 360 degrees

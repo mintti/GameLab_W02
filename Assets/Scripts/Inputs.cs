@@ -14,6 +14,8 @@ public class Inputs : MonoBehaviour
     public bool backflip;
     public bool attack;
     public bool resetCamera;
+    public bool cameraSenseUp;
+    public bool cameraSenseDown;
     
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -94,6 +96,25 @@ public class Inputs : MonoBehaviour
 	    playerController.ResetCamera();
     }
     
+
+    public void OnCameraSensitivityUp(InputValue value)
+    {
+	    cameraSenseUp = value.isPressed;
+	    if(cameraSenseUp)
+	    {
+		    playerController.CameraSenseUp(true);
+	    }
+    }
+    
+    public void OnCameraSensitivityDown(InputValue value)
+    {
+        cameraSenseDown = value.isPressed;
+        if(cameraSenseUp)
+	    {
+		    playerController.CameraSenseUp(false);
+	    }
+    }
+
 
     private void OnApplicationFocus(bool hasFocus)
     {
