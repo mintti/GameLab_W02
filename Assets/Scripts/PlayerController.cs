@@ -174,7 +174,10 @@ public class PlayerController : MonoBehaviour
     {
         stateMachine.FixedUpdateState();
     }
-
+    void LateUpdate()
+    {
+        CameraRotation();
+    }
     void Update()
     {
         stateMachine.UpdateState();
@@ -214,28 +217,10 @@ public class PlayerController : MonoBehaviour
         }
         if (warpTimer > 0f) warpTimer -= Time.deltaTime;
         
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, 1f, LayerMask.GetMask("WallLayer")))
-        {
-            isWalled = true;
-        }
-        else
-        {
-            isWalled = false;
-        }
-        
-        if (isWalled && !_controller.isGrounded && _verticalVelocity < 0.0f)
-        {
-            isWallSliding = true;
-        }
-        else
-        {
-            isWallSliding = false;
-        }
-        if (isWallSliding)
-        {
-            _verticalVelocity = -2f;
-        }
+
+        CheckIsWalled();
+        CheckIsWallSliding();
+
 
         if (Time.time - lastClickedTime > maxComboDelay && isAttack)
         {
@@ -251,10 +236,34 @@ public class PlayerController : MonoBehaviour
         HandlingCoyoteTime();
     }
 
-    private void LateUpdate()
+
+    private void CheckIsWalled()
     {
-        CameraRotation();
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 1f, LayerMask.GetMask("WallLayer"))){
+            isWalled = true;
+        }
+        else{
+            isWalled = false;
+        }
     }
+
+    private void CheckIsWallSliding()
+    {
+        if (isWalled && !_controller.isGrounded && _verticalVelocity < 0.0f){
+            isWallSliding = true;
+        }
+        else{
+            isWallSliding = false;
+        }
+
+        if (isWallSliding)
+        {
+            _verticalVelocity = -2f;
+        }
+    }
+
+
 
     private void CameraRotation()
     {
@@ -381,16 +390,19 @@ public class PlayerController : MonoBehaviour
                                isAttackGrounded && !isBackflip && !isBackflipDown && !isWallJumping;
         if(isAvailableDash){
             wallJumpCounter = 0f;  // wall jump cancel
-            
-            //create particle
-            GameObject particle = Instantiate(dashParticle, transform.position, _mainCamera.transform.rotation);
-            particle.transform.parent = _mainCamera.transform;
-            ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
-            particlesys.Play();
+            CreateParticleDash();
             stateMachine.ChangeState(StateName.DASH);
         }else{
-            //Debug.Log("playerController.isDashing(" +playerController.isDashing + ") playerController.isDashTetany("+playerController.isDashTetany+") " + " playerController.dashCounter("+ playerController.dashCounter+")");
+            //Debug.Log("isDashing(" +isDashing + ") isDashTetany("+isDashTetany+") " + " dashCounter("+ dashCounter+")");
         }   
+    }
+
+    void CreateParticleDash()
+    {
+        GameObject particle = Instantiate(dashParticle, transform.position, _mainCamera.transform.rotation);
+        particle.transform.parent = _mainCamera.transform;
+        ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
+        particlesys.Play();
     }
     #endregion
 

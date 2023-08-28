@@ -28,7 +28,7 @@ public class WallJumpState : BaseState
             pController.stateMachine.ChangeState(StateName.WALK); 
         }
 
-        if (inputManager.dash) // 벽점프 중 Dash입력시 벽점프 캔슬
+        if (inputManager.dash && pController.dashCounter > 0) // 벽점프 중 Dash입력시 벽점프 캔슬
         {
             pController.wallJumpCounter = 0f;
             pController.stateMachine.ChangeState(StateName.DASH);
