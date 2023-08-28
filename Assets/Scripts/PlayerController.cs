@@ -555,7 +555,7 @@ public class PlayerController : MonoBehaviour
 
     private void CheckEmit()
     {
-        if ((isDashing) || _speed == SprintSpeed)
+        if ((isDashing) || inputManager.sprint)
         {
             startEmmiter();
         }

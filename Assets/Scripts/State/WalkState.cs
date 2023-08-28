@@ -88,7 +88,8 @@ public class WalkState : BaseState
         if (pController._touchLadder)
         {
             // 사다리에 붙고
-            if (inputManager.move == Vector2.up)  // 화살표Up 누르는 순간
+            Debug.Log(inputManager.move);
+            if (inputManager.move.y > 0)  // 화살표Up 누르는 순간
             {
                 // [TODO] 사다리를 바라봐야한다면, 바라보는 대상 카메라 -> 사다리 변경 필요
                 pController.OnLadder = true; // state 상태 진입

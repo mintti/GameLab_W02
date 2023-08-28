@@ -24,7 +24,8 @@ public class UIManager : MonoBehaviour
     {
         {StateName.WALK,     "점프     : SPACE BAR(A)\n" +
                              "대시     : 우클릭(L-Shoulder)\n" +
-                             "걷기     : CTRL(Right-Trigger)\n" +
+                             "스프린트 : SHIFT(L-StickPress)\n" +
+                             "살금살금 : CTRL(Right-Trigger)\n" +
                              "공격     : 좌클릭(B)\n"},
         {StateName.JUMP,     "백플립   : E(X)\n"+
                              "공격     : 좌클릭(B)\n"},
