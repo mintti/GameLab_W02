@@ -268,9 +268,18 @@ public class PlayerController : MonoBehaviour
     public void CameraSenseUp(bool up)
     {
         if( up ){
-            cameraSensitivity += 0.1f;
+            cameraSensitivity += 0.2f;
+            if(cameraSensitivity >= 4f)
+            {
+                cameraSensitivity = 4f;
+            }
         }else{
-            cameraSensitivity -= 0.1f;
+            cameraSensitivity -= 0.2f;
+            if(cameraSensitivity <= 0.2f)
+            {
+                cameraSensitivity = 0.2f;
+            }
+            
         }
     }
 
