@@ -105,5 +105,6 @@ public class JumpState : BaseState
     public override void OnExitState()
     {
         pController.isJumping = false;
+        multiplyValue = 1f;
     }
 }

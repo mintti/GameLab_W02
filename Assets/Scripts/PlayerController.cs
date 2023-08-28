@@ -245,7 +245,7 @@ public class PlayerController : MonoBehaviour
         }
 
         
-        ComboRecentlyChangedTimer -= Time.deltaTime;
+        if (ComboRecentlyChangedTimer > 0f) ComboRecentlyChangedTimer -= Time.deltaTime;
         if (dontMoveRotationTimer > 0f) dontMoveRotationTimer -= Time.deltaTime;
         CheckEmit();
         HandlingCoyoteTime();
