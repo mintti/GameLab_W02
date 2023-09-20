@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6993606324682612580}
+  - component: {fileID: 8317353183626849837}
   - component: {fileID: 6993606324682612578}
   - component: {fileID: 6993606324682612579}
   - component: {fileID: 6993606324682612577}
@@ -38,6 +39,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8317353183626849837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6993606324682612632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55dfe448052c08047a0080535775fdac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!143 &6993606324682612578
 CharacterController:
   m_ObjectHideFlags: 0
@@ -69,7 +82,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputManager: {fileID: 6993606324682612576}
-  cameraSensitivity: 1
   MoveSpeed: 7
   RotationSmoothTime: 0.12
   SpeedChangeRate: 10
@@ -105,6 +117,8 @@ MonoBehaviour:
   coyoteTimer: 0
   canJumpBuffer: 0
   warpTimer: 0
+  newSensitivityText: 
+  sensitivityFlag: 0
   _touchLadder: 0
   isExitLadder: 0
   OnLadder: 0

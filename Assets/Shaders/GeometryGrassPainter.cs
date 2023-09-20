@@ -40,7 +40,7 @@ public class GeometryGrassPainter : MonoBehaviour
     public int i = 0;
 
     public float sizeWidth = 1f;
-    public float sizeLength = 1f;
+    public float sizeLength = 10f;
     public float density = 1f;
 
 
