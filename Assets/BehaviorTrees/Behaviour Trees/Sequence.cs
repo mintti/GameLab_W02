@@ -1,5 +1,4 @@
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +10,6 @@ public class Sequence : Node
     {
         this.nodes = nodes;
     }
-
     public override NodeState Evaluate()
     {
         bool isAnyNodeRunning = false;

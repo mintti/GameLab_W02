@@ -1,5 +1,4 @@
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,10 +10,8 @@ public class Selector : Node
     {
         this.nodes = nodes;
     }
-
     public override NodeState Evaluate()
     {
-        bool isAnyNodeRunning = false;
         foreach (var node in nodes)
         {
             switch (node.Evaluate())
@@ -22,19 +19,16 @@ public class Selector : Node
                 case NodeState.RUNNING:
                     _nodeState = NodeState.RUNNING;
                     return _nodeState;
-                    break;
                 case NodeState.SUCCESS:
                     _nodeState = NodeState.SUCCESS;
                     return _nodeState;
-                    break;
                 case NodeState.FAILURE:
-                    _nodeState = NodeState.FAILURE;
-                    return _nodeState;
+                    break;
                 default:
                     break;
             }
         }
-        
+        _nodeState = NodeState.FAILURE;
         return _nodeState;
     }
 }

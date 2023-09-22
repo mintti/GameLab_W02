@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6993606324682612579}
   - component: {fileID: 6993606324682612577}
   - component: {fileID: 6993606324682612576}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 6993606324895781712}
   - component: {fileID: 6993606324895781715}
   - component: {fileID: 6993606324895781714}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Eye1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -305,7 +305,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6993606325412057062}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -339,7 +339,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6993606325772617549}
   - component: {fileID: 6993606325772617546}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -473,7 +473,7 @@ GameObject:
   - component: {fileID: 6993606326156673040}
   - component: {fileID: 6993606326156673043}
   - component: {fileID: 6993606326156673042}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -590,7 +590,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6993606326439162608}
   - component: {fileID: 6993606326439162609}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -720,7 +720,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6993606326603015245}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerCameraRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
