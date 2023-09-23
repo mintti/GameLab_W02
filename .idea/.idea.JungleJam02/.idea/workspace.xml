@@ -6,17 +6,24 @@
   <component name="ChangeListManager">
     <list default="true" id="7f4366c4-dd79-4469-9c62-e02f5c54abbc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.JungleJam02/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.JungleJam02/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/GroundColor.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/GroundColor.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BehaviorTrees/Nodes/GoToCoverNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BehaviorTrees/Nodes/GoToCoverNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BehaviorTrees/Nodes/IsCovereAvaliableNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BehaviorTrees/Nodes/IsCovereAvaliableNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BehaviorTrees/Shooting.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BehaviorTrees/Shooting.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/SlashCollider.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/SlashCollider.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Map.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Map.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Shaders/BotWGrass.shader" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Shaders/BotWGrass.shader.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Shaders/GeometryGrassPainter.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Shaders/GeometryGrassPainter.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Shaders/GrassGeometry.shader" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Shaders/GrassGeometry.shader.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Shaders/GrassPainterEditor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Shaders/GrassPainterEditor.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/DungGeunMo SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/DungGeunMo SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Map/NavMesh.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Map/NavMesh.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/DestroyInstantly.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DestroyInstantly.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/HandlingHit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/HandlingHit.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/PlayerController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/AttackState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/AttackState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/BackflipState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/BackflipState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/DashState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/DashState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/JumpState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/JumpState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/LadderState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/LadderState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/StateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/StateMachine.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/WalkState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/WalkState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/WallJumpState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/WallJumpState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +50,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/616a7e61d7b4498398469eb7e86bdeb21a000/90/d100542c/CharacterController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/CameraPractice/Assets/3rdPerson+Fly/Scripts/PlayerScripts/MoveBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Behavior Designer Movement/Scripts/Tasks/NavMeshMovement.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/DestroyOneSecond.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/HandlingHit.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/HandlingParticle.cs" root0="FORCE_HIGHLIGHTING" />
@@ -187,6 +195,7 @@
       <workItem from="1695169598681" duration="962000" />
       <workItem from="1695171571808" duration="8173000" />
       <workItem from="1695199524345" duration="1360000" />
+      <workItem from="1695430555124" duration="10970000" />
     </task>
     <servers />
   </component>

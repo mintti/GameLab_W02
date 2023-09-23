@@ -69,8 +69,16 @@ public class HandlingHit: MonoBehaviour
         {
             hitDelay = .4f;
             Vector3 pos = transform.position - GameObject.Find("Player").transform.position;
-            rb.AddForce(pos.normalized * .5f, ForceMode.Impulse);
-            if (gameObject.CompareTag("Enemy"))rb.AddForce(Vector3.up * 4f, ForceMode.Impulse);
+            if (GetComponent<Rigidbody>())
+            {
+                rb.AddForce(pos.normalized * .5f, ForceMode.Impulse);
+                if (gameObject.CompareTag("Enemy")) rb.AddForce(Vector3.up * 4f, ForceMode.Impulse);
+            }
+
+            if (GetComponent<SimpleFlash>())
+            {
+                GetComponent<SimpleFlash>().Flash();
+            }
             
             foreach (GameObject child in childObjects)
             {

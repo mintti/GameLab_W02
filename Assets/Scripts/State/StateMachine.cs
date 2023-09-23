@@ -26,7 +26,7 @@ public class StateMachine
 
     public void AddState(StateName stateName, BaseState state)
     {
-        Debug.Log("AddState :" + stateName);
+        //Debug.Log("AddState :" + stateName);
 
         if(!states.ContainsKey(stateName))
         {
@@ -56,7 +56,7 @@ public class StateMachine
 
     public void ChangeState(StateName nextStateName)
     {
-        Debug.Log("ChangeState from (" + CurrentState.stateName + ")  to (" + nextStateName + ")");
+        //Debug.Log("ChangeState from (" + CurrentState.stateName + ")  to (" + nextStateName + ")");
 
         UIManager.Instance.UpdateKeyInfo(nextStateName);
         

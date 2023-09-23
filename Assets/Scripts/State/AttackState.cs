@@ -8,7 +8,7 @@ public class AttackState : BaseState
 {
     public AttackState( PlayerController pController, Inputs inputManager) : base(pController,inputManager,stateName: StateName.ATTACK)
     {
-        Debug.Log("AttackState 생성");
+        //Debug.Log("AttackState 생성");
     }
 
     public override void OnEnterState()

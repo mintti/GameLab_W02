@@ -20,6 +20,7 @@ public class IsCovereAvaliableNode : Node
     {
         Transform bestSpot = FindBestCoverSpot();
         ai.SetBestCoverSpot(bestSpot);
+        Debug.Log("spot:" + bestSpot);
         return bestSpot != null ? NodeState.SUCCESS : NodeState.FAILURE;
     }
 

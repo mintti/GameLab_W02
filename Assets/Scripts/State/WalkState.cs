@@ -18,7 +18,7 @@ public class WalkState : BaseState
 
     public WalkState( PlayerController pController, Inputs inputManager) : base(pController, inputManager, StateName.WALK)
     {
-        Debug.Log("WalkState 생성");
+        //Debug.Log("WalkState 생성");
         
         _mainCamera = pController.GetMainCamera();
     }

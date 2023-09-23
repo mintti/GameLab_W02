@@ -400,8 +400,6 @@ public class PlayerController : MonoBehaviour
     
     public void Jump()
     {
-        Debug.Log("");
-
         if (!isJumping && _controller.isGrounded || (coyoteTimer > 0f && _controller.velocity.y < 0.0f)){ // 땅바닥에서 점프
             stateMachine.ChangeState(StateName.JUMP);
         }else if(OnLadder) // 사다리에서 점프

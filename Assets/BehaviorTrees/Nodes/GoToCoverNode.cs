@@ -16,6 +16,7 @@ public class GoToCoverNode : Node
 
     public override NodeState Evaluate()
     {
+        //Debug.Log("gggggg");
         Transform coverSpot = ai.GetBestCoverSpot();
         if (coverSpot == null)
             return NodeState.FAILURE;

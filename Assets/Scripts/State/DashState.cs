@@ -16,7 +16,7 @@ public class DashState : BaseState
 
     public DashState( PlayerController pController, Inputs inputManager) : base(pController, inputManager, StateName.DASH)
     {
-        Debug.Log("DashState 생성");
+        //Debug.Log("DashState 생성");
         _mainCamera = pController.GetMainCamera();
     }
 
