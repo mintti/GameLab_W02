@@ -118,7 +118,10 @@ public class HandlingHit: MonoBehaviour
     IEnumerator Jump()
     {
         yield return new WaitForSeconds(2.8f);
-        rb.AddForce(Vector3.up * 30000, ForceMode.Impulse);
+        if (GetComponent<Rigidbody>())
+        {
+            rb.AddForce(Vector3.up * 30000, ForceMode.Impulse);
+        }
     }
     
     public void AdjustScaleEvent()
