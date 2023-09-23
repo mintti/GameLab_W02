@@ -8,7 +8,7 @@ public class BackflipState : BaseState
 
     public BackflipState( PlayerController pController, Inputs inputManager) : base(pController,inputManager,stateName: StateName.BACKFLIP)
     {
-        Debug.Log("BackflipState 생성");
+        //Debug.Log("BackflipState 생성");
     }
 
     public override void OnEnterState()

@@ -18,7 +18,7 @@ public class JumpState : BaseState
     
     public JumpState( PlayerController pController, Inputs inputManager) : base(pController, inputManager, stateName: StateName.JUMP)
     {
-        Debug.Log("JumpState 생성");
+        //Debug.Log("JumpState 생성");
         _mainCamera = pController.GetMainCamera();
     }
 

@@ -24,8 +24,8 @@ TagManager:
   - WallLayer
   - Sheep
   - InvisibleWall
-  - 
-  - 
+  - Player
+  - Enemy
   - 
   - 
   - 

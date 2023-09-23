@@ -28,6 +28,12 @@ public class DestroyInstantly : MonoBehaviour
             GameObject particle = Instantiate(hitParticle, other.transform.position, transform.rotation);
             ParticleSystem particlesys = particle.GetComponent<ParticleSystem>();
             particlesys.Play();
+            
+            EnemyAI ai = other.GetComponent<EnemyAI>();
+            if (ai != null)
+            {
+                ai.TakeDamage(5);
+            }
         }
     }
 }

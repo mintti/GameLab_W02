@@ -7,7 +7,7 @@ public class LadderState : BaseState
 {
     public LadderState( PlayerController pController, Inputs inputManager) : base(pController,inputManager,stateName: StateName.LADDER)
     {
-        Debug.Log("LadderState 생성");
+        //Debug.Log("LadderState 생성");
     }
 
     public override void OnEnterState()

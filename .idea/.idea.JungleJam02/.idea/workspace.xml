@@ -6,9 +6,23 @@
   <component name="ChangeListManager">
     <list default="true" id="7f4366c4-dd79-4469-9c62-e02f5c54abbc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.JungleJam02/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.JungleJam02/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BehaviorTrees/Nodes/GoToCoverNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BehaviorTrees/Nodes/GoToCoverNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BehaviorTrees/Nodes/IsCovereAvaliableNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BehaviorTrees/Nodes/IsCovereAvaliableNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BehaviorTrees/Shooting.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BehaviorTrees/Shooting.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/SlashCollider.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/SlashCollider.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Map.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Map.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Map/NavMesh.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Map/NavMesh.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/DestroyInstantly.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DestroyInstantly.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/HandlingHit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/HandlingHit.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/DungGeunMo SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/DungGeunMo SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/PlayerController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/AttackState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/AttackState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/BackflipState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/BackflipState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/DashState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/DashState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/JumpState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/JumpState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/LadderState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/LadderState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/StateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/StateMachine.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/WalkState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/WalkState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/State/WallJumpState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/State/WallJumpState.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,13 +50,14 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/616a7e61d7b4498398469eb7e86bdeb21a000/90/d100542c/CharacterController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/CameraPractice/Assets/3rdPerson+Fly/Scripts/PlayerScripts/MoveBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Behavior Designer Movement/Scripts/Tasks/NavMeshMovement.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/DestroyOneSecond.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/EasterEgg.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/HandlingHit.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/HandlingParticle.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SimpleFlash.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@2.8.9/Samples~/Cinemachine Example Scenes/Scenes/Trigger volumes/GenericTrigger.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.6.3/InputSystem/Editor/Internal/AdvancedDropdown/AdvancedDropdownGUI.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.6.3/InputSystem/Plugins/PlayerInput/PlayerInput.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.test-framework@1.1.33/UnityEngine.TestRunner/TestRunner/PlaymodeTestsController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.testtools.codecoverage@1.2.3/Samples~/Tutorial/Asteroids/Scripts/Controllers/AsteroidController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.testtools.codecoverage@1.2.3/Samples~/Tutorial/Asteroids/Scripts/Controllers/DebrisController.cs" root0="SKIP_HIGHLIGHTING" />
@@ -58,6 +73,7 @@
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Tests/Runtime/Image/ImageTests.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Tests/Runtime/Layout/AspectRatioFitterTests.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Tests/Runtime/ScrollBar/ScrollBarClamp.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../JungleLAB_WEEK03/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/UI/Core/RawImage.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -76,7 +92,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;haein0919&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -94,7 +110,7 @@
 }</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="$USER_HOME$/Desktop/대시와 친구들/대시와 친구들.exe" />
+      <option name="EXE_PATH" value="$USER_HOME$/Desktop/대시와 친구들/대시와 친구들 최종\대시와 친구들.exe" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="C:\Users\Jungle\Desktop\대시와 친구들" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -170,7 +186,16 @@
       <workItem from="1693220460149" duration="27000" />
       <workItem from="1693220992677" duration="580000" />
       <workItem from="1693222068601" duration="1820000" />
-      <workItem from="1693223932895" duration="2495000" />
+      <workItem from="1693223933386" duration="5114000" />
+      <workItem from="1693302094068" duration="2144000" />
+      <workItem from="1693306723479" duration="2251000" />
+      <workItem from="1693317424790" duration="868000" />
+      <workItem from="1693320965325" duration="509000" />
+      <workItem from="1695116652390" duration="1426000" />
+      <workItem from="1695169598681" duration="962000" />
+      <workItem from="1695171571808" duration="8173000" />
+      <workItem from="1695199524345" duration="1360000" />
+      <workItem from="1695430555124" duration="10970000" />
     </task>
     <servers />
   </component>

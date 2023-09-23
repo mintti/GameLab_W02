@@ -6,7 +6,7 @@ public class WallJumpState : BaseState
 {
     public WallJumpState( PlayerController pController, Inputs inputManager) : base(pController,inputManager,stateName: StateName.WALLJUMP)
     {
-        Debug.Log("WallJumpState 생성");
+        //Debug.Log("WallJumpState 생성");
     }
 
     public override void OnEnterState()
