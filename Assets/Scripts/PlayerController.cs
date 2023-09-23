@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour
     private Inputs _input;
     public GameObject _mainCamera;
     public Animator _animator;
+    public Animator _AnchorAnimator;
     public TrailRenderer[] Tyremarks;
     [SerializeField] private GameObject dashParticle = default;
     [SerializeField] private GameObject slashParticle = default;
@@ -87,6 +88,8 @@ public class PlayerController : MonoBehaviour
     
     public string newSensitivityText;
     public bool sensitivityFlag;
+
+    public bool isGroundedOnce = false;
     
     #region 사다리
     [Tooltip("사다리 콜라이더와 접촉 시 true")]
@@ -371,11 +374,15 @@ public class PlayerController : MonoBehaviour
     {
         if (_controller.isGrounded)
         {
+            if (isGroundedOnce == false)
+            {
+                _AnchorAnimator.SetTrigger("Squash");
+                isGroundedOnce = true;
+            }
             if( dashCounter == 0 ){
                 dashCounter =  1;
                 // 대쉬는 공중에서 한번만 가능. 땅에 닿은 후에 충전됨. 최대충전횟수 1회.
             }
-
             isAttackGrounded = true;
         }
     }
@@ -402,9 +409,11 @@ public class PlayerController : MonoBehaviour
     {
         if (!isJumping && _controller.isGrounded || (coyoteTimer > 0f && _controller.velocity.y < 0.0f)){ // 땅바닥에서 점프
             stateMachine.ChangeState(StateName.JUMP);
+            isGroundedOnce = false;
         }else if(OnLadder) // 사다리에서 점프
         {
             stateMachine.ChangeState(StateName.JUMP);
+            isGroundedOnce = false;
         }
         else if (_controller.isGrounded || (coyoteTimer > 0f && _controller.velocity.y < 0.0f))
         {
@@ -464,7 +473,7 @@ public class PlayerController : MonoBehaviour
     public void Backflip()
     {
         bool isAvailableBackflip =
-            (!_controller.isGrounded && !isWalled && !isWallSliding && !isBackflip && !isBackflipDown && !isAttack && isAttackGrounded);
+            (!_controller.isGrounded && !isBackflip && !isBackflipDown && !isAttack && isAttackGrounded);
 
         if(isAvailableBackflip)
         {

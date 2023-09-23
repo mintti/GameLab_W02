@@ -24,6 +24,7 @@ public class JumpState : BaseState
 
     public override void OnEnterState()
     {
+        pController._AnchorAnimator.SetTrigger("Stretch");
         pController.isJumping = true;
     	if(pController.OnLadder)
         {
