@@ -3410,6 +3410,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6993606326156673045, guid: 84bb9065c02b52f488aa051de1febdd9, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6993606326156673045, guid: 84bb9065c02b52f488aa051de1febdd9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84bb9065c02b52f488aa051de1febdd9, type: 3}
 --- !u!1001 &270840277
@@ -15285,32 +15293,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1115046375}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1119824207 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6993606324682612632, guid: 84bb9065c02b52f488aa051de1febdd9, type: 3}
-  m_PrefabInstance: {fileID: 269062982}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &1119824209
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1119824207}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 71fe4916d31a0124a9d49943a4d47261, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &1126465969 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 680828231511875516, guid: de8d4c0f905fbff4aa850ab3c2f502f0, type: 3}

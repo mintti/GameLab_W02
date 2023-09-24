@@ -445,6 +445,7 @@ public class PlayerController : MonoBehaviour
                                 !isBackflip && !isBackflipDown && 
                                 !isWallJumping;
         if(isAvailableDash){
+            _animator.SetTrigger("Dash");
             wallJumpCounter = 0f;  // wall jump cancel
             CreateParticleDash();
             stateMachine.ChangeState(StateName.DASH);
